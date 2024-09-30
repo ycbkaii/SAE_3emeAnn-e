@@ -13,4 +13,4 @@ data = data[variables]
 
 print(data)
 
-# On peut commencer les analyses
+# On peut commencer les analyses 
