@@ -114,8 +114,8 @@ position = dict(zip(couleurs.keys(),range(len(pca_df['cat_date'].drop_duplicates
 
 pca_df.plot.scatter("Dim1", "Dim2", c=[couleurs[p] for p in pca_df["cat_date"]])
 for cont, coul in couleurs.items():
-    plt.scatter(135, position[cont] / 2 + 2.15, c=[coul])
-    plt.text(136, position[cont] / 2 + 2, cont)
+    plt.scatter(135, position[cont] + 10.15, c=[coul])
+    plt.text(136, position[cont]  + 10, cont)
 plt.xlabel("Dimension 1 (%)")
 plt.ylabel("Dimension 2 (%)")
 plt.suptitle("Premier plan factoriel (%)")
