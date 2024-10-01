@@ -1,7 +1,5 @@
 import pandas as pd
 import matplotlib.pyplot as plt
-import numpy as np
-
 
 # On récupere le fichier csv et on nettoie ce dernier
 data = pd.read_csv("csv/bigboss_book.csv")
@@ -26,16 +24,6 @@ variables = [
 # On nettoie et on garde que les données qu'on va utiliser
 data = data[variables]
 
-
-# MEMO PIE CHART
-# compte = data.groupby(["race"]).size().reset_index(name="count")
-
-# labels = compte["race"].to_list()
-
-# # plt.pie(compte['count'].to_numpy(),labels=labels, startangle = 90)
-# # plt.title("Pie chart of the race repartition")
-# # plt.show()
-# On peut commencer les analyses
 
 # On isole le genre le plus voté pour chaque livre
 data_first_genre = data["genre_and_votes"].str.split(",", expand=True)[0]
@@ -66,23 +54,28 @@ data_genre_principale = data_genre_bien.iloc[:26]
 data_autre_genre = data_genre_bien.iloc[26:]
 count_autre = data_autre_genre.sum(numeric_only=True).to_list()[0]
 
-df_autre = pd.DataFrame({
-    "genre_grp" : "Autre",
-    "count" : count_autre
-},index=[1]) # On crée la ligne "autre" dans un nouveau dataFrame
+df_autre = pd.DataFrame(
+    {"genre_grp": "Autre", "count": count_autre}, index=[1]
+)  # On crée la ligne "autre" dans un nouveau dataFrame
 
 
-data_genre_principale = pd.concat([data_genre_principale,df_autre],ignore_index=True) # On concatène
+data_genre_principale = pd.concat(
+    [data_genre_principale, df_autre], ignore_index=True
+)  # On concatène
 
 labels = data_genre_principale["genre_grp"]
 
 labels_autre = data_autre_genre["genre_grp"]
 
 
-plt.pie(data_genre_principale['count'].to_numpy(),labels=labels, startangle = 90)
+plt.pie(
+    data_genre_principale["count"].to_numpy(),
+    labels=labels.to_list(),
+    startangle=90,
+)
 plt.title("Test pie chart")
 plt.show()
 
-plt.pie(data_autre_genre['count'].to_numpy(),labels=labels_autre, startangle = 90)
+plt.pie(data_autre_genre["count"].to_numpy(), labels=labels_autre, startangle=90)
 plt.title("Autre pie chart")
 plt.show()
