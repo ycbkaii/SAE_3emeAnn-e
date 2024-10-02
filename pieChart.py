@@ -52,7 +52,14 @@ data_genre_bien = (
 
 data_genre_principale = data_genre_bien.iloc[:9]
 data_autre_genre = data_genre_bien.iloc[9:]
-count_autre = data_autre_genre.sum(numeric_only=True).to_list()[0]
+count_autre = data_autre_genre.sum(numeric_only=True)["count"]
+total_data_autre_genre = data_autre_genre.sum(numeric_only=True)["count"]
+
+def calcPoucentageAutreGenre(row) :
+    return (row["count"]/total_data_autre_genre) * 100 
+
+data_autre_genre.loc[:,"poucentage"] = data_autre_genre.apply(calcPoucentageAutreGenre,axis=1)
+
 
 df_autre = pd.DataFrame(
     {"genre_grp": "Other (less than 3.4 percent)", "count": count_autre}, index=[1]
@@ -62,6 +69,9 @@ df_autre = pd.DataFrame(
 data_genre_principale = pd.concat(
     [data_genre_principale, df_autre], ignore_index=True
 )  # On concatène
+
+
+
 
 labels = data_genre_principale["genre_grp"]
 
