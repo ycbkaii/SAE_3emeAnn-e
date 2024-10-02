@@ -101,10 +101,6 @@ pca_df = pd.DataFrame({
 })
 
 
-
-#TODO Finir ACP
-
-
 # La pallette de couleurs
 palette = plt.get_cmap('Dark2')
 couleurs = dict(zip(pca_df["cat_date"].drop_duplicates(),palette(range(len(pca_df['cat_date'].drop_duplicates())))))
