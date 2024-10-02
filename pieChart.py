@@ -2,7 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 # On récupere le fichier csv et on nettoie ce dernier
-data = pd.read_csv("csv/bigboss_book.csv")
+data = pd.read_csv("csv/bigboss_book.csv", low_memory=False)
 
 variables = [
     "author",
@@ -53,14 +53,6 @@ data_genre_bien = (
 data_genre_principale = data_genre_bien.iloc[:9]
 data_autre_genre = data_genre_bien.iloc[9:]
 count_autre = data_autre_genre.sum(numeric_only=True)["count"]
-total_data_autre_genre = data_autre_genre.sum(numeric_only=True)["count"]
-
-def calcPoucentageAutreGenre(row) :
-    return (row["count"]/total_data_autre_genre) * 100 
-
-data_autre_genre.loc[:,"poucentage"] = data_autre_genre.apply(calcPoucentageAutreGenre,axis=1)
-
-
 df_autre = pd.DataFrame(
     {"genre_grp": "Other (less than 3.4 percent)", "count": count_autre}, index=[1]
 )  # On crée la ligne "autre" dans un nouveau dataFrame
@@ -71,9 +63,37 @@ data_genre_principale = pd.concat(
 )  # On concatène
 
 
+total_data_autre_genre = data_autre_genre.sum(numeric_only=True)["count"]
+total_data_principale_genre = data_genre_principale.sum(numeric_only=True)["count"]
 
+
+def calcPoucentageAutreGenre(row):
+    return (row["count"] / total_data_autre_genre) * 100
+
+
+def calcPoucentagePrincipaleGenre(row):
+    return (row["count"] / total_data_principale_genre) * 100
+
+
+data_autre_genre = pd.concat(
+    [data_autre_genre, data_autre_genre.apply(calcPoucentageAutreGenre, axis=1)], axis=1
+).rename(columns={0: "pourcentage"})
+
+
+data_principale_pourcentage = data_genre_principale.apply(
+    calcPoucentagePrincipaleGenre, axis=1
+)
 
 labels = data_genre_principale["genre_grp"]
+labels = labels.to_list()
+data_principale_pourcentage = data_principale_pourcentage.to_list()
+tmp_labels = []
+for i in range(len(labels)):
+    prct = data_principale_pourcentage[i]
+    tmp_labels.append(labels[i] + " - " + str(round(prct, 3)) + "%")
+
+
+labels = tmp_labels
 
 labels_autre = data_autre_genre["genre_grp"]
 
@@ -82,26 +102,24 @@ fig, (ax1, ax2) = plt.subplots(
     1, 2, figsize=(100, 100), subplot_kw=dict(aspect="equal")
 )
 
-explode =([0] * 9) + [0.1]
+explode = ([0] * 9) + [0.1]
 wedges, texts, autotexts = ax1.pie(
     data_genre_principale["count"].to_numpy(),
     startangle=90,
     autopct="%1.2f%%",
     radius=1.2,
-    explode=explode
+    explode=explode,
 )
-
-# TODO voir si on peut mettre les pourcentage sur la légende
 
 ax1.legend(
     wedges,
-    labels.to_list(),
+    labels,
     title="Gender",
     loc="upper left",
     bbox_to_anchor=(1, 0, 0.5, 1),
 )
 
-plt.setp(autotexts, size=10)
+plt.setp(texts, size=10)
 
 ax1.set_title("Principal gender pie chart")
 
@@ -120,4 +138,4 @@ ax2.legend(
 )
 
 ax2.set_title("Other gender pie chart")
-#plt.show()
+plt.show()
