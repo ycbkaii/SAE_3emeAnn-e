@@ -47,3 +47,14 @@ plt.grid(True)
 
 # Affichage du graphique
 plt.show()
+
+# Partie 2 : Box Plot
+
+# Création du box plot
+plt.figure(figsize=(10, 5))
+data[ratings_columns].plot.box()
+plt.title("Box Plot des notations en fonction des étoiles")
+plt.ylabel("Nombre de notes")
+plt.xticks([1, 2, 3, 4, 5], ['5 étoiles', '4 étoiles', '3 étoiles', '2 étoiles', '1 étoile'])
+plt.grid(True)
+plt.show()
