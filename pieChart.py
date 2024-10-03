@@ -71,6 +71,16 @@ def calcPoucentageAutreGenre(row):
     return (row["count"] / total_data_autre_genre) * 100
 
 
+def categorizeAutreGenre(row):
+    if row["pourcentage"] > 5:
+        return "More than 5%"
+    elif row["pourcentage"] >= 1:
+        return "Between 5% and 1%"
+    elif row["pourcentage"] >= 0.1:
+        return "Between 1% and 0.1%"
+    else :
+        return "Less than 0.1%"
+
 def calcPoucentagePrincipaleGenre(row):
     return (row["count"] / total_data_principale_genre) * 100
 
@@ -79,6 +89,12 @@ data_autre_genre = pd.concat(
     [data_autre_genre, data_autre_genre.apply(calcPoucentageAutreGenre, axis=1)], axis=1
 ).rename(columns={0: "pourcentage"})
 
+data_autre_genre = pd.concat(
+    [data_autre_genre, data_autre_genre.apply(categorizeAutreGenre, axis=1)], axis=1
+).rename(columns={0: "cat"})
+
+
+distrib_autre_genre = data_autre_genre.groupby("cat").count().reset_index()
 
 data_principale_pourcentage = data_genre_principale.apply(
     calcPoucentagePrincipaleGenre, axis=1
@@ -95,8 +111,7 @@ for i in range(len(labels)):
 
 labels = tmp_labels
 
-labels_autre = data_autre_genre["genre_grp"]
-
+labels_autre = distrib_autre_genre["cat"].drop_duplicates()
 
 fig, (ax1, ax2) = plt.subplots(
     1, 2, figsize=(100, 100), subplot_kw=dict(aspect="equal")
@@ -123,19 +138,23 @@ plt.setp(texts, size=10)
 
 ax1.set_title("Principal gender pie chart")
 
-wedges2, texts2, autotexts2 = ax2.pie(
-    data_autre_genre["count"].to_numpy(),
-    startangle=90,
-    autopct="%1.1f%%",
-)
+def prctCatAutre(row) :
+    return row["count"]/196
+# bar chart parameters
+genre_ratios = distrib_autre_genre.apply(prctCatAutre,axis=1).to_list()
+print(distrib_autre_genre)
+bottom = 1
+width = .2
 
-ax2.legend(
-    wedges2,
-    labels_autre.to_list(),
-    title="Gender",
-    loc="center left",
-    bbox_to_anchor=(1, 0, 0.5, 1),
-)
+# Adding from the top matches the legend.
+for j, (height, label) in enumerate(reversed([*zip(genre_ratios, labels_autre)])):
+    bottom -= height
+    bc = ax2.bar(0, height, width, bottom=bottom, color='C0', label=label,
+                 alpha=0.1 + 0.25 * j)
+    ax2.bar_label(bc, labels=[f"{height:.0%}"], label_type='center')
 
-ax2.set_title("Other gender pie chart")
+ax2.set_title('Other Gender repartition')
+ax2.legend()
+ax2.axis('off')
+ax2.set_xlim(- 2.5 * width, 2.5 * width)
 plt.show()
