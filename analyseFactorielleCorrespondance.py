@@ -31,8 +31,81 @@ def awardsEnNb(col_award) :
         return 'Aucun Prix'
 
 # Fonction pour la création de la variable "Taille du livre"
-
+def noteMoyenneLivre(col_rate) :
+    col_rate = col_rate.replace(",", ".")
+    try :
+        if float(col_rate) <= 2.5 :
+             return 'Livre peu apprécié'
+        elif float(col_rate) < 4 : 
+            return 'Livre apprécié moyennement'
+        else : 
+            return 'Livre énormément apprécié'
+    except : 
+        return 'Livre inconnu'
 
 # On prépare les variables catégorielles
+catNote = data['average_rating'].apply(noteMoyenneLivre)
 catAwards = data['awards'].apply(awardsEnNb)
+
+
+# On enregistre 2 variables catégorielles qui nous interessent que nous avons transformé en catégorielle
+data_crosstab = pd.crosstab(catAwards,catNote)
+print(data_crosstab)
+## AFC
+
+#region STANDARDISATION
+# On met en place la standardisation des données
+temp = data_crosstab.sub(data_crosstab.mean())
+data_scaled = temp.div(data_crosstab.std())
+#endregion
+
+
+#region TEST DE SPHÉRÉCITÉ DE BARLETT
+chi_square_value, p_value = calculate_bartlett_sphericity(data_scaled)
+print("p_value = ",p_value) 
+#endregion
+
+
+# On va déterminer le nombre de facteurs à conserver dans l'analyse, on fait sans rotation
+fa=FactorAnalyzer(n_factors=3,rotation=None)
+fa.fit(data_scaled)
+ev,v=fa.get_eigenvalues()
+print(ev)
+
+plt.scatter(range(1, data_scaled.shape[1] + 1), ev)
+plt.plot(range(1, data_scaled.shape[1] + 1), ev)
+plt.title('Scree Plot')
+plt.xlabel('Factors')
+plt.ylabel('Valeurs Propres')
+plt.grid()
+#plt.show()
+
+
+# On définis les méthodes d'analyse factorielle
+methods = [
+    ("FA No Rotation",FactorAnalysis(2,rotation=None)),
+    ("FA Varimax", FactorAnalysis(2, rotation="varimax")),
+    ("FA Quartimax", FactorAnalysis(2, rotation="quartimax")),
+]
+
+fig, axes = plt.subplots(ncols=3, figsize=(15, 5), sharex=True, sharey=True)
+
+
+for ax, (method, fa) in zip(axes, methods):
+    fa.fit(data_scaled)
+    components = fa.components_
+    vmax = np.abs(components).max()
+    ax.scatter(components[0, :], components[1, :])
+    ax.axhline(0, -1, 1, color='k')
+    ax.axvline(0, -1, 1, color='k')
+    for i, j, z in zip(components[0, :], components[1, :], data_scaled.columns):
+        ax.text(i + 0.02, j + 0.02, str(z), ha="center")
+    ax.set_title(str(method))
+    if ax.get_subplotspec().is_first_col():
+        ax.set_ylabel("Factor 1")
+    ax.set_xlabel("Factor 2")
+
+# Ajuster la disposition des sous-graphiques
+plt.tight_layout()
+plt.show()
     
