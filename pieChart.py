@@ -116,7 +116,7 @@ labels = tmp_labels
 labels_autre = distrib_autre_genre["cat"].drop_duplicates()
 
 fig, (ax1, ax2) = plt.subplots(
-    1, 2, figsize=(100, 100), subplot_kw=dict(aspect="equal")
+    1, 2, figsize=(192,108)
 )
 
 explode = ([0] * 9) + [0.1]
@@ -124,7 +124,7 @@ wedges, texts, autotexts = ax1.pie(
     data_genre_principale["count"].to_numpy(),
     startangle=90,
     autopct="%1.2f%%",
-    radius=1.2,
+    radius=1,
     explode=explode,
 )
 
@@ -132,7 +132,7 @@ ax1.legend(
     wedges,
     labels,
     title="Gender",
-    loc="upper left",
+    loc="center left",
     bbox_to_anchor=(1, 0, 0.5, 1),
 )
 
@@ -144,7 +144,6 @@ def prctCatAutre(row) :
     return row["count"]/196
 # bar chart parameters
 genre_ratios = distrib_autre_genre.apply(prctCatAutre,axis=1).to_list()
-print(distrib_autre_genre)
 bottom = 1
 width = .2
 
@@ -160,10 +159,12 @@ ax2.legend()
 ax2.axis('off')
 ax2.set_xlim(- 2.5 * width, 2.5 * width)
 
+
+# Below code is copied and adapted from https://matplotlib.org/stable/gallery/pie_and_polar_charts/bar_of_pie.html
 # use ConnectionPatch to draw lines between the two plots
-theta1, theta2 = wedges[0].theta1, wedges[0].theta2
-center, r = wedges[0].center, wedges[0].r
-bar_height = sum(genre_ratios)
+theta1, theta2 = wedges[-1].theta1, wedges[-1].theta2
+center, r = wedges[-1].center, wedges[-1].r
+bar_height = 1
 
 # draw top connecting line
 x = r * np.cos(np.pi / 180 * theta2) + center[0]
@@ -177,7 +178,7 @@ ax2.add_artist(con)
 # draw bottom connecting line
 x = r * np.cos(np.pi / 180 * theta1) + center[0]
 y = r * np.sin(np.pi / 180 * theta1) + center[1]
-con = ConnectionPatch(xyA=(-width / 2, 0), coordsA=ax2.transData,
+con = ConnectionPatch(xyA=(-width / 2,0.04), coordsA=ax2.transData,
                       xyB=(x, y), coordsB=ax1.transData)
 con.set_color([0, 0, 0])
 ax2.add_artist(con)
