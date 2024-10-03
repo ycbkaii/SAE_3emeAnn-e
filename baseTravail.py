@@ -109,16 +109,20 @@ print(dc.head())
 
 mca = MCA(dc)
 
+plt.figure(figsize=(10, 8))
 plt.ioff()  # Désactiver le mode interactif
 
-plt.scatter(mca.fs_c()[:, 0], mca.fs_c()[:, 1], s=20, alpha=0.7, edgecolors='none')
+plt.scatter(mca.fs_c()[:, 0], mca.fs_c()[:, 1], s=5, alpha=0.7, edgecolors='none')
 
 for i, var in enumerate(dc.columns):
-    plt.annotate(var, (mca.fs_c()[i, 0], mca.fs_c()[i, 1]))    
-
+    plt.annotate(var,
+                 (mca.fs_c()[i, 0], mca.fs_c()[i, 1]),
+                 textcoords="offset points",  # Utiliser des coordonnées relatives au point
+                 xytext=(5, 5),  # Décalage de 5 points 
+                 ha='center',    # Alignement horizontal
+                 fontsize=6) 
+    
 plt.title("Projection des variables - ACM")
 plt.show()
 
-
-# /CHOICE 
 
