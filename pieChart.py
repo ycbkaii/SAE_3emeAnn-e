@@ -1,5 +1,7 @@
+import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+from matplotlib.patches import ConnectionPatch
 
 # On récupere le fichier csv et on nettoie ce dernier
 data = pd.read_csv("csv/bigboss_book.csv", low_memory=False)
@@ -157,4 +159,28 @@ ax2.set_title('Other Gender repartition')
 ax2.legend()
 ax2.axis('off')
 ax2.set_xlim(- 2.5 * width, 2.5 * width)
+
+# use ConnectionPatch to draw lines between the two plots
+theta1, theta2 = wedges[0].theta1, wedges[0].theta2
+center, r = wedges[0].center, wedges[0].r
+bar_height = sum(genre_ratios)
+
+# draw top connecting line
+x = r * np.cos(np.pi / 180 * theta2) + center[0]
+y = r * np.sin(np.pi / 180 * theta2) + center[1]
+con = ConnectionPatch(xyA=(-width / 2, bar_height), coordsA=ax2.transData,
+                      xyB=(x, y), coordsB=ax1.transData)
+con.set_color([0, 0, 0])
+con.set_linewidth(4)
+ax2.add_artist(con)
+
+# draw bottom connecting line
+x = r * np.cos(np.pi / 180 * theta1) + center[0]
+y = r * np.sin(np.pi / 180 * theta1) + center[1]
+con = ConnectionPatch(xyA=(-width / 2, 0), coordsA=ax2.transData,
+                      xyB=(x, y), coordsB=ax1.transData)
+con.set_color([0, 0, 0])
+ax2.add_artist(con)
+con.set_linewidth(4)
+
 plt.show()
