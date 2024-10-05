@@ -31,25 +31,25 @@ def awardsEnNb(col_award) :
         return 'Aucun Prix'
 
 # Fonction pour la création de la variable "Taille du livre"
-def noteMoyenneLivre(col_rate) :
-    col_rate = col_rate.replace(",", ".")
+def tailleLivre(col_nbpages) :
+    
     try :
-        if float(col_rate) <= 2.5 :
-             return 'Livre peu apprécié'
-        elif float(col_rate) < 4 : 
-            return 'Livre apprécié moyennement'
+        if float(col_nbpages) <= 200:
+             return 'Petit livre'
+        elif float(col_nbpages) <= 350 : 
+            return 'Livre de taille moyenne'
         else : 
-            return 'Livre énormément apprécié'
+            return 'Grand Livre'
     except : 
-        return 'Livre inconnu'
+        return 'Taille inconnue'
 
 # On prépare les variables catégorielles
-catNote = data['average_rating'].apply(noteMoyenneLivre)
+catTaille = data['number_of_pages'].apply(tailleLivre)
 catAwards = data['awards'].apply(awardsEnNb)
 
 
 # On enregistre 2 variables catégorielles qui nous interessent que nous avons transformé en catégorielle
-data_crosstab = pd.crosstab(catAwards,catNote)
+data_crosstab = pd.crosstab(catAwards,catTaille)
 print(data_crosstab)
 ## AFC
 
