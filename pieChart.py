@@ -193,4 +193,7 @@ con.set_color([0, 0, 0])
 ax2.add_artist(con)
 con.set_linewidth(4)
 
+# Afficher en plein ecran pour + de lisibilité
+# manager = plt.get_current_fig_manager()
+# manager.full_screen_toggle()    
 plt.show()
