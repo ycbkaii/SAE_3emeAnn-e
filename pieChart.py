@@ -78,19 +78,19 @@ def calcPoucentagePrincipaleGenre(row):
     return (row["count"] / total_data_principale_genre) * 100
 
 def categorizeAutreGenre(row):
-    if row["pourcentage"] > 5:
-        return "More than 5%"
-    elif row["pourcentage"] >= 1:
-        return "Between 5% and 1%"
-    elif row["pourcentage"] >= 0.1:
-        return "Between 1% and 0.1%"
+    if row["count"] > 800:
+        return "More than 800 books"
+    elif row["count"] >= 100:
+        return "Between 800 and 100 books"
+    elif row["count"] >= 10:
+        return "Between 100 and 10 books"
     else:
-        return "Less than 0.1%"
+        return "Less than 10 books"
 
 
 def prctCatAutre(row):
     '''Pour les ratios du bar chart'''
-    return row["count"] / 196
+    return row["count"] / 188
 
 
 # On applique les fonctions
@@ -104,7 +104,6 @@ data_principale_pourcentage = data_genre_principale.apply(
 data_autre_genre = pd.concat(
     [data_autre_genre, data_autre_genre.apply(categorizeAutreGenre, axis=1)], axis=1
 ).rename(columns={0: "cat"})
-
 # Pour le bar chart
 distrib_autre_genre = data_autre_genre.groupby("cat").count().reset_index()
 
@@ -149,6 +148,7 @@ ax1.set_title("Principal genders pie chart")
 
 # bar chart parameters
 genre_ratios = distrib_autre_genre.apply(prctCatAutre, axis=1).to_list()
+print(genre_ratios,distrib_autre_genre)
 bottom = 1
 width = 0.2
 
@@ -187,7 +187,7 @@ ax2.add_artist(con)
 x = r * np.cos(np.pi / 180 * theta1) + center[0]
 y = r * np.sin(np.pi / 180 * theta1) + center[1]
 con = ConnectionPatch(
-    xyA=(-width / 2, 0.04), coordsA=ax2.transData, xyB=(x, y), coordsB=ax1.transData
+    xyA=(-width / 2, 0), coordsA=ax2.transData, xyB=(x, y), coordsB=ax1.transData
 )
 con.set_color([0, 0, 0])
 ax2.add_artist(con)
