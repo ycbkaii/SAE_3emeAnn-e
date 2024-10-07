@@ -114,7 +114,7 @@ data_principale_pourcentage = data_principale_pourcentage.to_list()
 tmp_labels = []
 for i in range(len(labels)):
     prct = data_principale_pourcentage[i]
-    tmp_labels.append(labels[i] + " - " + str(round(prct, 3)) + "%")
+    tmp_labels.append(labels[i] + " - " + str(round(prct, 4)) + "%")
 
 labels = tmp_labels
 
@@ -148,7 +148,6 @@ ax1.set_title("Principal genders pie chart")
 
 # bar chart parameters
 genre_ratios = distrib_autre_genre.apply(prctCatAutre, axis=1).to_list()
-print(genre_ratios,distrib_autre_genre)
 bottom = 1
 width = 0.2
 
@@ -160,7 +159,7 @@ for j, (height, label) in enumerate(reversed([*zip(genre_ratios, labels_autre)])
     )
     ax2.bar_label(bc, labels=[f"{height:.0%}"], label_type="center")
 
-ax2.set_title("Other Gender repartition")
+ax2.set_title("Other Gender repartition by number of books")
 ax2.legend()
 ax2.axis("off")
 ax2.set_xlim(-2.5 * width, 2.5 * width)
