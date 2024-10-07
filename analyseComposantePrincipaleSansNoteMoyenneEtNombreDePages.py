@@ -99,27 +99,3 @@ plt.show()
 
 
 
-
-# Mise en place du graphique des individus
-pca_df = pd.DataFrame({
-    "Dim1" :  pca_res[:,0],
-    "Dim2" :  pca_res[:,1],
-    "cat_date" : variableQualitative.to_numpy()
-})
-
-
-# La pallette de couleurs
-palette = plt.get_cmap('Dark2')
-couleurs = dict(zip(pca_df["cat_date"].drop_duplicates(),palette(range(len(pca_df['cat_date'].drop_duplicates())))))
-position = dict(zip(couleurs.keys(),range(len(pca_df['cat_date'].drop_duplicates())))) 
-
-
-
-pca_df.plot.scatter("Dim1", "Dim2", c=[couleurs[p] for p in pca_df["cat_date"]])
-for cont, coul in couleurs.items():
-    plt.scatter(135, position[cont] + 10.15, c=[coul])
-    plt.text(136, position[cont]  + 10, cont)
-plt.xlabel("Dimension 1 (%)")
-plt.ylabel("Dimension 2 (%)")
-plt.suptitle("Premier plan factoriel (%)")
-plt.show()
