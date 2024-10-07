@@ -14,7 +14,7 @@ data = pd.read_csv("csv/bigboss_book.csv")
 
 # On récupere les colonnes quantitatives
 
-variables = ['rating_count', 'review_count', 'average_rating', 'five_star_ratings', 'four_star_ratings', 'three_star_ratings', 'two_star_ratings', 'one_star_ratings', 'number_of_pages']
+variables = ['rating_count', 'review_count', 'five_star_ratings', 'four_star_ratings', 'three_star_ratings', 'two_star_ratings', 'one_star_ratings']
 
 # Pour le graphique des individus on va récupérer une variable qualitative 'date_published'
 variableQualitative = data['date_published'].astype(str)
@@ -64,7 +64,7 @@ x_scaled = temp.div(data.std())
 
 
 #region Mise en place pour les variables avec nombre de pages et note moyenne
-pca = PCA(n_components=9)
+pca = PCA(n_components=7)
 pca.fit(x_scaled)
 
 pca_res = pca.fit_transform(x_scaled)
@@ -81,7 +81,7 @@ print(f"Pourcentage valeurs propres : {pourcentValeursPropre}\n")
 
 #CREATION TABLE QUI RESUME LES VALEURS PROPRES
 tableauACP = pd.DataFrame({
-    "Dimension " : ["Dim" + str (x + 1) for  x in range (9)],
+    "Dimension " : ["Dim" + str (x + 1) for  x in range (7)],
     "Valeur propre" : str(valeursPropre),
     "% valeur propre" : np.round(pourcentValeursPropre * 100),
     "% cum. val. prop." : np.round(np.cumsum(pourcentValeursPropre) * 100)

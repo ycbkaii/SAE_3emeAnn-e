@@ -38,8 +38,10 @@ def tailleLivre(col_nbpages) :
              return 'Petit livre'
         elif float(col_nbpages) <= 350 : 
             return 'Livre de taille moyenne'
-        else : 
+        elif float(col_nbpages) <= 550: 
             return 'Grand Livre'
+        else : 
+            return 'Tres grand livre'
     except : 
         return 'Taille inconnue'
 
