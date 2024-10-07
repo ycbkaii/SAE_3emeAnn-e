@@ -16,23 +16,6 @@ data = pd.read_csv("csv/bigboss_book.csv")
 
 variables = ['rating_count', 'review_count', 'five_star_ratings', 'four_star_ratings', 'three_star_ratings', 'two_star_ratings', 'one_star_ratings']
 
-# Pour le graphique des individus on va récupérer une variable qualitative 'date_published'
-variableQualitative = data['date_published'].astype(str)
-
-# On créé une fonction pour qualitativiser la variable
-def datePublished(date) :
-    dateRetenu = date.split()[-1]
-    if dateRetenu == None or dateRetenu == 'nan' : 
-        return 'Date Inconnu'
-
-    if int(dateRetenu) >= 2010 :
-        return 'Livre Très Récent'
-    elif int(dateRetenu) < 2010 and int(dateRetenu) >= 2000 : 
-        return 'Livre Récent'
-    else :
-        return 'Ancien Livre'
-
-variableQualitative = variableQualitative.apply(datePublished)
 
 # On nettoie et on garde que les données qu'on va utiliser
 data = data[variables]
