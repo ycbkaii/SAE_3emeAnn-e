@@ -84,8 +84,10 @@ def categorizeAutreGenre(row):
         return "Between 800 and 100 books"
     elif row["count"] >= 10:
         return "Between 100 and 10 books"
+    elif row["count"] >= 2:
+        return "Between 10 and 2 books"
     else:
-        return "Less than 10 books"
+        return "1 books"
 
 
 def prctCatAutre(row):
@@ -155,7 +157,7 @@ width = 0.2
 for j, (height, label) in enumerate(reversed([*zip(genre_ratios, labels_autre)])):
     bottom -= height
     bc = ax2.bar(
-        0, height, width, bottom=bottom, color="C0", label=label, alpha=0.1 + 0.25 * j
+        0, height, width, bottom=bottom, color="C0", label=label, alpha=0.1 + 0.20 * j
     )
     ax2.bar_label(bc, labels=[f"{height:.0%}"], label_type="center")
 
