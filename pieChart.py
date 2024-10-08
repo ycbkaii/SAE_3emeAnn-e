@@ -58,7 +58,7 @@ data_genre_principale = data_genre_bien.iloc[:9]
 data_autre_genre = data_genre_bien.iloc[9:] 
 count_autre = data_autre_genre.sum(numeric_only=True)["count"]
 df_autre = pd.DataFrame(
-    {"genre_grp": "Other (less than 3.4 percent)", "count": count_autre}, index=[1]
+    {"genre_grp": "Other - 188 genders", "count": count_autre}, index=[1]
 )  # On crée la ligne "autre" dans un nouveau dataFrame
 
 
