@@ -19,31 +19,31 @@ def awardsEnNb(col_award) :
         nbCol = len(col_award.split(','))
         
         if col_award == "nan" or col_award == "":
-            return 'Aucun Prix'
+            return 'None Price'
         elif nbCol <= 2: 
-            return 'Peu de prix'
+            return 'Few prices'
         elif nbCol <= 4 : 
-            return 'Moyennement de prix'
+            return 'Moderate number prices'
         elif nbCol > 4 :
-            return 'Beaucoup de prix'
+            return 'A lot of prices'
 
     except : 
-        return 'Aucun Prix'
+        return 'None Price'
 
 # Fonction pour la création de la variable "Taille du livre"
 def tailleLivre(col_nbpages) :
     
     try :
         if float(col_nbpages) <= 200:
-             return 'Petit livre'
+             return 'Small book'
         elif float(col_nbpages) <= 350 : 
-            return 'Livre de taille moyenne'
+            return 'Book of intermediate size'
         elif float(col_nbpages) <= 550: 
-            return 'Grand Livre'
+            return 'Big Book'
         else : 
-            return 'Tres grand livre'
+            return 'Very Big Book'
     except : 
-        return 'Taille inconnue'
+        return 'Unknown Size'
 
 # On prépare les variables catégorielles
 catTaille = data['number_of_pages'].apply(tailleLivre)

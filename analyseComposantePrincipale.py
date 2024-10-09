@@ -23,14 +23,14 @@ variableQualitative = data['date_published'].astype(str)
 def datePublished(date) :
     dateRetenu = date.split()[-1]
     if dateRetenu == None or dateRetenu == 'nan' : 
-        return 'Date Inconnu'
+        return 'Unknown Book'
 
     if int(dateRetenu) >= 2010 :
-        return 'Livre Très Récent'
+        return 'Very recent book'
     elif int(dateRetenu) < 2010 and int(dateRetenu) >= 2000 : 
-        return 'Livre Récent'
+        return 'Recent book'
     else :
-        return 'Ancien Livre'
+        return 'Old Book'
 
 variableQualitative = variableQualitative.apply(datePublished)
 
