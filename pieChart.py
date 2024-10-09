@@ -31,15 +31,19 @@ data = data[variables]
 data_first_genre = data["genre_and_votes"].str.split(",", expand=True)[0]
 
 # On sépare la catégorie du nombre de vote
-data_first_genre = data_first_genre.str.split("[0-9]", expand=True, regex=True)[0].to_frame()
-data_first_genre = data_first_genre.rename(columns={0: 'Cat originale'})
+data_first_genre = data_first_genre.str.split("[0-9]", expand=True, regex=True)[
+    0
+].to_frame()
+data_first_genre = data_first_genre.rename(columns={0: "Cat originale"})
 
 
 # On compte pour chaque catégorie
-data_genre = data_first_genre.groupby('Cat originale').size().reset_index(name="count")
+data_genre = data_first_genre.groupby("Cat originale").size().reset_index(name="count")
 
 # On regroupe les catégorie en enlevant les sous-catégorie (ex : Youg Adult-Teen -> Youg Adult)
-data_catégorie_princiale = data_genre['Cat originale'].str.split("-", expand=True)[0].str.strip()
+data_catégorie_princiale = (
+    data_genre["Cat originale"].str.split("-", expand=True)[0].str.strip()
+)
 
 
 data_genre["genre_grp"] = data_catégorie_princiale
@@ -48,14 +52,14 @@ data_genre_bien = (
     .sum()  # on calcule la taille
     .sort_values("count", axis=0, ascending=False)  # On trie de manière déscendante
     .reset_index()  # On reset l'index du dataframe
-    .drop('Cat originale', axis=1)  # On supprime la colonne avec les ancien genre
+    .drop("Cat originale", axis=1)  # On supprime la colonne avec les ancien genre
 )
 
 # On selectionne les 9 genres principaux
 data_genre_principale = data_genre_bien.iloc[:9]
 
 # les autres genre seront afficher comme 'autre'
-data_autre_genre = data_genre_bien.iloc[9:] 
+data_autre_genre = data_genre_bien.iloc[9:]
 count_autre = data_autre_genre.sum(numeric_only=True)["count"]
 df_autre = pd.DataFrame(
     {"genre_grp": "Other - 188 genders", "count": count_autre}, index=[1]
@@ -70,12 +74,15 @@ data_genre_principale = pd.concat(
 total_data_autre_genre = data_autre_genre.sum(numeric_only=True)["count"]
 total_data_principale_genre = data_genre_principale.sum(numeric_only=True)["count"]
 
+
 # Fonction de calcule de prct et de cat.
 def calcPoucentageAutreGenre(row):
     return (row["count"] / total_data_autre_genre) * 100
 
+
 def calcPoucentagePrincipaleGenre(row):
     return (row["count"] / total_data_principale_genre) * 100
+
 
 def categorizeAutreGenre(row):
     if row["count"] > 800:
@@ -91,7 +98,7 @@ def categorizeAutreGenre(row):
 
 
 def prctCatAutre(row):
-    '''Pour les ratios du bar chart'''
+    """Pour les ratios du bar chart"""
     return row["count"] / 188
 
 
@@ -106,7 +113,7 @@ data_principale_pourcentage = data_genre_principale.apply(
 data_autre_genre = pd.concat(
     [data_autre_genre, data_autre_genre.apply(categorizeAutreGenre, axis=1)], axis=1
 ).rename(columns={0: "cat"})
-# Pour le bar chart
+# Pour le ratio du bar chart
 distrib_autre_genre = data_autre_genre.groupby("cat").count().reset_index()
 
 # On créer les labels
@@ -133,7 +140,7 @@ wedges, texts, autotexts = ax1.pie(
     autopct="%1.2f%%",
     radius=1,
     explode=explode,
-    pctdistance=0.8
+    pctdistance=0.8,
 )
 
 ax1.legend(
@@ -196,5 +203,5 @@ con.set_linewidth(4)
 
 # Afficher en plein ecran pour + de lisibilité
 # manager = plt.get_current_fig_manager()
-# manager.full_screen_toggle()    
+# manager.full_screen_toggle()
 plt.show()
