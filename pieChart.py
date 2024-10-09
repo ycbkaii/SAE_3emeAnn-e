@@ -85,7 +85,7 @@ def calcPoucentagePrincipaleGenre(row):
 
 
 def categorizeAutreGenre(row):
-    if row["count"] > 800:
+    if row["count"] >= 800:
         return "More than 800 books"
     elif row["count"] >= 100:
         return "Between 800 and 100 books"
