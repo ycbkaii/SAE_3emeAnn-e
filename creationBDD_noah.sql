@@ -5,15 +5,16 @@ CREATE TABLE utilisateurs(
 );
 
 CREATE TABLE categories_raison_lecture(
-    categorie VARCHAR PRIMARY KEY
+    id_raison_lecture SERIAL PRIMARY KEY,
+    categorie VARCHAR 
 );
 
 CREATE TABLE utilisateur_raison (
     id_user INT REFERENCES utilisateurs(id_user) ON DELETE CASCADE,
-    categorie VARCHAR REFERENCES categories_raison_lecture(categorie) ON DELETE CASCADE,
-    PRIMARY KEY (id_user, categorie)
+    id_raison_lecture INT REFERENCES categories_raison_lecture(id_raison_lecture) ON DELETE CASCADE,
+    id_vitesse_lecture INT REFERENCES vitesse_de_lecture(id_vitesse_lecture) ON DELETE CASCADE,
+    PRIMARY KEY (id_user, categorie_raison, categorie_vitesse)
 );
-
 
 CREATE TABLE humeur (
     nom_humeur VARCHAR PRIMARY KEY
