@@ -1,0 +1,25 @@
+-- Table: Awards
+CREATE TABLE _awards (
+    id_awards SERIAL PRIMARY KEY,
+    nom_awards VARCHAR(255)
+);
+
+-- Table: possede_serie (Saga Has Book)
+CREATE TABLE _possede_serie (
+    id_saga INT,
+    id_livre INT,
+    numero_opus INT,
+    PRIMARY KEY (id_saga, id_livre),
+    FOREIGN KEY (id_saga) REFERENCES saga(id_saga),
+    FOREIGN KEY (id_livre) REFERENCES livre(id_livre)
+);
+
+-- Table: recompense_en (Book Wins Award)
+CREATE TABLE _recompense_en (
+    id_livre INT,
+    id_awards INT,
+    date DATE,
+    PRIMARY KEY (id_livre, id_awards, date),
+    FOREIGN KEY (id_livre) REFERENCES livre(id_livre),
+    FOREIGN KEY (id_awards) REFERENCES awards(id_awards)
+);
