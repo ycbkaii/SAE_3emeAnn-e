@@ -20,6 +20,6 @@ def split_genres(row):
     return pd.DataFrame(df_list)
 
 # Apply the function to all rows and concatenate results
-all_new_rows = pd.concat([split_genres(row) for index, row in data_extract.iterrows()], ignore_index=True)
+genre_du_livre = pd.concat([split_genres(row) for index, row in data_extract.iterrows()], ignore_index=True)
 
-all_new_rows.to_csv("csv/peuplement_genre_du_livre.csv",header=False)
+genre_du_livre.to_csv("csv/peuplement_genre_du_livre.csv",header=False)
