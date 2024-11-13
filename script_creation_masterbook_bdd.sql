@@ -49,6 +49,9 @@ CREATE TABLE "_livre" (
 	"isbn" varchar(13) DEFAULT NULL,
 	"id_saga" int DEFAULT NULL,
 	"numéro_opus" int DEFAULT NULL,
+    "review_count_others" int,
+    "rating_count_others" int,
+    "average_rating_others" float,
     FOREIGN KEY (id_saga) REFERENCES _saga(id_saga),
 	PRIMARY KEY("id_livre")
 );
@@ -316,6 +319,9 @@ CREATE TABLE _auteur(
     lieu_naissance INT DEFAULT NULL,
     id_genre_1 INT NOT NULL,
     id_genre_2 INT DEFAULT NULL,
+    review_count_others int,
+    rating_count_others int,
+    average_rating_others float,
     FOREIGN KEY (id_genre_1) REFERENCES _genre(id_genre),
     FOREIGN KEY (id_genre_2) REFERENCES _genre(id_genre),
     FOREIGN KEY (id_genre_sex) REFERENCES _genre_personne(id_genre) ON DELETE CASCADE,
@@ -420,8 +426,6 @@ GROUP BY id_saga;
 * @author Yanis
 */
 
-
--- TODO Création d'un trigger pour add +1 dans la table d'association _genres_du_livre quand l'user vote pour un genre du livre s'il considère que ce livre respecte un genre en particulier
 
 CREATE OR REPLACE FUNCTION _update_nombre_vote()
 RETURNS TRIGGER AS $$
