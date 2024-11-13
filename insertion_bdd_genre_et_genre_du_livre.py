@@ -26,5 +26,5 @@ genre = genre_du_livre['genre']
 
 genre_unique = genre.drop_duplicates()
 
-genre_du_livre.to_csv("csv/peuplement_genre_du_livre.csv",index=False)
-genre_unique.to_csv("csv/peuplement_genre_livre.csv",index=False)
+genre_du_livre.to_csv("csv/peuplement_genre_du_livre.csv")
+genre_unique.to_csv("csv/peuplement_genre_livre.csv")
