@@ -323,15 +323,21 @@ CREATE TABLE _auteur(
     nom_complet VARCHAR,
     id_genre_sex INT NOT NULL,
     lieu_naissance INT DEFAULT NULL,
-    id_genre_1 INT NOT NULL,
-    id_genre_2 INT DEFAULT NULL,
     review_count int,
     rating_count int,
     average_rating float,
-    FOREIGN KEY (id_genre_1) REFERENCES _genre(id_genre),
-    FOREIGN KEY (id_genre_2) REFERENCES _genre(id_genre),
     FOREIGN KEY (id_genre_sex) REFERENCES _genre_personne(id_genre) ON DELETE CASCADE,
     FOREIGN KEY (lieu_naissance) REFERENCES _lieu_de_naissance(id_lieu) ON DELETE CASCADE 
+);
+
+
+-- Création de table liaison entre auteur et genres
+CREATE TABLE _genres_auteurs(
+    id_genre INT,
+    id_auteur INT,
+    PRIMARY KEY(id_genre, id_auteur),
+    FOREIGN KEY(id_genre) REFERENCES _genre(id_genre),
+    FOREIGN KEY (id_auteur) REFERENCES _auteur(id_auteur)
 );
 
 
