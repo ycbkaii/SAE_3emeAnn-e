@@ -49,9 +49,14 @@ CREATE TABLE "_livre" (
 	"isbn" varchar(13) DEFAULT NULL,
 	"id_saga" int DEFAULT NULL,
 	"numéro_opus" int DEFAULT NULL,
-    "review_count_others" int,
-    "rating_count_others" int,
-    "average_rating_others" float,
+    "review_count" int,
+    "rating_count" int,
+    "average_rating" float,
+    "five_star_ratings" INT,
+    "four_star_ratings" INT,
+    "three_star_ratings" INT,
+    "two_star_ratings" INT,
+    "one_star_ratings" INT,
     FOREIGN KEY (id_saga) REFERENCES _saga(id_saga),
 	PRIMARY KEY("id_livre")
 );
@@ -80,7 +85,8 @@ CREATE TABLE "_possede_personnage" (
 
 -- Table Publisher
 CREATE TABLE "_publisher" (
-	"id_publisher" serial NOT NULL UNIQUE,
+	"id_publisher" serial NOT NULL,
+    "nom_complet" VARCHAR(200) NOT NULL,
 	PRIMARY KEY("id_publisher")
 );
 
@@ -319,9 +325,9 @@ CREATE TABLE _auteur(
     lieu_naissance INT DEFAULT NULL,
     id_genre_1 INT NOT NULL,
     id_genre_2 INT DEFAULT NULL,
-    review_count_others int,
-    rating_count_others int,
-    average_rating_others float,
+    review_count int,
+    rating_count int,
+    average_rating float,
     FOREIGN KEY (id_genre_1) REFERENCES _genre(id_genre),
     FOREIGN KEY (id_genre_2) REFERENCES _genre(id_genre),
     FOREIGN KEY (id_genre_sex) REFERENCES _genre_personne(id_genre) ON DELETE CASCADE,
@@ -362,28 +368,82 @@ CREATE TABLE _aime_auteur(
 );
 
 
+-- Création de trigger et de fonction pour les valeurs calculées d'auteur
+-- Fonction pour calculer rating count et avg rating et review count
+CREATE OR REPLACE FUNCTION _rating_review_auteur_and_avg()
+RETURNS TRIGGER AS $$
+    
+BEGIN
+    IF (NEW.note_auteur IS NOT NULL) THEN
+        
+        -- On met à jour le la moyenne et le rating count
+        UPDATE _auteur SET average_rating = ((average_rating * rating_count::FLOAT)+NEW.note_auteur::FLOAT)/(rating_count+1) WHERE id_auteur = NEW.id_auteur; 
+        UPDATE _auteur SET rating_count = rating_count +1 WHERE id_auteur = NEW.id_auteur;
 
--- Création d'une vue des valeurs calculées de la table 'Auteur'
+    END IF;
 
--- Création vue pour le 'rating' pour auteur
-CREATE VIEW rating_auteur AS
-SELECT id_auteur, AVG(note_auteur) AS average_rating, COUNT(note_auteur) AS rating_count 
-FROM _a_lu_auteur
-WHERE note_auteur IS NOT NULL
-GROUP BY id_auteur
-;
--- Création vue pour le 'review' pour auteur
-CREATE VIEW review_auteur AS
-SELECT id_auteur, COUNT(review) AS review_count
-FROM _a_lu_auteur
-WHERE review IS NOT NULL
-GROUP BY id_auteur
-;
+    -- On augmente de +1 le review count
+    IF (NEW.review IS NOT NULL AND NEW.review != '') THEN
+        UPDATE _auteur SET review_count = review_count+1 WHERE id_auteur = NEW.id_auteur;
+    END IF;
 
-CREATE VIEW auteur_calculees AS 
-SELECT review_auteur.id_auteur, average_rating, rating_count, review_count FROM review_auteur 
-NATURAL JOIN rating_auteur
-;
+    
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER _update_avg_and_nombre_vote_pour_auteur
+AFTER INSERT ON _a_lu_auteur
+FOR EACH ROW
+EXECUTE FUNCTION _rating_review_auteur_and_avg();
+
+
+
+
+
+-- Création de trigger et de fonction pour les valeurs calculées d'auteur
+-- Fonction pour calculer rating count et avg rating et review count
+CREATE OR REPLACE FUNCTION _rating_review_livre_and_avg()
+RETURNS TRIGGER AS $$
+    
+BEGIN
+    IF (NEW.note_livre IS NOT NULL) THEN
+        
+
+        -- On check que l'utilisateur a mis entre 1 et 5 étoiles
+        IF (NEW.note_livre = 5) THEN
+            UPDATE _livre SET five_star_ratings = five_star_ratings+1 WHERE id_livre = NEW.id_livre;
+        ELSIF (NEW.note_livre = 4) THEN 
+            UPDATE _livre SET four_star_ratings = four_star_ratings+1 WHERE id_livre = NEW.id_livre;
+        ELSIF (NEW.note_livre = 3) THEN
+            UPDATE _livre SET three_star_ratings = three_star_ratings+1 WHERE id_livre = NEW.id_livre;
+        ELSIF (NEW.note_livre = 2) THEN
+            UPDATE _livre SET two_star_ratings = two_star_ratings+1 WHERE id_livre = NEW.id_livre;
+        ELSIF (NEW.note_livre = 1) THEN
+            UPDATE _livre SET one_star_ratings = one_star_ratings+1 WHERE id_livre = NEW.id_livre;
+        END IF;
+
+        -- On met à jour le la moyenne et le rating count
+        UPDATE _livre SET average_rating = (five_star_ratings::FLOAT + four_star_ratings::FLOAT + three_star_ratings::FLOAT + two_star_ratings::FLOAT + one_star_ratings::FLOAT) / (rating_count+1) WHERE id_livre = NEW.id_livre; 
+        UPDATE _livre SET rating_count = rating_count +1 WHERE id_livre = NEW.id_livre;
+
+    END IF;
+
+    -- On augmente de +1 le review count
+    IF (NEW.review IS NOT NULL AND NEW.review != '') THEN
+        UPDATE _livre SET review_count = review_count+1 WHERE id_livre = NEW.id_livre;
+    END IF;
+
+    
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER _update_avg_and_nombre_vote_pour_livre
+AFTER INSERT ON _a_lu_livre_vote_genre_pour_livre
+FOR EACH ROW
+EXECUTE FUNCTION _rating_review_livre_and_avg();
+
 
 /**
 * @author Guillaume
