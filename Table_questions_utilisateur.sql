@@ -18,11 +18,6 @@ CREATE TABLE _lieux_lecture (
     nom_lieux VARCHAR(50) NOT NULL
 );
 
-CREATE TABLE _utilisateur (
-    id_user SERIAL PRIMARY KEY,
-    nom VARCHAR(50) NOT NULL
-);
-
 CREATE TABLE _ou_utilisateur_lit_generalement (
     id_lieux INT NOT NULL,
     id_user INT NOT NULL,
