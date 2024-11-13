@@ -27,4 +27,4 @@ for index, row in data_cleaned.iterrows():
 publisher_df = pd.DataFrame(publisher_data)
 
 # Sauvegarder le csv des personnages
-publisher_df.to_csv("csv/publisher_avec_id_livre.csv", index=False)
+publisher_df.to_csv("csv/publisher_avec_id_livre.csv", index=True)

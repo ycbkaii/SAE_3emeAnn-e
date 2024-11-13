@@ -28,4 +28,4 @@ for index, row in data_cleaned.iterrows():
 characters_df = pd.DataFrame(characters_data)
 
 # Sauvegarder le csv des personnages
-characters_df.to_csv("csv/personnages_avec_id_livre.csv", index=False)
+characters_df.to_csv("csv/personnages_avec_id_livre.csv", index=True)
