@@ -1,9 +1,3 @@
--- Table: Awards
-CREATE TABLE _awards (
-    id_awards SERIAL PRIMARY KEY,
-    nom_awards VARCHAR(255)
-);
-
 -- Table: possede_serie (Saga Has Book)
 CREATE TABLE _possede_serie (
     id_saga INT,
@@ -14,6 +8,14 @@ CREATE TABLE _possede_serie (
     FOREIGN KEY (id_livre) REFERENCES livre(id_livre)
 );
 
+
+-- Table: Awards
+CREATE TABLE _awards (
+    id_awards SERIAL PRIMARY KEY,
+    nom_awards VARCHAR(255)
+);
+
+
 -- Table: recompense_en (Book Wins Award)
 CREATE TABLE _recompense_en (
     id_livre INT,
@@ -23,3 +25,22 @@ CREATE TABLE _recompense_en (
     FOREIGN KEY (id_livre) REFERENCES livre(id_livre),
     FOREIGN KEY (id_awards) REFERENCES awards(id_awards)
 );
+
+-- Table: Saga (Series)
+CREATE TABLE saga (
+    id_saga SERIAL PRIMARY KEY,
+    nom_de_la_saga VARCHAR(255),
+);
+
+
+--Vue : Pour calculer dynamiquement le nombre de livres dans chaque saga
+CREATE VIEW nb_livre_in_saga AS
+SELECT id_saga, COUNT(*) AS nb_livre_in_saga
+FROM livre
+GROUP BY id_saga;
+
+--jointure entre la table saga et la vue nb_livre_in_saga :
+SELECT s.id_saga, s.nom_de_la_saga, v.nb_livre_in_saga
+FROM saga s
+LEFT JOIN nb_livre_in_saga v ON s.id_saga = v.id_saga;
+
