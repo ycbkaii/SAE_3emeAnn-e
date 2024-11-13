@@ -1,0 +1,2 @@
+copy _awards(id_awards, nom_awards) FROM 'awards.csv' DELIMITER ',' CSV HEADER;
+copy _recompense_en(id_livre, id_award, date) FROM 'recompense_en.csv' DELIMITER ',' CSV HEADER;
