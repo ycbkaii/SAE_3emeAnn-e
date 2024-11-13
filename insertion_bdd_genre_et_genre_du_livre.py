@@ -22,4 +22,9 @@ def split_genres(row):
 # Apply the function to all rows and concatenate results
 genre_du_livre = pd.concat([split_genres(row) for index, row in data_extract.iterrows()], ignore_index=True)
 
-genre_du_livre.to_csv("csv/peuplement_genre_du_livre.csv",header=False)
+genre = genre_du_livre['genre']
+
+genre_unique = genre.drop_duplicates()
+
+genre_du_livre.to_csv("csv/peuplement_genre_du_livre.csv",index=False)
+genre_unique.to_csv("csv/peuplement_genre_livre.csv",index=False)
