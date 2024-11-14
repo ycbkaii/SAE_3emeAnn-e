@@ -18,13 +18,15 @@ print(data_cleaned)
 # On peut commencer la création du csv
 publisher_data=[]
 
-for index, row in data_cleaned.iterrows():
+index=1
+for abc, row in data_cleaned.iterrows():
     book_id = row['id']
     publisher = row['publisher']
-    publisher_data.append({'publisher': publisher,'id': book_id})
+    publisher_data.append({'id_publi':index,'publisher': publisher,'id_book': book_id})
+    index+=1
 
 # Convertir la liste en DataFrame
-publisher_df = pd.DataFrame(publisher_data)
+publisher_data = pd.DataFrame(publisher_data)
 
 # Sauvegarder le csv des personnages
-publisher_df.to_csv("csv/publisher_avec_id_livre.csv", index=True)
+publisher_data.to_csv("csv/publisher_avec_id_livre.csv", index=True)

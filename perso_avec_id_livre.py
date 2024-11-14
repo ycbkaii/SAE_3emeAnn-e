@@ -17,12 +17,13 @@ print(data_cleaned)
 
 # On peut commencer la création du csv
 characters_data=[]
-
-for index, row in data_cleaned.iterrows():
+index = 1
+for abc, row in data_cleaned.iterrows():
     book_id = row['id']
     characters_list = row['characters'].split(', ')  
     for character in characters_list:
-        characters_data.append({'character': character,'id': book_id})
+        characters_data.append({'id_perso':index,'nom_personnage': character,'id_livre': book_id})
+        index+=1
 
 # Convertir la liste en DataFrame
 characters_df = pd.DataFrame(characters_data)
