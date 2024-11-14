@@ -66,7 +66,7 @@ data['birthplace'] = data['birthplace'].apply(replaceLocationToId)
 
 
 # On garde que les colonnes associés à l'auteur
-dataAuteurCsv= data[['author_id', 'author_name', 'author_gender', 'birthplace', 'author_review_count', 'author_rating_count', 'author_average_rating']].to_csv("peuplement_auteurs.csv",index=False) 
+dataAuteurCsv= data[['author_id', 'author_name', 'author_gender', 'birthplace', 'author_review_count', 'author_rating_count', 'author_average_rating']].drop_duplicates(subset="author_id").to_csv("peuplement_auteurs.csv",index=False) 
 
 
 # On fait la table de liason en CSV du genres de l'auteurs
