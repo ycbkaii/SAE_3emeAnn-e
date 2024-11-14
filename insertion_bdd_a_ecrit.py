@@ -1,5 +1,6 @@
 
 import pandas as pd
+import numpy as np
 
 # Charger les deux fichiers CSV d'origine
 books_df = pd.read_csv("../csv/bigboss_book.csv")  # Contient la colonne 'id' pour 'id_livre'
@@ -15,7 +16,14 @@ a_ecrit_df['id_livre'] = books_df['id']
 a_ecrit_df['id_auteur'] = authors_df['author_id']
 
 
+# On supprime les '.'
+def suppPoint(row) :
+    if str(row) != 'nan' : 
+        return str(row).split('.')[0]
+    return np.nan
+
+a_ecrit_df['id_auteur'] = a_ecrit_df['id_auteur'].apply(suppPoint)
 # Sauvegarder le DataFrame résultant dans un nouveau fichier CSV
-a_ecrit_df.to_csv("a_ecrit.csv", index=False)
+a_ecrit_df.dropna(subset='id_auteur').to_csv("a_ecrit.csv", index=False)
 
 print("Le fichier a_ecrit.csv a été généré avec succès.")

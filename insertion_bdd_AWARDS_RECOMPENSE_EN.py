@@ -49,7 +49,13 @@ awards_unique['id_award'] = awards_unique.index + 1  # Générer un id_award uni
 recompense_en = awards_data.merge(awards_unique, on='nom_awards')[['id_livre', 'id_award', 'date']]
 
 
+# On rajoute 01-01 à l'année
+def rajout0101(row) :
+    return row+"-01-01"
+
+recompense_en['date'] = recompense_en['date'].apply(rajout0101)
+
 awards_unique[['id_award', 'nom_awards']].to_csv("awards.csv", index=False)
-recompense_en.to_csv("peuplement_recompense_en.csv", index=False)
+recompense_en.drop_duplicates().to_csv("peuplement_recompense_en.csv", index=False)
 
 print("Les fichiers awards.csv et recompense_en.csv ont été générés avec succès.")

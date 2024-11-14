@@ -1,23 +1,6 @@
 
 
 
-
-
-
-
--- -- Insert pour livre
-
-
--- INSERT INTO _possede_personnage (id_book, id_personnage)
--- SELECT id_book, id_perso
--- FROM 'csv/personnages_avec_id_livre.csv' 
-
-
--- INSERT INTO _a_publie (id_publisher, id_book)
--- SELECT id_publi, id_book
--- FROM 'csv/publisher_avec_id_livre.csv';
-
-
 -- @author Yanis Chiouar
 -- @description Mise en place de map les data dans la BDD
 
@@ -223,21 +206,39 @@ FROM masterbook.temp_import_auteur;
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
+-- Insertion genre du livre
 \COPY masterbook._genres_du_livre(id_livre,id_genre,nombre_votes_utilisateur)
 FROM '/home/bkaii/Documents/COURS_PORTATIFS/S5/SAE/scripts_insertions/peuplement_genre_du_livre.csv'
 DELIMITER ','
 CSV HEADER;
 
 
+
+-- Insertion de possede_personnage
+INSERT INTO masterbook._possede_personnage
+SELECT colonne3::INT, colonne1::INT
+FROM  masterbook.temp_import_perso;
+
+-- Insertion de _a_publie
+INSERT INTO masterbook._a_publie
+SELECT colonne1::INT, colonne3::INT
+FROM masterbook.temp_import_publisher;
+
+-- Insertion _genre_auteurs
+\COPY masterbook._genres_auteurs
+FROM '/home/bkaii/Documents/COURS_PORTATIFS/S5/SAE/scripts_insertions/peuplement_genre_auteurs.csv'
+DELIMITER ','
+CSV HEADER;
+
+
+-- Insertion _recompenser_en
+\COPY masterbook._recompense_en
+FROM '/home/bkaii/Documents/COURS_PORTATIFS/S5/SAE/scripts_insertions/peuplement_recompense_en.csv'
+DELIMITER ','
+CSV HEADER;
+
+-- Insertion dans _ecrit_par
+\COPY masterbook._a_ecrit(id_livre, id_auteur)
+FROM '/home/bkaii/Documents/COURS_PORTATIFS/S5/SAE/scripts_insertions/a_ecrit.csv'
+DELIMITER ','
+CSV HEADER;
