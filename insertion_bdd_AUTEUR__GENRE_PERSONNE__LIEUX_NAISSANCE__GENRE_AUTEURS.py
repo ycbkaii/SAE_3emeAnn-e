@@ -33,7 +33,7 @@ csv_birth_location = birth_location_data.dropna().to_csv("csv_birth_location.csv
 # On fait auteur pour le CSV
 
 # On recupere le csv fait par guillaume pour les 'genre_livre'
-dataGenreLivre = pd.read_csv("peuplement_genre_livre.csv")
+dataGenreLivre = pd.read_csv("peuplement_genre_livre.csv",index_col="id")
 
 
 # on remplace le 'genre_sexuel' par l'id du genre sexuel
