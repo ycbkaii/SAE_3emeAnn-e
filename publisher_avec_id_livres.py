@@ -1,7 +1,4 @@
 import pandas as pd
-import matplotlib.pyplot as plt
-import numpy as np
-
 
 # On récupere le fichier csv et on nettoie ce dernier
 data = pd.read_csv("csv/bigboss_book.csv")

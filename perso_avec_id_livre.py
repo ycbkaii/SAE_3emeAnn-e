@@ -1,6 +1,4 @@
 import pandas as pd
-import matplotlib.pyplot as plt
-import numpy as np
 
 
 # On récupere le fichier csv et on nettoie ce dernier
