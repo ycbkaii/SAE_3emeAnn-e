@@ -1,4 +1,4 @@
-from analyseACM import mca_result, ids_individus
+from analyseACM import mca_result, ids_individus, dataFromCsv
 from sklearn.cluster import KMeans
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -43,6 +43,7 @@ for cluster in range(k):
     cluster_points = mca_df[mca_df['Cluster'] == cluster]
     plt.scatter(cluster_points['Dim1'], cluster_points['Dim2'], label=f'Cluster {cluster}', alpha=0.6)
     
+    # Ajout de titres pour les points (l'id des utilisateurs)
     for i, row in cluster_points.iterrows():
         plt.text(row['Dim1'], row['Dim2'], str(i), fontsize=8, alpha=0.7, color='black')
 
@@ -53,8 +54,6 @@ plt.legend()
 plt.grid()
 plt.show()
 
+print(mca_df)
 
-# Afficher les statistiques descriptives par cluster
-# cluster_analysis = mca_df.groupby('Cluster').mean()
-# print(cluster_analysis)
 

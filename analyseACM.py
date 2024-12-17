@@ -14,7 +14,12 @@ variables = ['genre_humain', 'age', 'duree_livre_200', 'familie_lecture', 'genre
 
 # On nettoie et on garde que les données qu'on va utiliser
 data = data[variables]
+
+data = data.reset_index(drop=True)
+
 data = data[data['genre_humain'] != "-1"]
+
+dataFromCsv = data
 
 # Générer des colonnes pour chaque âge
 age_dummies = pd.get_dummies(data["age"], prefix="age")
