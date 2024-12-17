@@ -9,12 +9,21 @@ from mca import MCA
 # On récupere le fichier csv et on nettoie ce dernier
 data = pd.read_csv("questionnaire_traite.csv")
 
-variables = ['genre_humain', 'age', 'secteur', 'familie_lecture', 'prefere_lire', 'duree_livre_200', 'genre']
-
+# variables = ['genre_humain', 'age', 'secteur', 'familie_lecture', 'prefere_lire', 'duree_livre_200', 'genre']
+variables = ['genre_humain', 'age', 'duree_livre_200', 'familie_lecture', 'genre']
 
 # On nettoie et on garde que les données qu'on va utiliser
 data = data[variables]
 data = data[data['genre_humain'] != "-1"]
+
+# Générer des colonnes pour chaque âge
+age_dummies = pd.get_dummies(data["age"], prefix="age")
+
+# Ajouter les colonnes générées au DataFrame original
+data = pd.concat([data, age_dummies], axis=1)
+
+# Supprimer la colonne d'origine si souhaité
+data.drop(columns=["age"], inplace=True)
 
 
 
@@ -34,32 +43,11 @@ for i, j, nom in zip(mcaFic.fs_c()[:, 0], mcaFic.fs_c()[:, 1],  dc.columns):
 plt.show()
 
 
-# # On peut commencer les analyses
-# from mca import MCA 
 
-# data_cat = data
-# dc = pd.get_dummies(data_cat)
-# print(dc.head())
+# On renseigne les résultats des coordonnées des individus
+mca_result = mcaFic.fs_r()
+ids_individus = dc.index
 
 
-# mca = MCA(dc)
-# # print(mca.fs_c().shape)
 
-
-# plt.figure(figsize=(10, 8))
-# # plt.ioff()  # Désactiver le mode interactif
-
-# plt.scatter(mca.fs_c()[:, 0], mca.fs_c()[:, 1], s=5, alpha=0.7, edgecolors='none')
-
-# # Affichage du texte pour le points (ajout de paramêtre pour que ce soit plus lisible)
-# for i, var in enumerate(dc.columns):
-#     plt.annotate(var,
-#                  (mca.fs_c()[i, 0], mca.fs_c()[i, 1]),
-#                  textcoords="offset points",  # Utiliser des coordonnées relatives au point
-#                  xytext=(5, 5),  # Décalage de 5 points 
-#                  ha='center',    # Alignement horizontal
-#                  fontsize=6) 
-    
-# plt.title("Projection des variables - ACM")
-# plt.show()
-
+print(mca_result)
