@@ -4,27 +4,22 @@ from sklearn.decomposition import PCA
 import pandas as pd
 from gensim.models import FastText
 
-csv_genre = pd.read_csv("csv/peuplement_genre_livre.csv", index_col="id")
+csv = pd.read_csv("csv/peuplement_formulaire_secteur.csv", index_col="id_secteur")
 
-data = (
-    csv_genre["genre"]
-    .str.split("-", expand=True)[0]
-    .reset_index(name="genre")["genre"]
-    .apply(lambda x: [x])
-    .to_list()
+data = csv["secteur"].apply(lambda x : [x])
+
+
+model = Word2Vec(
+    sentences=data, vector_size=4, window=5, min_count=1, workers=4, sg=1
 )
 
-# model = Word2Vec(
-#     sentences=data, vector_size=4, window=5, min_count=1, workers=4, sg=1
-# )
-
-model = FastText(vector_size=4, window=3, min_count=1)  # instantiate
+# model = FastText(vector_size=4, window=3, min_count=1)  # instantiate
 
 model.build_vocab(corpus_iterable=data)
 
 model.train(corpus_iterable=data, total_examples=len(data), epochs=10)
 
-print(model.wv.similar_by_key('Romance'))
+print(model.wv.similar_by_key("ressources humaines "))
 
 raise
 
