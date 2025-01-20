@@ -14,8 +14,8 @@ cursor = conn.cursor()
 print("Connected")
 
 
-# TODO Ici on recoit l'ID de l'utilisateur qui vient de se connecter pour l'affichage de ses recommandations
-target_id = 10
+# TODO Ici on recoit l'ID de l'utilisateur qui vient de se connecter pour l'affichage de ses recommandations et on fait un transform pour l'integrer dans les clusters
+target_id = 3
 target_point = mca_df.loc[target_id, ['Dim1', 'Dim2']].values
 
 # On recupere le cluster associé à la target point
@@ -36,17 +36,83 @@ points_les_plus_proches = mca_df.drop(index=target_id).sort_values(by="distance_
 print(points_les_plus_proches)
 
 # On affiche les utilisateurs qui sont les plus proches de notre target
+print(f"Target Point : \n {dataFromCsv.loc[target_id]}\n\n")
 for i in points_les_plus_proches.index :
+    
+    # TODO Mettre les genres les plus utilisés
+    
+    
     print(f"{dataFromCsv.loc[i]}\n\n")
+
+
+
+
+# Le genre qu'on retrouve le plus de fois
+genres_le_plus_linked = dataFromCsv.loc[[i for i in points_les_plus_proches.index]].groupby("genre").count().sort_values(by="genre_humain")
+if len(genres_le_plus_linked) >=2 :
+    genres_le_plus_linked = genres_le_plus_linked[-2:]
+genres_le_plus_linked = genres_le_plus_linked.index.to_numpy()
+
+
+# On regarde si les personnes du cluster sont familiés avec la lecture
+familieLecture = dataFromCsv.loc[[i for i in points_les_plus_proches.index]].groupby("familie_lecture").count().idxmax()[0]
+
+print(f"Genres proposés :{genres_le_plus_linked}")
+print(f"Familiarité générale avec la lecture : {familieLecture}")
+
+
+# On définit des constantes pour savoir si la durée du livre en fonction de la familiarité de l'utilisateur
+FACHE = '<=100'
+MOYEN = '>100 AND number_of_page<=170'
+CONTENT = '>170 AND number_of_page<=230'
+JADORE_LIRE = '>230'
+nb_pages_sql_query = '>0'
+
+if familieLecture == "fache" :
+    nb_pages_sql_query = FACHE
+elif familieLecture == "moyen" : 
+    nb_pages_sql_query = MOYEN
+elif familieLecture == "content" :
+    nb_pages_sql_query = CONTENT
+elif nb_pages_sql_query == "j'adore lire":
+    nb_pages_sql_query = JADORE_LIRE
+
+
+
+# Les genres selected
+if len(genres_le_plus_linked) == 2:
+    genre_selected = f"nom_genre = '{genres_le_plus_linked[1]}'"
+    genre_selected_2 = f"nom_genre = '{genres_le_plus_linked[0]}'"
+else : 
+    genre_selected = f"nom_genre = '{genres_le_plus_linked[1]}'"
+    genre_selected_2 = genre_selected
+
+
+# TRaduire la philosophie
+if genre_selected == "nom_genre = 'Philosophie'" : 
+    genre_selected = "nom_genre = 'Philosophy'"
+elif genre_selected_2 == "nom_genre = 'Philosophie'" : 
+    genre_selected_2 = "nom_genre = 'Philosophy'"
+
+# TRaduire la fantaisie
+if genre_selected == "nom_genre = 'Fantaisie'" : 
+    genre_selected = "nom_genre = 'Fantasy'"
+elif genre_selected_2 == "nom_genre = 'Fantaisie'" : 
+    genre_selected_2 = "nom_genre = 'Fantasy'"
+
     
 # TODO Faire SQL pour afficher les livres en rapport
+queryToSelectBooksFirstGenre = f"(SELECT DISTINCT(title), average_rating, nom_genre FROM masterbook._livre NATURAL JOIN masterbook._genres_du_livre NATURAL JOIN masterbook._genre WHERE (number_of_page {nb_pages_sql_query}) AND average_rating > 4.0 AND rating_count >= 300 AND ({genre_selected}))" 
 
-# query="SELECT * from masterbook._publisher;"
-# cursor.execute(query)
+queryToSelectBooksSecondGenre = f"(SELECT DISTINCT(title), average_rating, nom_genre FROM masterbook._livre NATURAL JOIN masterbook._genres_du_livre NATURAL JOIN masterbook._genre WHERE (number_of_page {nb_pages_sql_query}) AND average_rating > 4.0 AND rating_count >= 300 AND ({genre_selected_2}))" 
 
-# tuples = cursor.fetchall()
+queryToSelectBooks = f"({queryToSelectBooksFirstGenre} UNION {queryToSelectBooksSecondGenre}) ORDER BY average_rating DESC LIMIT 10"
 
-# print(tuples)
+cursor.execute(queryToSelectBooks)
+
+tuples = cursor.fetchall()
+
+print(f"Les livres proposés : {tuples}\n")
 
 conn.commit()
 conn.close()
