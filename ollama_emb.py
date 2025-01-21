@@ -1,10 +1,34 @@
 import ollama
+import pandas as pd
+import datetime as dt
+import threading
 
-model = "mxbai-embed-large"
+# model = "mxbai-embed-large"
+model = "snowflake-arctic-embed2"
 
-embed = ollama.embed(
-    model=model,
-    input="Jim Butcher, the #1 New York Times bestselling author of The Dresden Files and the Codex Alera novels, conjures up a new series set in a fantastic world of noble families, steam-powered technology, and magic-wielding warriorsâ¦ Since time immemorial, the Spires have sheltered humanity, towering for miles over the mist-shrouded surface of the world. Within their halls, aristo Jim Butcher, the #1 New York Times bestselling author of The Dresden Files and the Codex Alera novels, conjures up a new series set in a fantastic world of noble families, steam-powered technology, and magic-wielding warriorsâ¦ Since time immemorial, the Spires have sheltered humanity, towering for miles over the mist-shrouded surface of the world. Within their halls, aristocratic houses have ruled for generations, developing scientific marvels, fostering trade alliances, and building fleets of airships to keep the peace. Captain Grimm commands the merchant ship,  . Fiercely loyal to Spire Albion, he has taken their side in the cold war with Spire Aurora, disrupting the enemyâs shipping lines by attacking their cargo vessels. But when the   is severely damaged in combat, leaving captain and crew grounded, Grimm is offered a proposition from the Spirearch of Albionâto join a team of agents on a vital mission in exchange for fully restoring   to its fighting glory. And even as Grimm undertakes this dangerous task, he will learn that the conflict between the Spires is merely a premonition of things to come. Humanityâs ancient enemy, silent for more than ten thousand years, has begun to stir once more. And death will follow in its wakeâ¦",
-)
+books = pd.read_csv("csv/bigboss_book.csv")
 
-print(embed)
+description= books[["description"]]
+
+def embedText(text: str):
+    return ollama.embed(model=model, input=text)
+
+start = dt.datetime.now()
+
+def embedDesc() :
+    for e in description.sample(1000).to_numpy() :
+        embedText(str(e))
+
+list_thread : list[threading.Thread]= []
+
+for i in range(1,6) :
+    list_thread.append(threading.Thread(target=embedDesc,name="Thread "+str(i)))
+
+for t in list_thread :
+    t.start()
+
+for t in list_thread :
+    t.join()
+
+end = dt.datetime.now()
+print((end - start).total_seconds())
