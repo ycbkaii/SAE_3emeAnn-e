@@ -26,8 +26,8 @@ plt.ylabel('Distorsion')
 plt.title('Méthode du Coude pour déterminer k optimal')
 plt.show()
 
-# ON mentionne K = 3
-k = 3
+# ON mentionne K = 4
+k = 4
 
 kmeans = KMeans(n_clusters=k, random_state=42)
 kmeans.fit(mca_result)
@@ -41,11 +41,11 @@ mca_df['Cluster'] = clusters
 plt.figure(figsize=(8, 5))
 for cluster in range(k):
     cluster_points = mca_df[mca_df['Cluster'] == cluster]
-    plt.scatter(cluster_points['Dim1'], cluster_points['Dim2'], label=f'Cluster {cluster}', alpha=0.6)
+    plt.scatter(cluster_points['Dim2'], cluster_points['Dim1'], label=f'Cluster {cluster}', alpha=0.6)
     
     # Ajout de titres pour les points (l'id des utilisateurs)
     for i, row in cluster_points.iterrows():
-        plt.text(row['Dim1'], row['Dim2'], str(i), fontsize=8, alpha=0.7, color='black')
+        plt.text(row['Dim2'], row['Dim1'], str(i), fontsize=8, alpha=0.7, color='black')
 
 plt.title('Clusters après K-means (ACM)')
 plt.xlabel('Dimension 1')

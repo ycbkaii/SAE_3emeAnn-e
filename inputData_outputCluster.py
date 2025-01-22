@@ -15,7 +15,7 @@ print("Connected")
 
 
 # TODO Ici on recoit l'ID de l'utilisateur qui vient de se connecter pour l'affichage de ses recommandations et on fait un transform pour l'integrer dans les clusters
-target_id = 3
+target_id = 30
 target_point = mca_df.loc[target_id, ['Dim1', 'Dim2']].values
 
 # On recupere le cluster associé à la target point
@@ -39,13 +39,18 @@ print(points_les_plus_proches)
 print(f"Target Point : \n {dataFromCsv.loc[target_id]}\n\n")
 for i in points_les_plus_proches.index :
     
-    # TODO Mettre les genres les plus utilisés
+    
     
     
     print(f"{dataFromCsv.loc[i]}\n\n")
 
 
+# Fonction pour afficher les "''"
+def escapeString(row) :
+    if row != None :
+        return row.replace("'", "''")
 
+dataFromCsv["genre"] = dataFromCsv["genre"].apply(escapeString)
 
 # Le genre qu'on retrouve le plus de fois
 genres_le_plus_linked = dataFromCsv.loc[[i for i in points_les_plus_proches.index]].groupby("genre").count().sort_values(by="genre_humain")
