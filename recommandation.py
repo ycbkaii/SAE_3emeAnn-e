@@ -8,7 +8,7 @@ csv_path = "./userVectorize.csv"
 
 matriceUser = cosine_similarity(pd.read_csv(csv_path))
 
-def getBooksByUser(id : int | str) :
+def getBooksByUser(id : int | str) -> (list[tuple] | list):
     """
     Fonction pour avoir les livres aimé par les utilisateur
     """
@@ -17,8 +17,13 @@ def getBooksByUser(id : int | str) :
             requete = "SELECT id_livre FROM _a_lu_livre_vote_genre_pour_livre WHERE note_livre>4 AND id_user="+id 
             try :
                 cursor.execute(requete)
+                res = cursor.fetchall()
+                return res
             except Exception as e :
                 print(e)
+                return []
+    else :
+        return []
 
 
 def getSimilarity(id_user1 : int, id_user2 : int) :
@@ -34,10 +39,19 @@ def getAllSimilarity(id_user : int) :
     return matriceUser[id_user]
 
 def findMaxSim(similarity : np.ndarray) :
+    """
+    Renvoie un liste de tuple (valMax,indice de l'user)
+    """
     trie = sorted(similarity,reverse=True)
     valMax = trie[1:6]
+    valMaxEtIndice = []
     for e in valMax :
-        print(np.where(similarity == e)[0][0])    
+        indice = np.where(similarity == e)[0][0]
+        valMaxEtIndice.append((e,indice))
+    return valMaxEtIndice
 
 
-findMaxSim(getAllSimilarity(1))
+def recommandUser(user : int) :
+    listBooks = []
+    for valMax in findMaxSim(getAllSimilarity(user)) :
+        listBooks.append(getBooksByUser(valMax[1]))
