@@ -1,2 +1,4 @@
 csv/
 sae/
+*.csv
+__pycache__
