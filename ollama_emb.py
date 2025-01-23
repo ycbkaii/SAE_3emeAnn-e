@@ -9,30 +9,35 @@ from sklearn.metrics.pairwise import cosine_similarity
 # model = "snowflake-arctic-embed2" # Le plus gros
 model = "all-minilm:33m" # Le plus petit
 
-books = pd.read_csv("csv/bigboss_book.csv")
+description = pd.read_csv("csv/bigboss_book.csv",usecols=["description"])
 genre = pd.read_csv("csv/peuplement_genre_livre.csv",index_col="id").to_numpy()
-description= books[["description"]]
-
+print(description)
 
 def embedText(text: str):
     return ollama.embed(model=model, input=text)
 
 start = dt.datetime.now()
 
-def embedDesc(listRes : list) :
-    for e in description.sample(1).to_numpy() :
-        listRes.append(embedText(str(e))["embeddings"])
+def embedDesc(listRes : list,start : int,end : int ) :
+    for e in description.to_numpy()[start:end] :
+        listRes.append(embedText(str(e))["embeddings"][0])
 
 def embedDescAll() :
-    list_thread : list[threading.Thread]= []
     listEmb = []
-    for i in range(1,5) :
-        list_thread.append(threading.Thread(target=embedDesc,name="Thread "+str(i),args=(listEmb,)))
-    for t in list_thread :
-        t.start()
-    for t in list_thread :
-        t.join()
-    print(listEmb)
+    for j in range(13) :
+        indice = j*4000
+        list_thread : list[threading.Thread]= []
+        for i in range(4) :
+            start = i*1000 + indice
+            end=(i+1)*1000 + indice
+            print(end,start)
+            list_thread.append(threading.Thread(target=embedDesc,name="Thread "+str(i),args=(listEmb,start,end)))
+        for t in list_thread :
+            t.start()
+        for t in list_thread :
+            t.join()
+    embedDesc(listEmb,52000,52200)
+    return listEmb
 
 
 # embedDescAll()
@@ -56,8 +61,17 @@ def embedGenreAll() :
 
     return listVecGenre
 
-embedGenre = embedGenreAll()
-pd.DataFrame(embedGenre).to_csv("./vectGenre.csv",index_label="id_genre")
-pd.DataFrame(cosine_similarity(embedGenre)).to_csv("./cosineSimGenre.csv",index_label="id_genre")
+
+def saveCosineMatrixGenre() :
+    embedGenre = embedGenreAll()
+    pd.DataFrame(cosine_similarity(embedGenre)).to_csv("./cosineSimGenre.csv",index_label="id_genre")
+
+def saveCosineMatrixDesc() :
+    resEmbedDesc = embedDescAll()
+    pd.DataFrame(resEmbedDesc).to_csv("./vectDesc384.csv",index_label="id_livre")
+    print(cosine_similarity(resEmbedDesc))
+    # print(pd.DataFrame(cosine_similarity(resEmbedDesc))) #.to_csv("./cosineSimDsc.csv",index_label="id_livre")
+
+saveCosineMatrixDesc()
 end = dt.datetime.now()
 print((end - start).total_seconds())
