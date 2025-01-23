@@ -2,8 +2,6 @@ import ollama
 import pandas as pd
 import datetime as dt
 import threading
-import numpy as np
-from sklearn.metrics.pairwise import cosine_similarity
 
 # model = "nomic-embed-text" # Un blanced
 # model = "snowflake-arctic-embed2" # Le plus gros
@@ -62,16 +60,15 @@ def embedGenreAll() :
     return listVecGenre
 
 
-def saveCosineMatrixGenre() :
+def saveVectGenre() :
     embedGenre = embedGenreAll()
-    pd.DataFrame(cosine_similarity(embedGenre)).to_csv("./cosineSimGenre.csv",index_label="id_genre")
+    pd.DataFrame(embedGenre).to_csv("./vectGenre.csv",index_label="id_genre")
 
-def saveCosineMatrixDesc() :
+def saveVectDesc() :
     resEmbedDesc = embedDescAll()
     pd.DataFrame(resEmbedDesc).to_csv("./vectDesc384.csv",index_label="id_livre")
-    print(cosine_similarity(resEmbedDesc))
-    # print(pd.DataFrame(cosine_similarity(resEmbedDesc))) #.to_csv("./cosineSimDsc.csv",index_label="id_livre")
 
-saveCosineMatrixDesc()
+saveVectGenre()
+saveVectDesc()
 end = dt.datetime.now()
 print((end - start).total_seconds())
