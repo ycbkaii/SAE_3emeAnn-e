@@ -4,15 +4,15 @@ import datetime as dt
 import threading
 
 # model = "nomic-embed-text" # Un blanced
-# model = "snowflake-arctic-embed2" # Le plus gros
-model = "all-minilm:33m" # Le plus petit
+model = "bge-m3" # Le plus gros
+#model = "all-minilm:33m" # Le plus petit
 
 description = pd.read_csv("csv/bigboss_book.csv",usecols=["description"])
 genre = pd.read_csv("csv/peuplement_genre_livre.csv",index_col="id").to_numpy()
 print(description)
 
 def embedText(text: str):
-    return ollama.embed(model=model, input=text)
+    return ollama.embed(model=model, input=text,options={"num_ctx":8192})
 
 start = dt.datetime.now()
 
@@ -34,6 +34,7 @@ def embedDescAll() :
             t.start()
         for t in list_thread :
             t.join()
+        print(len(listEmb[0]))
     embedDesc(listEmb,52000,52200)
     return listEmb
 
@@ -66,7 +67,7 @@ def saveVectGenre() :
 
 def saveVectDesc() :
     resEmbedDesc = embedDescAll()
-    pd.DataFrame(resEmbedDesc).to_csv("./vectDesc384.csv",index_label="id_livre")
+    pd.DataFrame(resEmbedDesc).to_csv("./vectDesc1024.csv",index_label="id_livre")
 
 saveVectGenre()
 saveVectDesc()
