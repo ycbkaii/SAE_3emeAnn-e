@@ -1,23 +1,12 @@
 from elasticsearch import Elasticsearch
-import pandas as pd
-import numpy as np
-from sklearn.metrics.pairwise import cosine_similarity
-
-
-cosSimGenreBooks = cosine_similarity(
-    pd.read_csv("./vectGenre.csv", index_col="id_genre").to_numpy()
-)
-
-vectDescBooks = pd.read_feather("./vectDesc1024")
-print(vectDescBooks)
-vectDescBooks = vectDescBooks.to_numpy()
 
 client = Elasticsearch("http://localhost:9200")
 index_name = "embeddings-books"
 
-print(client.info())
+def checkClient() :
+    return client.info()
 
-def calcSim2Books(id_books1):
+def kNNBooks(id_books1):
     livre1 = client.get(index=index_name, id=id_books1)["_source"]["description_vector"]
     query_string = {
         "field": "description_vector",
@@ -37,6 +26,3 @@ def kNNUser(user : int) :
         "num_candidates": 300
     }
     return client.search(index=index_name, knn=query_string)
-
-
-print(kNNUser(1))
