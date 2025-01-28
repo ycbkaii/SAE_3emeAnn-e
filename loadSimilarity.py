@@ -17,12 +17,8 @@ index_name = "embeddings-books"
 
 print(client.info())
 
-def calcSim2Books(id_books1, id_books2):
+def calcSim2Books(id_books1):
     livre1 = client.get(index=index_name, id=id_books1)["_source"]["description_vector"]
-    livre2 = client.get(index=index_name, id=id_books2)["_source"]["description_vector"]
-    # return cosine_similarity(
-    #     np.array(livre1).reshape(1, -1), vectDescBooks
-    # )
     query_string = {
         "field": "description_vector",
         "query_vector": livre1,
