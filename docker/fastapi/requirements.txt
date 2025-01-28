@@ -1,0 +1,5 @@
+fastapi[standard]
+elasticsearch
+scikit-learn
+pandas
+numpy

@@ -29,6 +29,12 @@ services:
     networks:
       - es  
 
+  server:
+    container_name: fastapi_server
+    build:
+      context: ./fastapi
+    ports:
+      - 8000:8000
 
 networks:
   es:
