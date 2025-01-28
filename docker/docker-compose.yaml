@@ -3,7 +3,7 @@ services:
     build:
       context: ./db
       dockerfile: Dockerfile
-    container_name: postgres-local
+    container_name: postgres-sae
     environment:
       POSTGRES_USER: root
       POSTGRES_PASSWORD: root
@@ -12,6 +12,9 @@ services:
       - "5432:5432"
     volumes:
       - db_data_masterbook:/var/lib/postgresql/data
+    networks:
+      - db
+
   elasticsearch:
     image: bitnami/elasticsearch:8.17.1
     container_name: my-es-sae
@@ -23,9 +26,13 @@ services:
       - ES_JAVA_OPTS=-Xms4096m -Xmx4096m # Pour pas que ES prennent TOUTES la rep
     volumes:
       - elasticsearch-data-persistence:/bitnami/elasticsearch/data
-  
+    networks:
+      - es  
 
 
+networks:
+  es:
+  db:
 
 volumes:
   db_data_masterbook:
