@@ -22,7 +22,10 @@ def recreateIndexDesc(vectDescBooks, index_name):
             }
         }
     }
-    client.indices.delete(index=index_name)
+    try :
+        client.indices.delete(index=index_name)
+    except Exception as e:
+        print(e)
     client.indices.create(index=index_name, mappings=mappings)
     for i in range(len(vectDescBooks)):
         doc = {"description_vector": vectDescBooks[i]}
@@ -71,5 +74,5 @@ def getvectBooks(idBook: int):
     return client.get(index=index_name_desc, id=idBook)
 
 
-# recreateIndexDesc(vectDescBooks,index_name_desc)
-recreateIndexUser(vectUser)
+recreateIndexDesc(vectDescBooks,index_name_desc)
+# recreateIndexUser(vectUser)
