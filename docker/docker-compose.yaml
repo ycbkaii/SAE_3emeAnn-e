@@ -1,0 +1,32 @@
+services:
+  postgres:
+    build:
+      context: ./db
+      dockerfile: Dockerfile
+    container_name: postgres-local
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: masterbook
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data_masterbook:/var/lib/postgresql/data
+  elasticsearch:
+    image: bitnami/elasticsearch:8.17.1
+    container_name: my-es-sae
+    ports:
+      - 9200:9200
+      - 9300:9300
+    environment:
+      - discovery.type=single-node
+      - ES_JAVA_OPTS=-Xms4096m -Xmx4096m # Pour pas que ES prennent TOUTES la rep
+    volumes:
+      - elasticsearch-data-persistence:/bitnami/elasticsearch/data
+  
+
+
+
+volumes:
+  db_data_masterbook:
+  elasticsearch-data-persistence:
