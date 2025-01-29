@@ -35,6 +35,9 @@ services:
       context: ./fastapi
     ports:
       - 8000:8000
+    networks:
+      - es 
+      - db
 
 networks:
   es:

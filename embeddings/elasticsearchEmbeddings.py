@@ -3,37 +3,51 @@ import pandas as pd
 
 client = Elasticsearch("http://localhost:9200")
 
-vectDescBooks = pd.read_feather("./vectDesc1024")
-print(vectDescBooks)
-vectDescBooks = vectDescBooks.to_numpy()
-
-vectUser = pd.read_csv("userVectorize.csv", index_col="id_user").to_numpy()
 
 index_name_desc = "embeddings-books"
 
-def recreateIndexDesc(vectDescBooks, index_name):
+
+def addBooks(desc, vect_desc, title, genre_principal, id):
+    doc = {
+        "id": id,
+        "description": desc,
+        "title": title,
+        "genre_principal": genre_principal,
+        "description_vector": vect_desc,
+    }
+    client.create(index=index_name_desc, document=doc)
+
+
+def recreateIndexDesc(index_name):
+    vectDescBooks = pd.read_feather("./vectDesc1024")
+    vectDescBooks = vectDescBooks.to_numpy()
     mappings = {
         "properties": {
+            "id": {"type": "keyword"},
+            "description": {"type": "text"},
+            "title": {"type": "text", "fields": {"keyword": {"type": "keyword"}}},
+            "genre_principal": {
+                "type": "text",
+                "fields": {"keyword": {"type": "keyword"}},
+            },
             "description_vector": {
                 "type": "dense_vector",
                 "dims": 1024,
                 "index": "true",
                 "similarity": "cosine",
-            }
+                "index_options": {"type": "int8_hnsw"},
+            },
         }
     }
-    try :
+    try:
         client.indices.delete(index=index_name)
     except Exception as e:
         print(e)
     client.indices.create(index=index_name, mappings=mappings)
-    for i in range(len(vectDescBooks)):
-        doc = {"description_vector": vectDescBooks[i]}
-        resp = client.index(index=index_name, id=i, document=doc)
-        print(resp["result"], i)
 
 
-def recreateIndexGenre(vectGenreBooks, index_name):
+def recreateIndexGenre(index_name):
+    vectGenreBooks = []
     mappings = {"properties": {"genre_vector": {"type": "dense_vector", "dims": 1024}}}
     try:
         client.indices.delete(index=index_name)
@@ -46,15 +60,20 @@ def recreateIndexGenre(vectGenreBooks, index_name):
         print(resp["result"], i)
 
 
-def recreateIndexUser(vectUser, index_name="hoe-users"):
-    
+def addUser(id,vector) :
+    doc = {"id" : id, "user_vector" : vector}
+    client.create(index="hoe-users",document=doc)
+
+def recreateIndexUser(index_name="hoe-users"):
+    vectUser = pd.read_csv("userVectorize.csv", index_col="id_user").to_numpy()
     mappings = {
         "properties": {
+            "id" : {"type":"keyword"},
             "user_vector": {
                 "type": "dense_vector",
-                "dims": len(vectUser[0]),
                 "index": "true",
                 "similarity": "cosine",
+                "index_options": {"type": "hnsw"},
             }
         }
     }
@@ -63,16 +82,13 @@ def recreateIndexUser(vectUser, index_name="hoe-users"):
     except Exception as e:
         print(e)
     client.indices.create(index=index_name, mappings=mappings)
-    for i in range(len(vectUser)):
-        doc = {"user_vector": vectUser[i]}
-        resp = client.index(index=index_name, id=i, document=doc)
-        print(resp["result"], i)
 
 
 # recreateIndex(vectDescBooks, index_name)
 def getvectBooks(idBook: int):
+    """Sert a rien parceque la recherche renvoie déja ça"""
     return client.get(index=index_name_desc, id=idBook)
 
 
-# recreateIndexDesc(vectDescBooks,index_name_desc)
-# recreateIndexUser(vectUser)
+# recreateIndexDesc(index_name_desc)
+# recreateIndexUser()
