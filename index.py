@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from embeddings.loadSimilarity import kNNBooks, checkClient, kNNUser
+from inputData_outputCluster import acmReco
 
 app = FastAPI()
 
@@ -23,3 +24,9 @@ def get_reco_books_id(books_id : int) :
 def get_user_similar_id(user_id : int) :
     """Renvoie les usr similaire """
     return kNNUser(user_id)
+
+
+@app.get("/livres/acm_recom/{user_id}")
+def get_books_recom_acm(user_id : int) :
+    """Cela renvoie les la liste des livres de recommandation"""
+    return acmReco(user_id)
