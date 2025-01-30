@@ -2,12 +2,12 @@
 
 async function mescouilles() {
     try {
-        const response = await fetch("http://127.0.0.1:8000/livres"); 
+        const response = await fetch("http://127.0.0.1:8000/books"); 
         const books = await response.json();
         console.log(books); 
        /* for (let index = 0; index < books.length; index++) {
             const element = books[index];
-            addCarouselItem(element);
+            addCarouselItem('#section\\ 1', 'lien vers la page avec les infos', 'lien image', 'nom du livre');
         }*/
     } catch (error) {
         console.error("Erreur lors de la récupération des livres :", error);
@@ -34,14 +34,14 @@ function addCarouselItem(containerSelector, href, src, alt) {
 }
 
 // Exemple d'utilisation :
-addCarouselItem('#section\\ 1', 'https://example.com', 'https://example.com/image.jpg', 'Image description');
+addCarouselItem('#section\\ 1', 'lien vers la page avec les infos', 'lien image', 'nom du livre');
 
 
 
-fetchBooks();
+mescouilles();
 
 
-//Fin partie modifier
+//Fin partie modifiée
 
 //NAVIGATION SHADOW
 window.addEventListener('scroll', function() {
