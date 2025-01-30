@@ -60,21 +60,22 @@ def recreateIndexGenre(index_name):
         print(resp["result"], i)
 
 
-def addUser(id,vector) :
-    doc = {"id" : id, "user_vector" : vector}
-    client.create(index="hoe-users",document=doc)
+def addUser(id, vector):
+    doc = {"id": id, "user_vector": vector}
+    client.create(index="hoe-users", document=doc)
+
 
 def recreateIndexUser(index_name="hoe-users"):
     vectUser = pd.read_csv("userVectorize.csv", index_col="id_user").to_numpy()
     mappings = {
         "properties": {
-            "id" : {"type":"keyword"},
+            "id": {"type": "keyword"},
             "user_vector": {
                 "type": "dense_vector",
                 "index": "true",
                 "similarity": "cosine",
                 "index_options": {"type": "hnsw"},
-            }
+            },
         }
     }
     try:
@@ -87,7 +88,11 @@ def recreateIndexUser(index_name="hoe-users"):
 # recreateIndex(vectDescBooks, index_name)
 def getvectBooks(idBook: int):
     """Sert a rien parceque la recherche renvoie déja ça"""
-    return client.get(index=index_name_desc, id=idBook)
+    query = {"term": {"id": idBook}}
+    return client.search(
+        index=index_name_desc,
+        query=query,
+    )
 
 
 # recreateIndexDesc(index_name_desc)

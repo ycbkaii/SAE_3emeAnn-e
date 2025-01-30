@@ -1,10 +1,18 @@
 from elasticsearch import Elasticsearch
 
-client = Elasticsearch("http://localhost:9200")
+try : 
+    client = Elasticsearch("http://localhost:9200")
+except Exception as e :
+    client = None
+    print("Erreur ElasticSearch : ",e)
+
 index_name = "embeddings-books"
 
 def checkClient() :
-    return client.info()
+    if client is not None :
+        return client.info()
+    else :
+        return {"Status" : "Es is not running"}
 
 def kNNBooks(id_books1):
     livre1 = client.get(index=index_name, id=id_books1)["_source"]["description_vector"]

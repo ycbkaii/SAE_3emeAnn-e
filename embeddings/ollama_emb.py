@@ -7,24 +7,18 @@ import threading
 model = "bge-m3"  # Le plus gros
 # model = "all-minilm:33m" # Le plus petit
 
-description = pd.read_csv("csv/bigboss_book.csv", usecols=["description"])
-genre = pd.read_csv("csv/peuplement_genre_livre.csv", index_col="id").to_numpy()
-print(description)
-
 
 def embedText(text: str):
     return ollama.embed(model=model, input=text, options={"num_ctx": 8192})
 
 
-start = dt.datetime.now()
-
-
-def embedDesc(listRes: list, start: int, end: int):
-    for e in description.to_numpy()[start:end]:
-        listRes.append(embedText(str(e))["embeddings"][0])
-
-
 def embedDescAll():
+    description = pd.read_csv("csv/bigboss_book.csv", usecols=["description"])
+
+    def embedDesc(listRes: list, start: int, end: int):
+        for e in description.to_numpy()[start:end]:
+            listRes.append(embedText(str(e))["embeddings"][0])
+
     listEmb = []
     for j in range(13):
         indice = j * 4000
@@ -53,6 +47,7 @@ def embedDescAll():
 
 
 def embedGenreAll():
+    genre = pd.read_csv("csv/peuplement_genre_livre.csv", index_col="id").to_numpy()
     listVecGenre = []
 
     def processFils(start: bool):
@@ -90,5 +85,3 @@ def saveVectDesc():
 
 saveVectGenre()
 saveVectDesc()
-end = dt.datetime.now()
-print((end - start).total_seconds())
