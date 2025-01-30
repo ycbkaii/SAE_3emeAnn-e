@@ -85,10 +85,17 @@ def recreateIndexUser(index_name="hoe-users"):
     client.indices.create(index=index_name, mappings=mappings)
 
 
-# recreateIndex(vectDescBooks, index_name)
 def getvectBooks(idBook: int):
     """Sert a rien parceque la recherche renvoie déja ça"""
     query = {"term": {"id": idBook}}
+    return client.search(
+        index=index_name_desc,
+        query=query,
+    )
+
+def searchBooks(title: str):
+    """Sert a rien parceque la recherche renvoie déja ça"""
+    query = {"match": {"title": title}}
     return client.search(
         index=index_name_desc,
         query=query,

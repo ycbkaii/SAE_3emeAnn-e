@@ -1,11 +1,8 @@
 import ollama
 import pandas as pd
-import datetime as dt
 import threading
 
-# model = "nomic-embed-text" # Un blanced
-model = "bge-m3"  # Le plus gros
-# model = "all-minilm:33m" # Le plus petit
+model = "bge-m3"  # Le meilleurs pour les desc
 
 
 def embedText(text: str):
