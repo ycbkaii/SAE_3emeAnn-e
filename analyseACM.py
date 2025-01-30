@@ -101,10 +101,10 @@ print(dc)
 
 # On affiche le graphique
 mcaFic = MCA(dc, benzecri=False)
-plt.scatter(mcaFic.fs_c()[:, 0], mcaFic.fs_c()[:, 1])
-for i, j, nom in zip(mcaFic.fs_c()[:, 0], mcaFic.fs_c()[:, 1],  dc.columns):
-    plt.text(i, j, nom)
-plt.show()
+# plt.scatter(mcaFic.fs_c()[:, 0], mcaFic.fs_c()[:, 1])
+# for i, j, nom in zip(mcaFic.fs_c()[:, 0], mcaFic.fs_c()[:, 1],  dc.columns):
+#     plt.text(i, j, nom)
+# plt.show()
 
 
 

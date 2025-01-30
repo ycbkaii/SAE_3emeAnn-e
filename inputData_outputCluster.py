@@ -126,4 +126,3 @@ def acmReco(userId : int, mca_df=mca_df) :
     
     return tuples
 
-acmReco(10)

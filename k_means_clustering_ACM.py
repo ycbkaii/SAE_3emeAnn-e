@@ -19,12 +19,12 @@ for k in K :
     distortions.append(kmeans.inertia_)
 
 # On fait la méthode du coude pour savoir combien de clusters on va garder
-plt.figure(figsize=(8, 5))
-plt.plot(K, distortions, 'bx-')
-plt.xlabel('Nombre de Clusters (k)')
-plt.ylabel('Distorsion')
-plt.title('Méthode du Coude pour déterminer k optimal')
-plt.show()
+# plt.figure(figsize=(8, 5))
+# plt.plot(K, distortions, 'bx-')
+# plt.xlabel('Nombre de Clusters (k)')
+# plt.ylabel('Distorsion')
+# plt.title('Méthode du Coude pour déterminer k optimal')
+# plt.show()
 
 # ON mentionne K = 4
 k = 4
@@ -47,12 +47,12 @@ for cluster in range(k):
     for i, row in cluster_points.iterrows():
         plt.text(row['Dim2'], row['Dim1'], str(i), fontsize=8, alpha=0.7, color='black')
 
-plt.title('Clusters après K-means (ACM)')
-plt.xlabel('Dimension 1')
-plt.ylabel('Dimension 2')
-plt.legend()
-plt.grid()
-plt.show()
+# plt.title('Clusters après K-means (ACM)')
+# plt.xlabel('Dimension 1')
+# plt.ylabel('Dimension 2')
+# plt.legend()
+# plt.grid()
+# plt.show()
 
 print(mca_df)
 
