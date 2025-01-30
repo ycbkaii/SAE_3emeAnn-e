@@ -22,7 +22,7 @@ def kNNBooks(id_books1):
         "k": 6,
         "num_candidates": 10000
     }
-    return client.search(index=index_name, knn=query_string)
+    return client.search(index=index_name, knn=query_string,source=False)
 
 def kNNUser(user : int) :
     index_name="hoe-users"

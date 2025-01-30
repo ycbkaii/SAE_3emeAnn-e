@@ -80,5 +80,5 @@ def saveVectDesc():
     pd.DataFrame(resEmbedDesc).to_csv("./vectDesc1024.csv", index_label="id_livre")
 
 
-saveVectGenre()
-saveVectDesc()
+# saveVectGenre()
+# saveVectDesc()
