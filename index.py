@@ -1,8 +1,27 @@
 from fastapi import FastAPI
 from embeddings.loadSimilarity import kNNBooks, checkClient, kNNUser
 from inputData_outputCluster import acmReco
+from fastapi.middleware.cors import CORSMiddleware
+
 
 app = FastAPI()
+
+
+# On mentionne les cors
+origins = [
+    "http://127.0.0.1:8000",
+    "http://localhost",
+    "http://localhost:8080",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 
 @app.get("/")
 def read_root():
