@@ -31,7 +31,7 @@ genre_philosophie = set()
 
 def splitgenre(row, sous_genre: set):
     for e in row.split(";"):
-        if e != "-1" and e != "Aucun" and len(e.split(",")) < 2 :
+        if e != "-1" and e != "Aucun" and len(e.split(",")) < 2:
             sous_genre.add(e)
 
 
@@ -59,7 +59,7 @@ def hoe_genre(row, total_genre: pd.DataFrame):
 
 dfVectorize = pd.DataFrame(
     [],
-    columns=["Age", "Genre","Vitesse lecture"]
+    columns=["Age", "Genre", "Vitesse lecture"]
     + total_genre.to_list()
     + sous_genre_historique
     + sous_genre_fantasy
@@ -88,7 +88,7 @@ def vectorizeRow(row):
             "sous_genre_policier",
             "sous_genre_science_fiction",
             "genre_philosophie",
-            "duree_livre_200"
+            "duree_livre_200",
         ]
     ]
     age = rowSelect["age"] / 100
@@ -125,5 +125,5 @@ def vectorizeRow(row):
 
 
 data.apply(vectorizeRow, axis=1)
-dfVectorize.to_csv("userVectorize.csv",index_label="id_user")
+dfVectorize.to_csv("userVectorize.csv", index_label="id_user")
 print(cosine_similarity(dfVectorize))

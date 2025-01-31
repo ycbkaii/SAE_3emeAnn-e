@@ -1,14 +1,17 @@
+import numpy as np
 from elasticsearch import Elasticsearch
 import pandas as pd
 
 ES_URL = "http://localhost:9200"
 
-try :
+try:
     client = Elasticsearch(ES_URL)
-except Exception as e :
-    raise RuntimeError("Can't connect to ES : "+str(e))
+except Exception as e:
+    raise RuntimeError("Can't connect to ES : " + str(e))
 
 index_name_desc = "embeddings-books"
+
+
 def add_books(desc, vect_desc, title, genre_principal, id_books):
     doc = {
         "id": id_books,
@@ -20,7 +23,7 @@ def add_books(desc, vect_desc, title, genre_principal, id_books):
     client.create(index=index_name_desc, document=doc)
 
 
-def recreate_index_desc(index_name):
+def recreate_index_desc(index_name=index_name_desc):
     mappings = {
         "properties": {
             "id": {"type": "keyword"},
@@ -93,10 +96,18 @@ def get_vect_books(id_book: int):
         query=query,
     )
 
-def search_books(title: str):
+
+def search_books_by_title(title: str):
     """Recherche par titre des livres"""
     query = {"match": {"title": title}}
     return client.search(
         index=index_name_desc,
         query=query,
     )
+
+
+def fill_index_desc(books_array: np.array, index_name=index_name_desc):
+    for book in books_array:
+        add_books(
+            book["desc"], book["vect_desc"], book["title"], book["genre"], book["id"]
+        )
