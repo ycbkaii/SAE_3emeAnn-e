@@ -1,7 +1,7 @@
 import numpy as np
 from elastic_transport import ObjectApiResponse
 from load_recommandation import knn_books, check_client_es
-from ollama_emb import embedText
+from ollama_emb import embed_text
 from elasticsearch_embeddings import (
     add_books,
     search_books_by_title,
@@ -33,7 +33,7 @@ def initialize_elastic_search():
 
 def add_new_books(books: Books) -> bool:
     # TODO ajouter le livre au SQL
-    embedding = embedText(books.desc)["embeddings"][0]
+    embedding = embed_text(books.desc)["embeddings"][0]
     add_books(books.desc, embedding, books.title, books.genre, books.id)
     return True
 
