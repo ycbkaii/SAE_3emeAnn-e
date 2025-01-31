@@ -1,15 +1,17 @@
 from elasticsearch import Elasticsearch
 import pandas as pd
 
-client = Elasticsearch("http://localhost:9200")
+ES_URL = "http://localhost:9200"
 
+try :
+    client = Elasticsearch(ES_URL)
+except Exception as e :
+    raise RuntimeError("Can't connect to ES : "+str(e))
 
 index_name_desc = "embeddings-books"
-
-
-def addBooks(desc, vect_desc, title, genre_principal, id):
+def add_books(desc, vect_desc, title, genre_principal, id_books):
     doc = {
-        "id": id,
+        "id": id_books,
         "description": desc,
         "title": title,
         "genre_principal": genre_principal,
@@ -18,9 +20,7 @@ def addBooks(desc, vect_desc, title, genre_principal, id):
     client.create(index=index_name_desc, document=doc)
 
 
-def recreateIndexDesc(index_name):
-    vectDescBooks = pd.read_feather("./vectDesc1024")
-    vectDescBooks = vectDescBooks.to_numpy()
+def recreate_index_desc(index_name):
     mappings = {
         "properties": {
             "id": {"type": "keyword"},
@@ -60,12 +60,12 @@ def recreateIndexGenre(index_name):
         print(resp["result"], i)
 
 
-def addUser(id, vector):
-    doc = {"id": id, "user_vector": vector}
+def add_user(id_usr, vector):
+    doc = {"id": id_usr, "user_vector": vector}
     client.create(index="hoe-users", document=doc)
 
 
-def recreateIndexUser(index_name="hoe-users"):
+def recreate_index_user(index_name="hoe-users"):
     vectUser = pd.read_csv("userVectorize.csv", index_col="id_user").to_numpy()
     mappings = {
         "properties": {
@@ -85,22 +85,18 @@ def recreateIndexUser(index_name="hoe-users"):
     client.indices.create(index=index_name, mappings=mappings)
 
 
-def getvectBooks(idBook: int):
-    """Sert a rien parceque la recherche renvoie déja ça"""
-    query = {"term": {"id": idBook}}
+def get_vect_books(id_book: int):
+    """Pour trouver le vecteur à chercher"""
+    query = {"term": {"id": id_book}}
     return client.search(
         index=index_name_desc,
         query=query,
     )
 
-def searchBooks(title: str):
-    """Sert a rien parceque la recherche renvoie déja ça"""
+def search_books(title: str):
+    """Recherche par titre des livres"""
     query = {"match": {"title": title}}
     return client.search(
         index=index_name_desc,
         query=query,
     )
-
-
-# recreateIndexDesc(index_name_desc)
-# recreateIndexUser()

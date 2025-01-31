@@ -1,7 +1,9 @@
 from elasticsearch import Elasticsearch
 
+from embeddings.elasticsearch_embeddings import ES_URL
+
 try : 
-    client = Elasticsearch("http://localhost:9200")
+    client = Elasticsearch(ES_URL)
 except Exception as e :
     client = None
     print("Erreur ElasticSearch : ",e)
