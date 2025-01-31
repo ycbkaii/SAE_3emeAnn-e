@@ -8,13 +8,20 @@ except Exception as e :
 
 index_name = "embeddings-books"
 
-def checkClient() :
+def search_books(title: str):
+    """Sert a rien parceque la recherche renvoie déja ça"""
+    query = {"match": {"title": title}}
+    return client.search(
+        index=index_name,
+        query=query,
+    )
+def check_client_es() :
     if client is not None :
         return client.info()
     else :
         return {"Status" : "Es is not running"}
 
-def kNNBooks(id_books1):
+def knn_books(id_books1):
     livre1 = client.get(index=index_name, id=id_books1)["_source"]["description_vector"]
     query_string = {
         "field": "description_vector",
@@ -24,13 +31,13 @@ def kNNBooks(id_books1):
     }
     return client.search(index=index_name, knn=query_string,source=False)
 
-def kNNUser(user : int) :
-    index_name="hoe-users"
-    usr = client.get(index=index_name, id=user)["_source"]["user_vector"]
+def knn_user(user : int) :
+    index_name_usr= "hoe-users"
+    usr = client.get(index=index_name_usr, id=str(user))["_source"]["user_vector"]
     query_string = {
         "field": "user_vector",
         "query_vector": usr,
         "k": 6,
         "num_candidates": 300
     }
-    return client.search(index=index_name, knn=query_string)
+    return client.search(index=index_name_usr, knn=query_string)

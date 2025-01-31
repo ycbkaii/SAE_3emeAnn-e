@@ -1,7 +1,7 @@
 from elastic_transport import ObjectApiResponse
-from loadSimilarity import kNNBooks,checkClient
+from load_recommandation import knn_books,check_client_es
 from ollama_emb import embedText
-from elasticsearchEmbeddings import addBooks,searchBooks
+from elasticsearch_embeddings import addBooks,searchBooks
 from typing import Any
 
 def object_api_response_to_ids(object_api: ObjectApiResponse[Any]) :
@@ -25,9 +25,9 @@ def search_books(title : str) :
     return object_api_response_to_ids(searchBooks(title=title))
 
 def check_client() :
-    return checkClient()
+    return check_client_es()
 
 def get_reco_books(books_id : int) :
-    return object_api_response_to_ids(kNNBooks(books_id))
+    return object_api_response_to_ids(knn_books(books_id))
 
 print(get_reco_books(100))
