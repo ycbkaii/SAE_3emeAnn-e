@@ -8,7 +8,7 @@ from scipy.spatial.distance import euclidean
 
 
 conn = psycopg2.connect(database="masterbook",
-                    port="5433",
+                    port="5432",
                     user="root",
                     host="localhost",
                     password="root"

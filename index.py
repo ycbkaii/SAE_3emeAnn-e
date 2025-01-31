@@ -1,7 +1,7 @@
 from fastapi import FastAPI, Path
 from fastapi.responses import FileResponse, HTMLResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
-from inputData_outputCluster import acmReco
+# from inputData_outputCluster import acmReco
 from fastapi.middleware.cors import CORSMiddleware
 from embeddings.embeddingsController import check_client_es, get_reco_books, initialize_elastic_search, \
     init_and_check_ollama
@@ -56,10 +56,10 @@ def get_reco_books_id(books_id: int):
 @app.get("/user/{user_id}")
 def get_user_similar_id(user_id: int):
     """Renvoie les utilisateurs similaires """
-    return
+    return "NOT YET IMPLEMENTED"
 
 
-@app.get("/livres/acm_recom/{user_id}")
-def get_books_recom_acm(user_id: int):
-    """Cela renvoie les la liste des livres de recommandation"""
-    return acmReco(user_id)
+# @app.get("/livres/acm_recom/{user_id}")
+# def get_books_recom_acm(user_id: int):
+#     """Cela renvoie les la liste des livres de recommandation"""
+#     return acmReco(user_id)

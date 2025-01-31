@@ -1,8 +1,8 @@
 import numpy as np
 from elastic_transport import ObjectApiResponse
-from load_recommandation import knn_books, check_client_es
-from ollama_emb import embed_text, check_ollama
-from elasticsearch_embeddings import (
+from .ollama_emb import embed_text, check_ollama
+from .load_recommandation import knn_books, check_client_es
+from .elasticsearch_embeddings import (
     add_books,
     search_books_by_title,
     recreate_index_desc,
@@ -51,6 +51,3 @@ def check_client():
 
 def get_reco_books(books_id: int):
     return object_api_response_to_ids(knn_books(books_id))
-
-
-print(get_reco_books(100))
