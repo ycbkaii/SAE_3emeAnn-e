@@ -3,7 +3,8 @@ from fastapi.responses import FileResponse, HTMLResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from inputData_outputCluster import acmReco
 from fastapi.middleware.cors import CORSMiddleware
-from embeddings.embeddingsController import check_client_es, get_reco_books, initialize_elastic_search
+from embeddings.embeddingsController import check_client_es, get_reco_books, initialize_elastic_search, \
+    init_and_check_ollama
 
 app = FastAPI()
 
@@ -32,6 +33,10 @@ def read_root():
     file_path = "Site/index.html"
     return FileResponse(file_path)
 
+
+@app.get("/ollama_info")
+def ollama_info() :
+    return init_and_check_ollama()
 
 @app.get("/es_info")
 def elastic_search_info():
