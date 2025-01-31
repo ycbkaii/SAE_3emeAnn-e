@@ -1,10 +1,9 @@
 from fastapi import FastAPI, Path
 from fastapi.responses import FileResponse, HTMLResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
-from embeddings.loadSimilarity import kNNBooks, checkClient, kNNUser
 from inputData_outputCluster import acmReco
 from fastapi.middleware.cors import CORSMiddleware
-
+from embeddings.embeddingsController import check_client,get_reco_books
 
 app = FastAPI()
 
@@ -37,18 +36,18 @@ def read_root():
 @app.get("/es_info")
 def elastic_search_info() :
     """Renvoie les infos du clients ElasticSearch"""
-    return checkClient()
+    return check_client()
 
 
 @app.get("/books/{books_id}")
 def get_reco_books_id(books_id : int) :
     """ Renvoie les recommandations item_base pour le livre d'id {books_id} """
-    return kNNBooks(books_id)
+    return
 
 @app.get("/user/{user_id}")
 def get_user_similar_id(user_id : int) :
-    """Renvoie les usr similaire """
-    return kNNUser(user_id)
+    """Renvoie les utilisateurs similaires """
+    return
 
 
 @app.get("/livres/acm_recom/{user_id}")

@@ -1,30 +1,33 @@
 from elastic_transport import ObjectApiResponse
-from loadSimilarity import kNNBooks
+from loadSimilarity import kNNBooks,checkClient
 from ollama_emb import embedText
 from elasticsearchEmbeddings import addBooks,searchBooks
 from typing import Any
 
-def ObjectApiResponseToIds(object: ObjectApiResponse[Any]) :
+def object_api_response_to_ids(object_api: ObjectApiResponse[Any]) :
     """ Permet de renvoyer les ids des livres de la réponse d'ES """
-    return object["hits"]["hits"]
+    return object_api["hits"]["hits"]
 
-class Books() :
+class Books:
     """La classe pour un livre"""
     id : int
     title : str
     desc : str
     genre : str
 
-def addNewBooks(books : Books) -> bool :
+def add_new_books(books : Books) -> bool :
     # TODO ajouter le livre au SQL
     embedding = embedText(books.desc)["embeddings"][0]
     addBooks(books.desc,embedding,books.title,books.genre,books.id)
     return True
 
-def recherchBooks(title : str) : 
-    return searchBooks(title=title)
+def search_books(title : str) :
+    return object_api_response_to_ids(searchBooks(title=title))
 
-def getRecoBooks(booksId : int) :
-    return ObjectApiResponseToIds(kNNBooks(booksId))
+def check_client() :
+    return checkClient()
 
-print(getRecoBooks(100))
+def get_reco_books(books_id : int) :
+    return object_api_response_to_ids(kNNBooks(books_id))
+
+print(get_reco_books(100))
