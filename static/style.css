@@ -1,0 +1,389 @@
+/* RESET CSS */
+/* http://meyerweb.com/eric/tools/css/reset/ 
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+/* END OF RESET CSS */
+
+/* STYLES */
+
+@import url(styles/buttons.css);
+@import url(styles/header.css);
+@import url(styles/nav.css);
+@import url(styles/main.css);
+@import url(styles/footer.css);
+
+:root {
+    --black-background: rgb(20, 20, 20);
+    --gray: #808080;
+    --white: white;
+    --white-btn-hover: rgba(255, 255, 255, 0.777);
+    --black-btn: rgba(0, 0, 0, 0.382);
+    --black-btn-hover: rgba(0, 0, 0, 0.8);
+    --gray-btn: rgba(120, 120, 120, 0.6);
+    --gray-btn-hover: rgba(109, 109, 110, 0.525);
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    color: var(--white);
+    background-color: var(--black-background);
+}
+
+.background {
+    height: 50rem;
+    background-image: linear-gradient(
+        to bottom,
+        rgba(20, 20, 20, 0.9) 5%,
+        rgba(20, 20, 20, 0.2) 20%,
+        rgba(20, 20, 20, 0.2) 80%,
+        rgba(20, 20, 20, 0.8) 100%
+      ),
+      url(https://raw.githubusercontent.com/debschaan/netflix-clone/37669424c8c0173f10c1f3cd619d49d21e2bfb6b/assets/img/banner%201.svg);
+    background-size: cover;
+}
+
+.visually-hidden {
+    clip: rect(1px 1px 1px 1px) !important;
+    clip: rect(1px, 1px, 1px, 1px) !important;
+    height: 1px !important;
+    overflow: hidden !important;
+    position: absolute !important;
+    white-space: nowrap !important;
+    width: 1px !important;
+}
+
+/* NAVIGATION */
+
+nav{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 0;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    transition: background-color 0.5s ease;
+}
+
+.scrolled {
+    background-color: var(--black-background);
+    z-index: 2;
+}
+
+/* PRIMARY NAVIGATION */
+
+.primary-menu--logo{
+    background-image: url(https://raw.githubusercontent.com/debschaan/netflix-clone/37669424c8c0173f10c1f3cd619d49d21e2bfb6b/assets/img/Vector__3_.svg);
+    background-repeat: no-repeat;
+    width: 7rem;
+    height: 2rem;
+    background-size: contain;
+    cursor: pointer;
+    position: relative;
+    left: 4rem;
+}
+
+.primary-menu--list{
+    display: flex;
+    gap: 2rem;
+    position: absolute;
+    left: 13rem;
+}
+
+.primary-menu--item a {
+    color: var(--white);
+    font-weight: 400;
+    font-size: 1rem;
+    text-decoration: none;
+}
+
+.primary-menu--item a:hover{
+    color: var(--gray);
+}
+
+/* SECONDARY NAVIGATION */
+
+.secondary-menu--list {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    position: relative;
+    right: 4rem;
+}
+
+.secondary-menu--item{
+   display: flex;
+   align-items: center;
+   gap: .5rem;
+}
+
+.secondary-menu--item a{
+    color: white;
+    font-size: 1.3rem;
+}
+
+.secondary-menu--user-icon {
+    background-image: url("https://github.com/debschaan/netflix-clone/blob/main/assets/img/user%201.png?raw=true");
+    width: 2rem;
+    height: 2rem;
+    background-repeat: no-repeat;
+}
+
+/* HERO SECTION */
+
+.hero {
+    padding: 4rem;
+}
+
+.hero--logo {
+    width: 40rem;
+    margin-bottom: 1rem;
+}
+
+.hero--description {
+    width: 40rem;
+    font-weight: 400;
+    line-height: 1.5rem;
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+}
+
+/* MAIN SECTION */
+
+main {
+    padding: 0 4rem;
+}
+
+.section__category {
+    margin-bottom: 2rem;
+}
+
+.category--title{
+    margin-bottom: 1rem;
+    position: absolute;
+}
+
+.category--title a{
+    font-size: 1.2rem;
+    font-weight: 400;
+    color: var(--white);
+    text-decoration: none;
+}
+
+.category--title a:hover{
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.category--carousel{
+    display: flex;
+    align-items: center;
+    margin: -2rem 0;
+}
+
+.carousel--list {
+    overflow: scroll;
+    white-space: nowrap;
+    display: inline-flex; 
+    width: 82rem;
+    padding: 3rem 0;
+    margin: 0 -3rem;
+    -ms-overflow-style: none;
+    scrollbar-width: none; 
+    list-style: none; 
+}
+
+.carousel--list::-webkit-scrollbar {
+    display: none;
+}
+  
+.carousel--item {
+    display: inline-block;
+    text-align: center;
+    margin-right: .3rem;
+    transition: .2s;
+}
+
+.carousel--item img {
+    width: 15rem;
+    border-radius: .2rem;
+}
+
+.carousel--item:hover{
+    transform: scale(1.4);
+    position: relative;
+    border-radius: .4rem;
+}
+
+/* FOOTER */
+
+footer{
+    padding: 5rem 14.5rem 1rem;
+    flex-direction: column;
+}
+
+.footer-copyright span{
+    color: var(--gray);
+    font-size: .8rem;
+    font-weight: 300;
+}
+
+/* SOCIAL */
+
+.social--list{
+    display: flex;
+    gap: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.social--item i{
+    font-size: 1.3rem;
+    color: var(--white);
+}
+
+/* OPTIONS */
+
+.options--list{
+    align-items: flex-start;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin-bottom: 1rem;
+}
+
+.options--item a{
+    display: list-item;
+    margin-bottom: .9rem;
+    padding-right: 1rem;
+    box-sizing: border-box;
+    color: var(--gray);
+    text-decoration: none;
+    width: 15rem;
+    font-weight: 300;
+    font-size: .8rem;
+}
+
+.options--item a:hover{
+    text-decoration: underline;
+}
+
+/* BUTTONS */
+
+.hero--button {
+    font-weight: 700;
+    border: none;
+    padding: 1.1rem 2.2rem;
+    border-radius: .3rem;
+    margin-right: 1rem;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.hero--button i {
+    margin-right: .5rem;
+}
+
+.play {
+    background-color: var(--white);
+    color: var(--black-background);
+}
+
+.play:hover {
+    background-color: var(--white-btn-hover);
+}
+
+.info {
+    background-color: var(--gray-btn);
+    color: var(--white);
+}
+
+.info:hover {
+    background-color: var(--gray-btn-hover);
+}
+
+.carousel-button {
+    cursor: pointer;
+    font-size: 2rem;
+    z-index: 1;
+    padding: 3.3rem 1rem;
+    border-radius: .2rem;
+    background-color: var(--black-btn);
+    transition: all 0.1s;
+}
+
+.carousel-button b{
+    color: var(--white);
+    transition: all 0.1s;
+    opacity: .7;
+}
+
+.carousel-button b:hover{
+    transform: scale(1.25);
+    transform-origin: center;
+    opacity: 1;
+}
+
+.carousel-button:hover{
+    background-color: var(--black-btn-hover) ;
+}
+
+.service-code-button{
+    padding: .4rem .4rem;
+    background-color: transparent;
+    color: var(--gray);
+    border: solid .09rem var(--gray);
+    font-size: .8rem;
+    margin-bottom: 1rem;
+}
+
+.service-code-button:hover{
+    color: var(--white);
+    cursor: pointer;
+}
