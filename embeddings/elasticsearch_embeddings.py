@@ -27,7 +27,7 @@ def recreate_index_desc(index_name=index_name_desc):
     mappings = {
         "properties": {
             "id": {"type": "keyword"},
-            "description": {"type": "text"},
+            "description": {"type": "text", "index": "false"},
             "title": {"type": "text", "fields": {"keyword": {"type": "keyword"}}},
             "genre_principal": {
                 "type": "text",

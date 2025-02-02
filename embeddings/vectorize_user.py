@@ -1,5 +1,4 @@
 import pandas as pd
-from sklearn.metrics.pairwise import cosine_similarity
 
 data = pd.read_csv("questionnaire_traite.csv")
 
@@ -126,4 +125,3 @@ def vectorizeRow(row):
 
 data.apply(vectorizeRow, axis=1)
 dfVectorize.to_csv("userVectorize.csv", index_label="id_user")
-print(cosine_similarity(dfVectorize))

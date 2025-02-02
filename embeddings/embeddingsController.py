@@ -1,8 +1,8 @@
 import numpy as np
 from elastic_transport import ObjectApiResponse
-from .ollama_emb import embed_text, check_ollama
-from .load_recommandation import knn_books, check_client_es
-from .elasticsearch_embeddings import (
+from embeddings.ollama_emb import embed_text, check_ollama
+from embeddings.load_recommandation import knn_books, check_client_es
+from embeddings.elasticsearch_embeddings import (
     add_books,
     search_books_by_title,
     recreate_index_desc,
@@ -30,9 +30,11 @@ def initialize_elastic_search():
     recreate_index_desc()
     fill_index_desc(np.array([]))
 
-def init_and_check_ollama() :
-    """Pour savoir si Ollama marche bien """
-    return {"status" : check_ollama()}
+
+def init_and_check_ollama():
+    """Pour savoir si Ollama marche bien"""
+    return {"status": check_ollama()}
+
 
 def add_new_books(books: Books) -> bool:
     # TODO ajouter le livre au SQL

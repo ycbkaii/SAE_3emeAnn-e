@@ -4,16 +4,19 @@ import threading
 
 MODEL = "bge-m3"  # Le meilleurs pour les desc
 
-def check_ollama() :
+
+def check_ollama():
     try:
         ollama.pull(MODEL)
-        ollama.embed(model=MODEL,input="test")
+        ollama.embed(model=MODEL, input="test")
         return "Ollama is running and ready for embed"
-    except Exception as e :
+    except Exception as e:
         return e
+
 
 def embed_text(text: str):
     return ollama.embed(model=MODEL, input=text, options={"num_ctx": 8192})
+
 
 def embed_desc_all():
     description = pd.read_csv("csv/bigboss_book.csv", usecols=["description"])
@@ -44,6 +47,7 @@ def embed_desc_all():
         print(len(list_embedings[0]))
     embed_desc(list_embedings, 52000, 52200)
     return list_embedings
+
 
 def embedGenreAll():
     genre = pd.read_csv("csv/peuplement_genre_livre.csv", index_col="id").to_numpy()

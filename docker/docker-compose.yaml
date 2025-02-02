@@ -38,10 +38,21 @@ services:
     networks:
       - es 
       - db
+      - ollama
+
+  ollama:
+    container_name: ollama_sae
+    volumes:
+      - ollama:/root/.ollama
+    image: ollama/ollama
+  networks:
+    - ollama
+
 
 networks:
   es:
   db:
+  ollama:
 
 volumes:
   db_data_masterbook:

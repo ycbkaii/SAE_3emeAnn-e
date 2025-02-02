@@ -7,12 +7,9 @@ import psycopg2
 from scipy.spatial.distance import euclidean
 
 
-conn = psycopg2.connect(database="masterbook",
-                    port="5432",
-                    user="root",
-                    host="localhost",
-                    password="root"
-                    )
+conn = psycopg2.connect(
+    database="masterbook", port="5432", user="root", host="localhost", password="root"
+)
 cursor = conn.cursor()
 print("Connected")
 
@@ -39,35 +36,34 @@ print(f"La data : {tuples}\n")
 columns = [desc[0] for desc in cursor.description]
 
 # Création du DataFrame
-data= pd.DataFrame(tuples, columns=columns)
+data = pd.DataFrame(tuples, columns=columns)
+
 
 # Fonction pour mentionner que le genre pref n'est pas renseigné
-def noneToNaSpecified(row) :
-    if row == None or row == np.nan :
+def noneToNaSpecified(row):
+    if row == None or row == np.nan:
         return "Non renseigné"
-    
-    
+
+
 # Fonction pour regrouper en tranche d'age
-def groupByAge(row) :
-    
-    if int(row) >= 18 and int(row) <=25 :
+def groupByAge(row):
+    if int(row) >= 18 and int(row) <= 25:
         return "Jeune adulte"
-    elif int(row) >25 and int(row)<=40 :
+    elif int(row) > 25 and int(row) <= 40:
         return "Adulte"
-    elif int(row) > 40 : 
+    elif int(row) > 40:
         return "Senior"
     return "Non renseigné"
-
 
 
 # # On récupere le fichier csv et on nettoie ce dernier
 # data = pd.read_csv("questionnaire_traite.csv")
 
 # variables = ['genre_humain', 'age', 'secteur', 'familie_lecture', 'prefere_lire', 'duree_livre_200', 'genre']
-variables = ['genre_humain', 'age', 'duree_livre_200', 'familie_lecture', 'genre']
+variables = ["genre_humain", "age", "duree_livre_200", "familie_lecture", "genre"]
 
 # data = data.apply(noneToNaSpecified)
-data['age'] = data['age'].apply(groupByAge)
+data["age"] = data["age"].apply(groupByAge)
 
 
 # On nettoie et on garde que les données qu'on va utiliser
@@ -75,7 +71,7 @@ data = data[variables]
 
 data = data.reset_index(drop=True)
 
-data = data[data['genre_humain'] != "-1"]
+data = data[data["genre_humain"] != "-1"]
 
 dataFromCsv = data
 
@@ -89,12 +85,8 @@ dataFromCsv = data
 # data.drop(columns=["age"], inplace=True)
 
 
-
-
-
-
-x = pd.concat([data],axis=1)
-dc=pd.DataFrame(pd.get_dummies(x))
+x = pd.concat([data], axis=1)
+dc = pd.DataFrame(pd.get_dummies(x))
 dc.head()
 # On affiche le tableau disjonctif
 print(dc)
@@ -107,11 +99,9 @@ mcaFic = MCA(dc, benzecri=False)
 # plt.show()
 
 
-
 # On renseigne les résultats des coordonnées des individus
 mca_result = mcaFic.fs_r()
 ids_individus = dc.index
-
 
 
 print(mca_result)
