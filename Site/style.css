@@ -180,6 +180,7 @@ nav{
 
 .hero {
     padding: 4rem;
+height: 40rem;
 }
 
 .hero--logo {
@@ -188,6 +189,7 @@ nav{
 }
 
 .hero--description {
+    margin-top: 10rem;
     width: 40rem;
     font-weight: 400;
     line-height: 1.5rem;
