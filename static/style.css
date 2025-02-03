@@ -85,7 +85,7 @@ body {
         rgba(20, 20, 20, 0.2) 80%,
         rgba(20, 20, 20, 0.8) 100%
       ),
-      url(https://raw.githubusercontent.com/debschaan/netflix-clone/37669424c8c0173f10c1f3cd619d49d21e2bfb6b/assets/img/banner%201.svg);
+      url("../The_Boy_With_The_Tiger\'s_Heart.jpg");
     background-size: cover;
 }
 
@@ -120,10 +120,10 @@ nav{
 /* PRIMARY NAVIGATION */
 
 .primary-menu--logo{
-    background-image: url(https://raw.githubusercontent.com/debschaan/netflix-clone/37669424c8c0173f10c1f3cd619d49d21e2bfb6b/assets/img/Vector__3_.svg);
+    background-image: url(/static/img/logo.jpg);
     background-repeat: no-repeat;
-    width: 7rem;
-    height: 2rem;
+    width: 5rem;
+    height: 5rem;
     background-size: contain;
     cursor: pointer;
     position: relative;
@@ -180,6 +180,7 @@ nav{
 
 .hero {
     padding: 4rem;
+height: 40rem;
 }
 
 .hero--logo {
@@ -188,6 +189,7 @@ nav{
 }
 
 .hero--description {
+    margin-top: 10rem;
     width: 40rem;
     font-weight: 400;
     line-height: 1.5rem;
@@ -225,14 +227,14 @@ main {
 .category--carousel{
     display: flex;
     align-items: center;
-    margin: -2rem 0;
+    margin: 10dvw 0;
 }
 
 .carousel--list {
     overflow: scroll;
     white-space: nowrap;
     display: inline-flex; 
-    width: 82rem;
+    width: 90dvw;
     padding: 3rem 0;
     margin: 0 -3rem;
     -ms-overflow-style: none;

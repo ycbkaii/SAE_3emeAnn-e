@@ -6,21 +6,18 @@
 
 
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/static/reset.css">
     <link rel="stylesheet" href="/static/style.css">
-    <title>Netflix</title>
+    <title>MasterBook</title>
 </head>
 <body>
 <div class="background">
         <header>
             <nav role="navigation">
-                <span class="primary-menu--logo" data-logo="Netflix's logo"><a href="#"></a></span>
+                <span class="primary-menu--logo" data-logo="test"><a href="#"></a></span>
                 <ul class="primary-menu--list">
                     <li class="primary-menu--item"><a href="#">Home</a></li>
                     <li class="primary-menu--item"><a href="#">Series</a></li>
-                    <li class="primary-menu--item"><a href="#">Movies</a></li>
-                    <li class="primary-menu--item"><a href="#">Trending</a></li>
-                    <li class="primary-menu--item"><a href="#">My list</a></li>
+                    <li class="primary-menu--item"><a href="#">Books</a></li>
                 </ul>
                 <ul class="secondary-menu--list">
                     <li class="secondary-menu--item"><a href="#"><i class="fa-solid fa-search"></i></a></li>
@@ -32,30 +29,28 @@
                 </ul>
             </nav>
             <div role="banner" class="hero">
-                <img class="hero--logo" src="https://github.com/debschaan/netflix-clone/blob/main/assets/img/poster%201.png?raw=true" alt="Movie title logo">
-                <p class="hero--description">In a state-of-the-art penitentiary, an inmate participates in an experiment with drugs that control emotions for a pharmaceutical genius.</p>
-                <button class="hero--button play"><i class="fa-solid fa-play"></i>Watch</button>
+                <!-- <h1>Titre du Livres</h1> -->
+                <p class="hero--description">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
                 <button class="hero--button info"><i class="fa-solid fa-circle-info"></i>More information</button>
             </div>
         </header>
 
         <main>
-            <h1 class="visually-hidden">test</h1>
-
-            <section class="section__category">
-                <h3 class="category--title"><a href="#"></a></h3>
+            <h1 class="visually-hidden">Livres</h1>
+            <section id="section 1" class="section__category">
+                <h3 class="category--title"><a href="#">Algo 1</a></h3>
                 <div class="category--carousel">
-                    <span class="carousel-button prev" role="button" aria-label="See before titles"><b class="fa-solid fa-chevron-left"></b></span>
+                    <span class="carousel-button prev" role="button" aria-label="See previous titles"><b class="fa-solid fa-chevron-left"></b></span>
                     <div class="carousel__container">
                         <ul class="carousel--list">
+                            <li class="carousel--item"><a href="#"><img src="" alt=""></a></li>
                         </ul>
                     </div>
                     <span class="carousel-button next" role="button" aria-label="See more titles"><b class="fa-solid fa-chevron-right"></b></span>
                 </div>
             </section>
-
-            <section id="section 1" class="section__category">
-                <h3 class="category--title"><a href="#">Trending</a></h3>
+            <section id="section 2" class="section__category">
+                <h3 class="category--title"><a href="#">Algo 1</a></h3>
                 <div class="category--carousel">
                     <span class="carousel-button prev" role="button" aria-label="See previous titles"><b class="fa-solid fa-chevron-left"></b></span>
                     <div class="carousel__container">
@@ -67,43 +62,6 @@
                 </div>
             </section>
 
-            <section class="section__category">
-                <h3 class="category--title"><a href="#">Foreign series</a></h3>
-                <div class="category--carousel">
-                    <span class="carousel-button prev" role="button" aria-label="See previous titles"><b class="fa-solid fa-chevron-left"></b></span>
-                    <div class="carousel__container">
-                        <ul class="carousel--list">
-                            <li class="carousel--item"><a href="#"><img src="https://github.com/debschaan/netflix-clone/blob/main/assets/img/estrangeiras_1.png?raw=true" alt="Queen Loreta"></a></li>
-                            <li class="carousel--item"><a href="#"><img src="https://github.com/debschaan/netflix-clone/blob/main/assets/img/estrangeiras_2.png?raw=true" alt="As 7 Vidas de Lea"></a></li>
-                            <li class="carousel--item"><a href="#"><img src="https://github.com/debschaan/netflix-clone/blob/main/assets/img/estrangeiras_3.png?raw=true" alt="Young Royals"></a></li>
-                            <li class="carousel--item"><a href="#"><img src="https://github.com/debschaan/netflix-clone/blob/main/assets/img/estrangeiras_4.png?raw=true" alt="Dark"></a></li>
-                            <li class="carousel--item"><a href="#"><img src="https://github.com/debschaan/netflix-clone/blob/main/assets/img/estrangeiras_5.png?raw=true" alt="Bem-vindos ao Eden"></a></li>
-                            <li class="carousel--item"><a href="#"><img src="https://github.com/debschaan/netflix-clone/blob/main/assets/img/estrangeiras_6.png?raw=true" alt="Ozark"></a></li>
-                            <li class="carousel--item"><a href="#"><img src="https://github.com/debschaan/netflix-clone/blob/main/assets/img/estrangeiras_7.png?raw=true" alt="Elize Matsunga"></a></li>
-                        </ul>
-                    </div>
-                    <span class="carousel-button next" role="button" aria-label="See more titles"><b class="fa-solid fa-chevron-right"></b></span>
-                </div>
-            </section>
-
-            <section class="section__category">
-                <h3 class="category--title"><a href="#">Eccentric acid humor series</a></h3>
-                <div class="category--carousel">
-                    <span class="carousel-button prev" role="button" aria-label="See previous titles"><b class="fa-solid fa-chevron-left"></b></span>
-                    <div class="carousel__container">
-                        <ul class="carousel--list">
-                            <li class="carousel--item"><a href="#"><img src="https://github.com/debschaan/netflix-clone/blob/main/assets/img/excentricas_1.png?raw=true" alt="Fyre"></a></li>
-                            <li class="carousel--item"><a href="#"><img src="https://github.com/debschaan/netflix-clone/blob/main/assets/img/excentricas_2.png?raw=true" alt="Friends from College"></a></li>
-                            <li class="carousel--item"><a href="#"><img src="https://github.com/debschaan/netflix-clone/blob/main/assets/img/excentricas_3.png?raw=true" alt="Riverdale"></a></li>
-                            <li class="carousel--item"><a href="#"><img src="https://github.com/debschaan/netflix-clone/blob/main/assets/img/excentricas_4.png?raw=true" alt="Velvet Buzzsaw"></a></li>
-                            <li class="carousel--item"><a href="#"><img src="https://github.com/debschaan/netflix-clone/blob/main/assets/img/excentricas_5.png?raw=true" alt="Amazing Interiors"></a></li>
-                            <li class="carousel--item"><a href="#"><img src="https://github.com/debschaan/netflix-clone/blob/main/assets/img/excentricas_6.png?raw=true" alt="The Good Place"></a></li>
-                            <li class="carousel--item"><a href="#"><img src="https://github.com/debschaan/netflix-clone/blob/main/assets/img/excentricas_7.png?raw=true" alt="Unbreakable Kimmy Schmidt"></a></li>
-                        </ul>
-                    </div>
-                    <span class="carousel-button next" role="button" aria-label="See more titles"><b class="fa-solid fa-chevron-right"></b></span>
-                </div>
-            </section>
         </main>
         <footer role="contentinfo">
             <ul class="social--list">
