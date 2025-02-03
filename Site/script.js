@@ -2,7 +2,7 @@
 
 async function mescouilles() {
     try {
-        const response = await fetch("http://127.0.0.1:8000/books"); 
+        const response = await fetch("http://127.0.0.1:8000"); 
         const books = await response.json();
         console.log(books); 
        /* for (let index = 0; index < books.length; index++) {
@@ -34,7 +34,7 @@ function addCarouselItem(containerSelector, href, src, alt) {
 }
 
 // Exemple d'utilisation :
-addCarouselItem('#section\\ 1', 'lien vers la page avec les infos', 'lien image', 'nom du livre');
+addCarouselItem('#section\\ 1', "lien vers la page avec les infos", "../TheBoy_With_The_Tiger's_Heart.jpg", "nom du livre");
 
 
 
@@ -68,7 +68,7 @@ carouselContainers.forEach(container => {
   // Calculate scroll amount based on the first item's width and margin
   const firstItem = carouselItems[0];
   const scrollAmount = firstItem.offsetWidth + parseInt(getComputedStyle(firstItem).marginRight);
-
+  
   // Event listeners for each carousel
   prevButton.addEventListener('click', () => {
     carousel.scrollBy({
