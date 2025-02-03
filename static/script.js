@@ -1,14 +1,36 @@
 //Partie Yoannnnnnnnnnnnnnnnnnnn
 
+let id_user = 12;
+
 async function fetchBooks(path, idSection) {
   try {
       const response = await fetch("http://127.0.0.1:8000/"+path); 
       const books = await response.json();
       console.log(books); 
-     /* for (let index = 0; index < books.length; index++) {
+     for (let index = 0; index < books.length; index++) {
           const element = books[index];
-          addCarouselItem('#section\\ 1', 'lien vers la page avec les infos', 'lien image', 'nom du livre');
-      }*/
+
+          // Lien api livre image
+          let url_image = await fetch("https://openlibrary.org/api/books?bibkeys="+element[3]+"&format=json");
+          console.log(url_image);
+          url_image = await url_image.json();
+          
+          console.log()
+
+          if(url_image[element[3]]){
+            url_image = url_image[element[3]]['thumbnail_url'];
+          }else{
+            url_image = "";
+          }
+          
+          
+
+          
+
+
+          addCarouselItem(idSection, 'lien vers la page avec les infos', url_image, element[0]);
+      }
+      
   } catch (error) {
       console.error("Erreur lors de la récupération des livres :", error);
   }
@@ -37,7 +59,7 @@ function addCarouselItem(containerSelector, href, src, alt) {
 addCarouselItem('#section\\ 1', "lien vers la page avec les infos", "../TheBoy_With_The_Tiger's_Heart.jpg", "nom du livre");
 
 
-fetchBooks();
+fetchBooks("livres/acm_recom/"+id_user, "#section\\ 2");
 
 
 
