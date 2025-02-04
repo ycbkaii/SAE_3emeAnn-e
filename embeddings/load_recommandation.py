@@ -21,10 +21,10 @@ def search_books(title: str):
 
 
 def check_client_es():
-    if client is not None:
+    try :
         return client.info()
-    else:
-        return {"Status": "Es is not running"}
+    except Exception :
+        return {"status": "Es is not running"}
 
 
 def knn_books(id_books1):

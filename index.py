@@ -1,14 +1,12 @@
 from fastapi import FastAPI, Path
 from fastapi.responses import FileResponse, HTMLResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
-
-# from inputData_outputCluster import acmReco
 from fastapi.middleware.cors import CORSMiddleware
+
+from admin import admin_router
+# from inputData_outputCluster import acmReco
 from embeddings.embeddingsController import (
-    check_client_es,
     get_reco_books,
-    initialize_elastic_search,
-    init_and_check_ollama,
 )
 
 app = FastAPI()
@@ -39,20 +37,20 @@ def read_root():
     return FileResponse(file_path)
 
 
-@app.get("/ollama_info")
-def ollama_info():
-    return init_and_check_ollama()
+# @app.get("/ollama_info")
+# def ollama_info():
+#     return init_and_check_ollama()
 
 
-@app.get("/es_info")
-def elastic_search_info():
-    """Renvoie les infos du clients ElasticSearch"""
-    return check_client_es()
+# @app.get("/es_info")
+# def elastic_search_info():
+#     """Renvoie les infos du clients ElasticSearch"""
+#     return check_client_es()
 
 
-@app.get("/init_es")
-def init_es():
-    return initialize_elastic_search()
+# @app.get("/init_es")
+# def init_es():
+#     return initialize_elastic_search()
 
 
 @app.get("/books/{books_id}")
@@ -67,13 +65,14 @@ def get_user_similar_id(user_id: int):
     return "NOT YET IMPLEMENTED"
 
 
-@app.get("/livres/acm_recom/{user_id}")
-def get_books_recom_acm(user_id : int) :
-    """Cela renvoie les la liste des livres de recommandation"""
-    return acmReco(user_id)
+# @app.get("/livres/acm_recom/{user_id}")
+# def get_books_recom_acm(user_id : int) :
+#     """Cela renvoie les la liste des livres de recommandation"""
+#     return acmReco(user_id)
 
 
-@app.get("/init")
-def init_ia() :
-    """Route pour init les algorithmes""" 
+# @app.get("/init")
+# def init_ia() :
+#     """Route pour init les algorithmes""" 
     
+app.include_router(admin_router)
