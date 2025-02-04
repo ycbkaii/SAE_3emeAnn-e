@@ -67,7 +67,13 @@ def get_user_similar_id(user_id: int):
     return "NOT YET IMPLEMENTED"
 
 
-# @app.get("/livres/acm_recom/{user_id}")
-# def get_books_recom_acm(user_id: int):
-#     """Cela renvoie les la liste des livres de recommandation"""
-#     return acmReco(user_id)
+@app.get("/livres/acm_recom/{user_id}")
+def get_books_recom_acm(user_id : int) :
+    """Cela renvoie les la liste des livres de recommandation"""
+    return acmReco(user_id)
+
+
+@app.get("/init")
+def init_ia() :
+    """Route pour init les algorithmes""" 
+    
