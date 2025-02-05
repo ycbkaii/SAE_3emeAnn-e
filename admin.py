@@ -6,8 +6,8 @@ from embeddings.embeddingsController import check_client, initialize_elastic_sea
 
 api_key = APIKeyHeader(name="admin-api-key")
 
-
-ADMIN_KEY="admin"
+ 
+ADMIN_KEY="changeme"
 
 
 def admin_api_key(key: str = Security(api_key)):
@@ -32,4 +32,11 @@ def ollama_info():
 
 @admin_router.get("/init")
 def init_ia() :
-    """Route pour init les algorithmes""" 
+    """Route pour init les algorithmes"""
+
+
+@admin_router.get("/modify_api_key/{new_key}")
+def modify_api_key(new_key : str) :
+    global ADMIN_KEY
+    ADMIN_KEY = new_key
+    return "Api key changed"
