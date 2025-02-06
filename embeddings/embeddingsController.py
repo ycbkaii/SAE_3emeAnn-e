@@ -1,8 +1,9 @@
 import numpy as np
 from elastic_transport import ObjectApiResponse
-from embeddings.ollama_emb import embed_text, check_ollama
-from embeddings.load_recommandation import knn_books, check_client_es
-from embeddings.elasticsearch_embeddings import (
+import psycopg2
+from ollama_emb import embed_text, check_ollama
+from load_recommandation import knn_books, check_client_es, knn_user
+from elasticsearch_embeddings import (
     add_books,
     search_books_by_title,
     recreate_index_desc,
@@ -55,4 +56,36 @@ def get_reco_books(books_id: int):
     return object_api_response_to_ids(knn_books(books_id))
 
 
-print(get_reco_books(100))
+conn = psycopg2.connect(database="masterbook",
+                        port="5433",
+                        user="root",
+                        host="localhost",
+                        password="root"
+                        )
+
+def getBooksByUser(id : int | str) -> (list[tuple] | list):
+    """
+    Fonction pour avoir les livres aimé par les utilisateur
+    """
+    if conn is not None :
+        with conn.cursor() as cursor :
+            requete = "SELECT id_livre FROM _a_lu_livre_vote_genre_pour_livre WHERE note_livre>4 AND id_user="+id 
+            try :
+                cursor.execute(requete)
+                res = cursor.fetchall()
+                return res
+            except Exception as e :
+                print(e)
+                return []
+    else :
+        return []
+
+
+def get_reco_user_based(id : int) :
+    for elem in object_api_response_to_ids(knn_user(id)) :
+        print(elem)
+
+
+# print(get_reco_books(100))
+
+get_reco_user_based(10)

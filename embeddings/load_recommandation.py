@@ -1,6 +1,6 @@
 from elasticsearch import Elasticsearch
 
-from embeddings.elasticsearch_embeddings import ES_URL
+from elasticsearch_embeddings import ES_URL
 
 try:
     client = Elasticsearch(ES_URL)
@@ -47,4 +47,4 @@ def knn_user(user: int):
         "k": 6,
         "num_candidates": 300,
     }
-    return client.search(index=index_name_usr, knn=query_string)
+    return client.search(index=index_name_usr, knn=query_string, source=False)

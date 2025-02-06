@@ -86,6 +86,8 @@ def recreate_index_user(index_name="hoe-users"):
     except Exception as e:
         print(e)
     client.indices.create(index=index_name, mappings=mappings)
+    for i in range(len(vectUser)) :
+        add_user(i,vectUser[i])
 
 
 def get_vect_books(id_book: int):
