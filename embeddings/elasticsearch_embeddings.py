@@ -20,7 +20,7 @@ def add_books(desc, vect_desc, title, genre_principal, id_books):
         "genre_principal": genre_principal,
         "description_vector": vect_desc,
     }
-    client.create(index=index_name_desc, document=doc)
+    client.index(index=index_name_desc, document=doc)
 
 
 def recreate_index_desc(index_name=index_name_desc):
@@ -47,7 +47,9 @@ def recreate_index_desc(index_name=index_name_desc):
     except Exception as e:
         print(e)
     client.indices.create(index=index_name, mappings=mappings)
-
+    tab = pd.read_feather("vectDesc1024").to_numpy()
+    for i in range(len(tab)) :
+        add_books(desc="",genre_principal="",id_books=i,title="",vect_desc=tab[i])
 
 def recreateIndexGenre(index_name):
     vectGenreBooks = []
@@ -65,11 +67,11 @@ def recreateIndexGenre(index_name):
 
 def add_user(id_usr, vector):
     doc = {"id": id_usr, "user_vector": vector}
-    client.create(index="hoe-users", document=doc)
+    client.index(index="hoe-users", document=doc)
 
 
 def recreate_index_user(index_name="hoe-users"):
-    vectUser = pd.read_csv("userVectorize.csv", index_col="id_user").to_numpy()
+    vectUser = pd.read_csv("./userVectorize.csv", index_col="id_user").to_numpy()
     mappings = {
         "properties": {
             "id": {"type": "keyword"},
@@ -90,15 +92,6 @@ def recreate_index_user(index_name="hoe-users"):
         add_user(i,vectUser[i])
 
 
-def get_vect_books(id_book: int):
-    """Pour trouver le vecteur à chercher"""
-    query = {"term": {"id": id_book}}
-    return client.search(
-        index=index_name_desc,
-        query=query,
-    )
-
-
 def search_books_by_title(title: str):
     """Recherche par titre des livres"""
     query = {"match": {"title": title}}
@@ -113,3 +106,6 @@ def fill_index_desc(books_array: np.array, index_name=index_name_desc):
         add_books(
             book["desc"], book["vect_desc"], book["title"], book["genre"], book["id"]
         )
+
+# recreate_index_user()
+# recreate_index_desc()

@@ -57,7 +57,7 @@ def get_reco_books(books_id: int):
 
 
 conn = psycopg2.connect(database="masterbook",
-                        port="5433",
+                        port="5432",
                         user="root",
                         host="localhost",
                         password="root"

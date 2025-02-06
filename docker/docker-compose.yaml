@@ -13,7 +13,7 @@ services:
     volumes:
       - db_data_masterbook:/var/lib/postgresql/data
     networks:
-      - db
+      - db_network
 
   elasticsearch:
     image: bitnami/elasticsearch:8.17.1
@@ -37,7 +37,7 @@ services:
       - 8000:8000
     networks:
       - es 
-      - db
+      - db_network
       - ollama
 
   ollama:
@@ -45,15 +45,16 @@ services:
     volumes:
       - ollama:/root/.ollama
     image: ollama/ollama
-  networks:
-    - ollama
+    networks:
+      - ollama
 
 
 networks:
   es:
-  db:
+  db_network:
   ollama:
 
 volumes:
   db_data_masterbook:
   elasticsearch-data-persistence:
+  ollama:
