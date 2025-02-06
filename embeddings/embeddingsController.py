@@ -53,3 +53,6 @@ def check_client():
 
 def get_reco_books(books_id: int):
     return object_api_response_to_ids(knn_books(books_id))
+
+
+print(get_reco_books(100))
