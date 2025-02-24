@@ -1,6 +1,6 @@
 //Partie Yoannnnnnnnnnnnnnnnnnnn
 
-let id_user = 12;
+let id_user = 5;
 
 async function fetchBooks(path, idSection) {
   try {
@@ -11,17 +11,19 @@ async function fetchBooks(path, idSection) {
           const element = books[index];
 
           // Lien api livre image
-          let url_image = await fetch("https://openlibrary.org/api/books?bibkeys="+element[3]+"&format=json");
-          console.log(url_image);
-          url_image = await url_image.json();
+          // let url_image = await fetch("https://openlibrary.org/api/books?bibkeys="+element[3]+"&format=json");
+          // console.log(url_image);
+          // url_image = await url_image.json();
+          let url_image = element[4];
           
-          console.log()
 
-          if(url_image[element[3]]){
-            url_image = url_image[element[3]]['thumbnail_url'];
-          }else{
-            url_image = "";
-          }
+          
+
+          // if(url_image[element[3]]){
+          //   url_image = url_image[element[3]]['thumbnail_url'];
+          // }else{
+          //   url_image = "";
+          // }
           
           
 

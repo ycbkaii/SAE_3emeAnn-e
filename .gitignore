@@ -2,3 +2,4 @@ bdd_docker
 *pycache*
 questionnaire*.csv
 csv/*
+*.csv
