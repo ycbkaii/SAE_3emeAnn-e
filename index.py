@@ -5,9 +5,10 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from admin import admin_router
 # from inputData_outputCluster import acmReco
-from embeddings.embeddingsController import (
-    get_reco_books,
-)
+# from embeddings.embeddingsController import (
+#     get_reco_books,
+#     get_reco_user_based,
+# )
 
 app = FastAPI()
 
@@ -53,16 +54,16 @@ def read_root():
 #     return initialize_elastic_search()
 
 
-@app.get("/books/{books_id}")
-def get_reco_books_id(books_id: int):
-    """Renvoie les recommandations item_base pour le livre d'id {books_id}"""
-    return get_reco_books(books_id)
+# @app.get("/books/{books_id}")
+# def get_reco_books_id(books_id: int):
+#     """Renvoie les recommandations item_base pour le livre d'id {books_id}"""
+#     return get_reco_books(books_id)
 
 
-@app.get("/user/{user_id}")
-def get_user_similar_id(user_id: int):
-    """Renvoie les utilisateurs similaires"""
-    return "NOT YET IMPLEMENTED"
+# @app.get("/user/{user_id}")
+# def get_user_similar_id(user_id: int):
+#     """Renvoie les reco user similaires"""
+#     return get_reco_user_based(user_id)
 
 
 # @app.get("/livres/acm_recom/{user_id}")

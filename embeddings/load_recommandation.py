@@ -1,6 +1,6 @@
 from elasticsearch import Elasticsearch
 
-from elasticsearch_embeddings import ES_URL
+from .elasticsearch_embeddings import ES_URL
 
 try:
     client = Elasticsearch(ES_URL)
@@ -43,14 +43,14 @@ def get_vect_user(id_user: int):
     )
 
 def knn_books(id_books1):
-    livre1 = client.get(index=index_name, id=id_books1)["_source"]["description_vector"]
+    livre1 = get_vect_books(id_book=id_books1)['hits']['hits'][0]["_source"]["description_vector"]
     query_string = {
         "field": "description_vector",
         "query_vector": livre1,
         "k": 6,
         "num_candidates": 10000,
     }
-    return client.search(index=index_name, knn=query_string, source=False)
+    return client.search(index=index_name, knn=query_string,source_includes="id")
 
 
 

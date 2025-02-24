@@ -1,9 +1,9 @@
 import numpy as np
 from elastic_transport import ObjectApiResponse
 import psycopg2
-from ollama_emb import embed_text, check_ollama
-from load_recommandation import knn_books, check_client_es, knn_user
-from elasticsearch_embeddings import (
+from .ollama_emb import embed_text, check_ollama
+from .load_recommandation import knn_books, check_client_es, knn_user
+from .elasticsearch_embeddings import (
     add_books,
     search_books_by_title,
     recreate_index_desc,
@@ -14,12 +14,11 @@ from typing import Any
 
 def object_api_response_to_ids(object_api: ObjectApiResponse[Any]):
     """Permet de renvoyer les ids des livres de la réponse d'ES"""
-    return object_api["hits"]["hits"]
+    return object_api["hits"]["hits"]["_source"]["id"]
 
 
 class Books:
     """La classe pour un livre"""
-
     id: int
     title: str
     desc: str
@@ -55,13 +54,16 @@ def check_client():
 def get_reco_books(books_id: int):
     return object_api_response_to_ids(knn_books(books_id))
 
-
-conn = psycopg2.connect(database="masterbook",
-                        port="5432",
-                        user="root",
-                        host="localhost",
-                        password="root"
-                        )
+try :
+    conn = psycopg2.connect(database="masterbook",
+                            port="5432",
+                            user="root",
+                            host="localhost",
+                            password="root"
+                            )
+except Exception as e :
+    conn = None
+    print("DATABASE ERROR :",e)
 
 def getBooksByUser(id : int | str) -> (list[tuple] | list):
     """
@@ -69,23 +71,22 @@ def getBooksByUser(id : int | str) -> (list[tuple] | list):
     """
     if conn is not None :
         with conn.cursor() as cursor :
-            requete = "SELECT id_livre FROM _a_lu_livre_vote_genre_pour_livre WHERE note_livre>4 AND id_user="+id 
+            requete = "SELECT id_livre FROM masterbook._a_lu_livre_vote_genre_pour_livre WHERE note_livre>4 AND id_user="+str(id) 
             try :
                 cursor.execute(requete)
                 res = cursor.fetchall()
                 return res
             except Exception as e :
                 print(e)
-                return []
+                return ()
     else :
-        return []
+        return ()
 
 
 def get_reco_user_based(id : int) :
+    listBooks = {}
     for elem in object_api_response_to_ids(knn_user(id)) :
-        print(elem)
-
-
-# print(get_reco_books(100))
-
-get_reco_user_based(10)
+        id_usr = elem["_source"]["id"]
+        if id_usr != id :
+            listBooks[id_usr] = getBooksByUser(id_usr)
+    return listBooks

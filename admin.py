@@ -13,14 +13,12 @@ ADMIN_KEY="changeme"
 def admin_api_key(key: str = Security(api_key)):
     return key == ADMIN_KEY
 
-
 admin_router = APIRouter(dependencies=[Depends(admin_api_key)],prefix="/admin")
 
 @admin_router.get("/es_info")
 def elastic_search_info():
     """Renvoie les infos du clients ElasticSearch"""
     return check_client()
-
 
 @admin_router.get("/init_es")
 def init_es():
@@ -34,9 +32,8 @@ def ollama_info():
 def init_ia() :
     """Route pour init les algorithmes"""
 
-
 @admin_router.get("/modify_api_key/{new_key}")
 def modify_api_key(new_key : str) :
     global ADMIN_KEY
     ADMIN_KEY = new_key
-    return "Api key changed"
+    return "Api key successfully updated"
