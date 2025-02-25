@@ -47,7 +47,7 @@ def authenticate_user(session: Session, username: str, password: str):
     return user
 
 
-def create_user(*, session: Session, user_create: UserCreate) -> User:
+def create_user(session: Session, user_create: UserCreate) -> User:
     db_obj = User.model_validate(
         user_create, update={"hashed_password": get_password_hash(user_create.password)}
     )
