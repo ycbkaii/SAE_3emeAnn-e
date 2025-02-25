@@ -1,4 +1,6 @@
 fastapi[standard]
+pyjwt
+passlib
 elasticsearch
 scikit-learn
 pandas
