@@ -2,7 +2,10 @@ from fastapi import FastAPI
 from fastapi.responses import FileResponse, HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
+from sqlmodel import select
 
+from deps import SessionDep
+from models import _utilisateur
 from user import user_router
 from admin import admin_router
 # from inputData_outputCluster import acmReco
@@ -37,6 +40,12 @@ def read_root():
     """La route par def"""
     file_path = "Site/index.html"
     return FileResponse(file_path)
+
+@app.get("/test")
+def test(session : SessionDep) :
+    statement = select(_utilisateur).where(_utilisateur.id_user == 1)
+    session_user = session.exec(statement).first()
+    return session_user
 
 
 # @app.get("/ollama_info")

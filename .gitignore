@@ -1,3 +1,4 @@
 bdd_docker
 *pycache*
 *.csv
+csv/vectDesc1024
