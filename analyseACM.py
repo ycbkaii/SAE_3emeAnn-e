@@ -1,10 +1,7 @@
-import random
 import pandas as pd
-import matplotlib.pyplot as plt
 import numpy as np
 from mca import MCA
 import psycopg2
-from scipy.spatial.distance import euclidean
 
 
 conn = psycopg2.connect(

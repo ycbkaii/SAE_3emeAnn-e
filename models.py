@@ -12,7 +12,7 @@ class UserBase(SQLModel):
     id_secteur: Optional[int] = None
     id_genre_sex: int
     id_prefere_lire: int
-
+    email : str
 
 # Properties to receive via API on creation
 class UserCreate(UserBase):
@@ -42,9 +42,8 @@ class UpdatePassword(SQLModel):
 
 
 # Database model, database table inferred from class name
-class User(UserBase, table=True):
+class User(UserBase):
     hashed_password: str
-    email : str
 
 class Livre(SQLModel):
     id_livre: int
