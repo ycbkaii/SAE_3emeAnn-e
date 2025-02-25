@@ -6,9 +6,7 @@ from embeddings.embeddingsController import check_client, initialize_elastic_sea
 
 api_key = APIKeyHeader(name="admin-api-key")
 
- 
 ADMIN_KEY="changeme"
-
 
 def admin_api_key(key: str = Security(api_key)):
     return key == ADMIN_KEY
