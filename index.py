@@ -3,6 +3,7 @@ from fastapi.responses import FileResponse, HTMLResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 
+from user import user_router
 from admin import admin_router
 # from inputData_outputCluster import acmReco
 # from embeddings.embeddingsController import (
@@ -77,3 +78,4 @@ def read_root():
 #     """Route pour init les algorithmes""" 
     
 app.include_router(admin_router)
+app.include_router(user_router)

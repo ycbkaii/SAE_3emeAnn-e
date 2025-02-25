@@ -54,21 +54,21 @@ def check_client():
 def get_reco_books(books_id: int):
     return object_api_response_to_ids(knn_books(books_id))
 
-try :
-    conn = psycopg2.connect(database="masterbook",
-                            port="5432",
-                            user="root",
-                            host="localhost",
-                            password="root"
-                            )
-except Exception as e :
-    conn = None
-    print("DATABASE ERROR :",e)
 
 def getBooksByUser(id : int | str) -> (list[tuple] | list):
     """
     Fonction pour avoir les livres aimé par les utilisateur
     """
+    try :
+        conn = psycopg2.connect(database="masterbook",
+                                port="5432",
+                                user="root",
+                                host="localhost",
+                                password="root"
+                                )
+    except Exception as e :
+        conn = None
+        print("DATABASE ERROR :",e)
     if conn is not None :
         with conn.cursor() as cursor :
             requete = "SELECT id_livre FROM masterbook._a_lu_livre_vote_genre_pour_livre WHERE note_livre>4 AND id_user="+str(id) 
