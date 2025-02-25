@@ -7,9 +7,30 @@
 
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="/static/header.css">
     <title>MasterBook</title>
 </head>
 <body>
+
+
+    <script>
+        
+        
+        function displayBarreRecherche(){
+            let barre = document.getElementById("searchbartop");
+            if(barre.style.visibility == "hidden" || barre.style.visibility == ""){
+                barre.style.visibility = "visible";
+                barre.className = "overlay effet";
+            }else{
+                barre.style.visibility = "hidden";
+                barre.className = "overlay";
+            }
+        }
+
+        
+    </script>
+
+
 <div class="background">
         <header>
             <nav role="navigation">
@@ -18,9 +39,23 @@
                     <li class="primary-menu--item"><a href="#">Home</a></li>
                     <li class="primary-menu--item"><a href="#">Series</a></li>
                     <li class="primary-menu--item"><a href="#">Books</a></li>
+                    <li class="primary-menu--item"><a href="/contact">Contact</a></li>
                 </ul>
                 <ul class="secondary-menu--list">
-                    <li class="secondary-menu--item"><a href="#"><i class="fa-solid fa-search"></i></a></li>
+                    <li class="secondary-menu--item">
+                        <a onclick="displayBarreRecherche()" id="loupe"><i class="fa-solid fa-search"></i></a>
+                    
+                        <div class="overlay" id="searchbartop">
+                            <div class="search-popup">
+                                <button class="close-btn" onclick="displayBarreRecherche()">✖</button>
+                                <form method="post" action="">
+                                    <input type="text" placeholder="Rechercher un livre, une série, un auteur..." />
+                                    <button type="submit">🔎</button>
+                                </form>
+                            </div>
+                        </div>
+
+                    </li>
                     <li class="secondary-menu--item"><a href="#"><i class="fa-solid fa-bell"></i></a></li>
                     <li class="secondary-menu--item user">
                         <span class="secondary-menu--user-icon" data-user="User's icon"><a href="#"></a></span>

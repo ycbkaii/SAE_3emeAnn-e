@@ -34,6 +34,11 @@ def read_root():
     file_path = "Site/index.html"
     return FileResponse(file_path)
 
+@app.get("/contact", response_class=HTMLResponse)
+def get_contact():
+    file_path = "Site/contacts.html"
+    return FileResponse(file_path)
+
 @app.get("/es_info")
 def elastic_search_info() :
     """Renvoie les infos du clients ElasticSearch"""
