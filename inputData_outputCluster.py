@@ -110,9 +110,9 @@ def acmReco(userId: int, mca_df=mca_df):
         genre_selected_2 = "nom_genre = 'Fantasy'"
 
     # TODO Faire SQL pour afficher les livres en rapport
-    queryToSelectBooksFirstGenre = f"(SELECT id_livre ,title, average_rating FROM masterbook._livre NATURAL JOIN masterbook._genres_du_livre NATURAL JOIN masterbook._genre WHERE (number_of_page {nb_pages_sql_query}) AND average_rating > 4.0 AND rating_count >= 300 AND ({genre_selected}))" 
+    queryToSelectBooksFirstGenre = f"(SELECT id_livre ,title, average_rating FROM masterbook._livre NATURAL JOIN masterbook._genres_du_livre NATURAL JOIN masterbook._genre WHERE (number_of_page {nb_pages_sql_query}) AND average_rating > 4.0 AND rating_count >= 300 AND ({genre_selected}))"
 
-    queryToSelectBooksSecondGenre = f"(SELECT id_livre ,title, average_rating FROM masterbook._livre NATURAL JOIN masterbook._genres_du_livre NATURAL JOIN masterbook._genre WHERE (number_of_page {nb_pages_sql_query}) AND average_rating > 4.0 AND rating_count >= 300 AND ({genre_selected_2}))" 
+    queryToSelectBooksSecondGenre = f"(SELECT id_livre ,title, average_rating FROM masterbook._livre NATURAL JOIN masterbook._genres_du_livre NATURAL JOIN masterbook._genre WHERE (number_of_page {nb_pages_sql_query}) AND average_rating > 4.0 AND rating_count >= 300 AND ({genre_selected_2}))"
 
     queryToSelectBooks = f"SELECT * FROM ({queryToSelectBooksFirstGenre} UNION {queryToSelectBooksSecondGenre}) ORDER BY average_rating DESC LIMIT 10"
 
@@ -121,12 +121,11 @@ def acmReco(userId: int, mca_df=mca_df):
     tuples = cursor.fetchall()
 
     print(f"Les livres proposés : {tuples}\n")
-    
+
     print(f"A partir des IDS on a ces livres : {getBooksById(tuples)}\n")
 
     conn.commit()
     conn.close()
     print("Connexion closed")
-    
-    return getBooksById(tuples)
 
+    return getBooksById(tuples)

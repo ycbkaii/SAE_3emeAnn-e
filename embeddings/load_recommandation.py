@@ -21,10 +21,11 @@ def search_books(title: str):
 
 
 def check_client_es():
-    try :
+    try:
         return client.info()
-    except Exception :
+    except Exception:
         return {"status": "Es is not running"}
+
 
 def get_vect_books(id_book: int):
     """Pour trouver le vecteur à chercher"""
@@ -34,6 +35,7 @@ def get_vect_books(id_book: int):
         query=query,
     )
 
+
 def get_vect_user(id_user: int):
     """Pour trouver le vecteur à chercher"""
     query = {"term": {"id": id_user}}
@@ -42,21 +44,23 @@ def get_vect_user(id_user: int):
         query=query,
     )
 
+
 def knn_books(id_books1):
-    livre1 = get_vect_books(id_book=id_books1)['hits']['hits'][0]["_source"]["description_vector"]
+    livre1 = get_vect_books(id_book=id_books1)["hits"]["hits"][0]["_source"][
+        "description_vector"
+    ]
     query_string = {
         "field": "description_vector",
         "query_vector": livre1,
         "k": 6,
         "num_candidates": 10000,
     }
-    return client.search(index=index_name, knn=query_string,source_includes="id")
-
+    return client.search(index=index_name, knn=query_string, source_includes="id")
 
 
 def knn_user(user: int):
     index_name_usr = "hoe-users"
-    usr = get_vect_user(user)['hits']['hits'][0]["_source"]["user_vector"]
+    usr = get_vect_user(user)["hits"]["hits"][0]["_source"]["user_vector"]
     query_string = {
         "field": "user_vector",
         "query_vector": usr,

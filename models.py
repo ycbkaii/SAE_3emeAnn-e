@@ -1,4 +1,4 @@
-from pydantic import EmailStr,BaseModel
+from pydantic import EmailStr, BaseModel
 from typing import Optional
 from sqlmodel import Field, SQLModel
 
@@ -12,7 +12,8 @@ class UserBase(SQLModel):
     id_secteur: Optional[int] = None
     id_genre_sex: int
     id_prefere_lire: int
-    email : str
+    email: str
+
 
 # Properties to receive via API on creation
 class UserCreate(UserBase):
@@ -45,6 +46,7 @@ class UpdatePassword(SQLModel):
 class User(UserBase):
     hashed_password: str
 
+
 class Livre(SQLModel):
     id_livre: int
     title: str
@@ -62,7 +64,7 @@ class Livre(SQLModel):
     three_star_ratings: int
     two_star_ratings: int
     one_star_ratings: int
-    cover_link : str
+    cover_link: str
 
 
 class Token(BaseModel):

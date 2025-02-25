@@ -19,6 +19,7 @@ def object_api_response_to_ids(object_api: ObjectApiResponse[Any]):
 
 class Books:
     """La classe pour un livre"""
+
     id: int
     title: str
     desc: str
@@ -55,38 +56,42 @@ def get_reco_books(books_id: int):
     return object_api_response_to_ids(knn_books(books_id))
 
 
-def getBooksByUser(id : int | str) -> (list[tuple] | list):
+def getBooksByUser(id: int | str) -> list[tuple] | list:
     """
     Fonction pour avoir les livres aimé par les utilisateur
     """
-    try :
-        conn = psycopg2.connect(database="masterbook",
-                                port="5432",
-                                user="root",
-                                host="localhost",
-                                password="root"
-                                )
-    except Exception as e :
+    try:
+        conn = psycopg2.connect(
+            database="masterbook",
+            port="5432",
+            user="root",
+            host="localhost",
+            password="root",
+        )
+    except Exception as e:
         conn = None
-        print("DATABASE ERROR :",e)
-    if conn is not None :
-        with conn.cursor() as cursor :
-            requete = "SELECT id_livre FROM masterbook._a_lu_livre_vote_genre_pour_livre WHERE note_livre>4 AND id_user="+str(id) 
-            try :
+        print("DATABASE ERROR :", e)
+    if conn is not None:
+        with conn.cursor() as cursor:
+            requete = (
+                "SELECT id_livre FROM masterbook._a_lu_livre_vote_genre_pour_livre WHERE note_livre>4 AND id_user="
+                + str(id)
+            )
+            try:
                 cursor.execute(requete)
                 res = cursor.fetchall()
                 return res
-            except Exception as e :
+            except Exception as e:
                 print(e)
                 return ()
-    else :
+    else:
         return ()
 
 
-def get_reco_user_based(id : int) :
+def get_reco_user_based(id: int):
     listBooks = {}
-    for elem in object_api_response_to_ids(knn_user(id)) :
+    for elem in object_api_response_to_ids(knn_user(id)):
         id_usr = elem["_source"]["id"]
-        if id_usr != id :
+        if id_usr != id:
             listBooks[id_usr] = getBooksByUser(id_usr)
     return listBooks

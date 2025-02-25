@@ -32,9 +32,7 @@ TokenDep = Annotated[str, Depends(oauth2_scheme)]
 
 def get_current_user(session: SessionDep, token: TokenDep) -> User:
     try:
-        payload = jwt.decode(
-            token, SECRET_KEY, algorithms=[ALGORITHM]
-        )
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         token_data = TokenPayload(**payload)
     except (InvalidTokenError, ValidationError):
         raise HTTPException(

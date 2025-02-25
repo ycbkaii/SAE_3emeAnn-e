@@ -7,7 +7,7 @@ from passlib.context import CryptContext
 from sqlmodel import Session, select
 from models import User, UserCreate
 from models import Token
-from typing import Annotated,Any
+from typing import Annotated, Any
 from deps import SessionDep
 
 # to get a string like this run:
@@ -23,6 +23,7 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/usr/token")
 
+
 def verify_password(plain_password, hashed_password):
     return pwd_context.verify(plain_password, hashed_password)
 
@@ -30,19 +31,21 @@ def verify_password(plain_password, hashed_password):
 def get_password_hash(password):
     return pwd_context.hash(password)
 
-def get_user(session : Session, username: str):
+
+def get_user(session: Session, username: str):
     statement = select(User).where(User.email == username)
     session_user = session.exec(statement).first()
     return session_user
 
 
-def authenticate_user(session : Session, username: str, password: str):
+def authenticate_user(session: Session, username: str, password: str):
     user = get_user(session, username)
     if not user:
         return False
     if not verify_password(password, user.hashed_password):
         return False
     return user
+
 
 def create_user(*, session: Session, user_create: UserCreate) -> User:
     db_obj = User.model_validate(
@@ -54,12 +57,12 @@ def create_user(*, session: Session, user_create: UserCreate) -> User:
     return db_obj
 
 
-
 def create_access_token(subject: str | Any, expires_delta: timedelta) -> str:
     expire = datetime.now(timezone.utc) + expires_delta
     to_encode = {"exp": expire, "sub": str(subject)}
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
+
 
 @user_router.post("/token")
 def login_access_token(
@@ -79,6 +82,7 @@ def login_access_token(
             user.id_user, expires_delta=access_token_expires
         )
     )
+
 
 # @user_router.get("/users/me/", response_model=User)
 # async def read_users_me(

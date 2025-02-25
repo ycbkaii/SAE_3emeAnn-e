@@ -48,8 +48,9 @@ def recreate_index_desc(index_name=index_name_desc):
         print(e)
     client.indices.create(index=index_name, mappings=mappings)
     tab = pd.read_feather("vectDesc1024").to_numpy()
-    for i in range(len(tab)) :
-        add_books(desc="",genre_principal="",id_books=i,title="",vect_desc=tab[i])
+    for i in range(len(tab)):
+        add_books(desc="", genre_principal="", id_books=i, title="", vect_desc=tab[i])
+
 
 def recreateIndexGenre(index_name):
     vectGenreBooks = []
@@ -88,8 +89,8 @@ def recreate_index_user(index_name="hoe-users"):
     except Exception as e:
         print(e)
     client.indices.create(index=index_name, mappings=mappings)
-    for i in range(len(vectUser)) :
-        add_user(i,vectUser[i])
+    for i in range(len(vectUser)):
+        add_user(i, vectUser[i])
 
 
 def search_books_by_title(title: str):
@@ -106,6 +107,7 @@ def fill_index_desc(books_array: np.array, index_name=index_name_desc):
         add_books(
             book["desc"], book["vect_desc"], book["title"], book["genre"], book["id"]
         )
+
 
 # recreate_index_user()
 # recreate_index_desc()

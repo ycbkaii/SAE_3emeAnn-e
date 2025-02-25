@@ -75,7 +75,7 @@ def read_root():
 
 # @app.get("/init")
 # def init_ia() :
-#     """Route pour init les algorithmes""" 
-    
+#     """Route pour init les algorithmes"""
+
 app.include_router(admin_router)
 app.include_router(user_router)
