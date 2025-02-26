@@ -1,5 +1,5 @@
-bdd_docker
+# bdd_docker
 *pycache*
 questionnaire*.csv
-csv/*
-*.csv
+# csv/*
+# *.csv
