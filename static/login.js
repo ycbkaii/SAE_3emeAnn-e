@@ -1,6 +1,8 @@
+var TOKEN = {}
+let form_con = document.getElementById("form_conn")
 async function login(formData) {
     try {
-        const response = await fetch('URL_DE_VOTRE_BACKEND', {
+        const response = await fetch('http://127.0.0.1:8000/usr/token', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
@@ -14,6 +16,7 @@ async function login(formData) {
 
         const data = await response.json();
         console.log('Réponse du serveur:', data);
+        TOKEN = data
         alert('Connexion réussie!');
     } catch (error) {
         console.error('Erreur lors de l\'envoi du formulaire:', error);
@@ -36,3 +39,18 @@ document.getElementById('oauth-form').addEventListener('submit', async function(
     await login(formData);
 
 });
+
+var conn_visible = false
+
+function display_conn() {
+    if (!conn_visible) {
+        form_con.style.display = "block"
+    }
+    else {
+        form_con.style.display = "none"
+    }
+}
+
+function read_token() {
+    return TOKEN
+}

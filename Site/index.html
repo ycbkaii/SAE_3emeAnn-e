@@ -36,6 +36,19 @@
         </header>
 
         <main>
+            <div class="form-container invisible" id="form_conn">
+                <h2>Connexion</h2>
+                <form id="oauth-form">
+                    <label for="username">Email</label>
+                    <input type="text" id="username" name="username" required>
+        
+                    <label for="password">Mot de passe</label>
+                    <input type="password" id="password" name="password" required>
+        
+                    <button type="submit">Se connecter</button>
+                </form>
+            </div>
+
             <h1 class="visually-hidden">Livres</h1>
             <section id="section 1" class="section__category">
                 <h3 class="category--title"><a href="#">Algo 1</a></h3>
@@ -92,5 +105,6 @@
         </footer>
     </div>
     <script src="/static/script.js"></script>
+    <script src="/static/login.js"></script>
 </body>
 </html>

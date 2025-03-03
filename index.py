@@ -42,6 +42,14 @@ def read_root():
     file_path = "Site/index.html"
     return FileResponse(file_path)
 
+@app.get("/login", response_class=HTMLResponse)
+def read_login():
+    """La route par def"""
+    file_path = "Site/login.html"
+    return FileResponse(file_path)
+
+
+
 @app.get("/test", response_model=Tuple[int, float])
 def test(session : SessionDep) :
     statement = select(_livre.id_livre,_livre.average_rating)
