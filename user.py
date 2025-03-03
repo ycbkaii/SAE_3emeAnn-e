@@ -8,7 +8,7 @@ from sqlmodel import Session, select
 from models import User, UserCreate
 from models import Token
 from typing import Annotated, Any
-from deps import SessionDep
+from deps import CurrentUser, SessionDep
 
 # to get a string like this run:
 # openssl rand -hex 32
@@ -32,14 +32,14 @@ def get_password_hash(password):
     return pwd_context.hash(password)
 
 
-def get_user(session: Session, username: str):
-    statement = select(User).where(User.email == username)
+def get_user(session: Session, email: str):
+    statement = select(User).where(User.email == email)
     session_user = session.exec(statement).first()
     return session_user
 
 
-def authenticate_user(session: Session, username: str, password: str):
-    user = get_user(session, username)
+def authenticate_user(session: Session, email: str, password: str):
+    user = get_user(session, email)
     if not user:
         return False
     if not verify_password(password, user.hashed_password):
@@ -84,11 +84,11 @@ def login_access_token(
     )
 
 
-# @user_router.get("/users/me/", response_model=User)
-# async def read_users_me(
-#     current_user: Annotated[User, Depends(get_current_user)],
-# ):
-#     return current_user
+@user_router.get("/test", response_model=User)
+def read_users_me(
+    current_user: CurrentUser,
+):
+    return "Test"
 
 
 # @user_router.get("/users/me/items/")

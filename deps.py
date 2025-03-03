@@ -26,6 +26,7 @@ def get_db() -> Generator[Session, None, None]:
 
 
 # Permet d'avoir une session dans la BDD
+
 SessionDep = Annotated[Session, Depends(get_db)]
 
 TokenDep = Annotated[str, Depends(oauth2_scheme)]

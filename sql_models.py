@@ -65,7 +65,7 @@ class PreferenceLecture(SQLModel, table = True):
     id_preference = Column(Integer, primary_key=True)
     preference = Column(String)
 
-class Utilisateur(SQLModel, table = True):
+class User(SQLModel, table = True):
     __tablename__ = '_utilisateur'
     metadata =  metaData
     id_user = Column(Integer, primary_key=True)

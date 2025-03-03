@@ -1,3 +1,4 @@
+from typing import Tuple
 from fastapi import FastAPI
 from fastapi.responses import FileResponse, HTMLResponse
 from fastapi.staticfiles import StaticFiles
@@ -5,7 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from sqlmodel import select
 
 from deps import SessionDep
-from models import _utilisateur
+from models import User, _livre
 from user import user_router
 from admin import admin_router
 # from inputData_outputCluster import acmReco
@@ -41,10 +42,11 @@ def read_root():
     file_path = "Site/index.html"
     return FileResponse(file_path)
 
-@app.get("/test")
+@app.get("/test", response_model=Tuple[int, float])
 def test(session : SessionDep) :
-    statement = select(_utilisateur).where(_utilisateur.id_user == 1)
+    statement = select(_livre.id_livre,_livre.average_rating)
     session_user = session.exec(statement).first()
+    print(session_user)
     return session_user
 
 
