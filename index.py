@@ -4,6 +4,7 @@ from fastapi.staticfiles import StaticFiles
 from embeddings.loadSimilarity import kNNBooks, checkClient, kNNUser
 from inputData_outputCluster import acmReco
 from fastapi.middleware.cors import CORSMiddleware
+from recommandation_aleatoire import recommend_genres
 
 
 app = FastAPI()
@@ -60,6 +61,11 @@ def get_user_similar_id(user_id : int) :
 def get_books_recom_acm(user_id : int) :
     """Cela renvoie les la liste des livres de recommandation"""
     return acmReco(user_id)
+
+@app.get("/livres/genres/{user_id}")
+def get_recommended_genres(user_id):
+    recommended = recommend_genres(user_id)
+    return recommended
 
 
 @app.get("/init")

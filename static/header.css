@@ -17,6 +17,14 @@
     visibility: hidden;
 }
 
+.category--title{
+    font-size: 30px;
+}
+
+.carousel--list{
+    overflow: hidden !important;
+}
+
 /* Boîte du pop-up */
 .search-popup {
     background: white;
