@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Requête GET - Livre</title>
+</head>
+<body>
+    <h1>Informations du livre</h1>
+    <div>ID du livre : <span id="book-id"></span></div>
+    <div id="book-info"></div>
+
+    <script>
+        async function fetchBook() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const bookId = urlParams.get('bookId');
+
+            if (!bookId) {
+                document.getElementById("book-info").innerText = "Aucun ID de livre fourni.";
+                return;
+            }
+
+            document.getElementById("book-id").innerText = bookId;
+
+            try {
+                const response = await fetch(`http://localhost:8000/books_list/${bookId}`);
+                if (!response.ok) {
+                    throw new Error("Erreur lors de la récupération du livre.");
+                }
+
+                const bookData = await response.json();
+
+                // Vérifier si des données sont renvoyées
+                if (bookData.length === 0) {
+                    document.getElementById("book-info").innerText = "Aucune information trouvée pour ce livre.";
+                    return;
+                }
+
+                // Afficher les informations du livre
+                const bookInfo = `
+                    <p><strong>Titre :</strong> ${bookData[0][0]}</p>
+                    <p><strong>Note Moyenne :</strong> ${bookData[0][1]}</p>
+                    <p><strong>Genre :</strong> ${bookData[0][2]}</p>
+                    <p><strong>ISBN :</strong> ${bookData[0][3]}</p>
+                    <p><strong>Couverture :</strong> <br><img src="${bookData[0][4]}" alt="Couverture du livre" width="150"></p>
+                `;
+
+                document.getElementById("book-info").innerHTML = bookInfo;
+
+            } catch (error) {
+                console.error("Erreur :", error);
+                document.getElementById("book-info").innerText = "Une erreur est survenue lors du chargement des données.";
+            }
+        }
+
+        // Appel de la fonction au chargement de la page
+        fetchBook();
+    </script>
+</body>
+</html>

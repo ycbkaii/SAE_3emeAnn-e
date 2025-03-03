@@ -4,6 +4,7 @@ from fastapi.staticfiles import StaticFiles
 from embeddings.loadSimilarity import kNNBooks, checkClient, kNNUser
 from inputData_outputCluster import acmReco
 from fastapi.middleware.cors import CORSMiddleware
+from utilities import getBooksById
 
 
 app = FastAPI()
@@ -66,3 +67,8 @@ def get_books_recom_acm(user_id : int) :
 def init_ia() :
     """Route pour init les algorithmes""" 
     
+
+@app.get("/books_list/{books_id}")
+def retourne_book(books_id : int) :
+    """ Renvoie les recommandations item_base pour le livre d'id {books_id} """
+    return getBooksById(books_id)
