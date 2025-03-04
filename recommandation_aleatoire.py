@@ -86,11 +86,21 @@ def recommend_genres(user_id, similarity_matrix=cosine_sim_df, num_recommendatio
     # Récupérer les similarités
     similarities = similarity_matrix.loc[preferred_genre]
     
-    print(similarities)
+    
     
     # Trier les genres par similarité
     recommended_genres = similarities.sort_values(ascending=False).iloc[1:]  # Exclure le genre préféré
-    recommended_genres = list(recommended_genres.index)
+
+    # On retire les similarités en dessous de 50%
+    listeGenresRecommended = []
+    for i in recommended_genres.index :
+        if recommended_genres[i] >= 0.5 :
+            listeGenresRecommended.append(i)
+        else : 
+            break
+    recommended_genres = listeGenresRecommended
+    #recommended_genres = list(recommended_genres.index)
+    
     
     # Mélanger légèrement les genres si shuffle_results est activé
     if shuffle_results:
