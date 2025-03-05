@@ -32,8 +32,8 @@ async function fetchBooks(path, idSection, label) {
             label = label+books[0][2];
           }
 
-          addCarouselItem(idSection, "/book.html?isbn="+element[3], url_image, element[0],label );
-          
+
+          addCarouselItem(idSection, "/book?book_id="+element[5], url_image, element[0], label);
       }
       
   } catch (error) {

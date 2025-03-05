@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Requête GET - Livre</title>
+
+</head>
+
+<body>
+
+    <h1>Informations du livre</h1>
+
+    <div>ID du livre :</div>
+
+    <div id="book-id" ></div>
+
+    <div id="book-info"></div>
+
+
+
+    <script>
+async function fetchBook() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const bookId = urlParams.get('book_id');
+    if (!bookId) {
+        document.getElementById('book-info').innerText = "Aucun ID de livre fourni.";
+        return;
+    }
+
+    document.getElementById('book-id').innerText = `ID du livre : ${bookId}`;
+
+    try {
+        const response = await fetch(`/books_list/${bookId}`);
+        if (!response.ok) {
+            throw new Error("Erreur lors de la récupération des données");
+        }
+
+        const bookData = await response.json();
+        document.getElementById('book-info').innerText = JSON.stringify(bookData, null, 2);
+    } catch (error) {
+        document.getElementById('book-info').innerText = "Erreur : " + error.message;
+    }
+}
+// Exécuter la fonction lorsque la page est chargée
+window.onload = fetchBook;
+
+    </script>
+
+</body>
+
+</html>
