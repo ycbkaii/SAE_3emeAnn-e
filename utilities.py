@@ -18,9 +18,9 @@ def getBooksById(listIdBooks):
         # On vérifie que l'id est un tuple ou non
         if isinstance(id, tuple):
             id = id[0]
-
-        queryToSelectBooks = f"SELECT DISTINCT(title), average_rating, nom_genre, isbn FROM masterbook._livre NATURAL JOIN masterbook._genres_du_livre NATURAL JOIN masterbook._genre WHERE id_livre = {id};"
-
+        
+        queryToSelectBooks = f"SELECT DISTINCT(title), average_rating, nom_genre, isbn, cover_link FROM masterbook._livre NATURAL JOIN masterbook._genres_du_livre NATURAL JOIN masterbook._genre WHERE id_livre = {id};"
+        
         cursor.execute(queryToSelectBooks)
 
         tuples.append(cursor.fetchall()[0])

@@ -1,4 +1,7 @@
 bdd_docker
 *pycache*
 *.csv
-csv/vectDesc1024
+questionnaire*.csv
+# csv/vectDesc1024
+
+# *.csv

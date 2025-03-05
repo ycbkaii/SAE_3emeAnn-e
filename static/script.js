@@ -1,8 +1,8 @@
 //Partie Yoannnnnnnnnnnnnnnnnnnn
 
-let id_user = 12;
+let id_user = 5;
 
-async function fetchBooks(path, idSection) {
+async function fetchBooks(path, idSection, label) {
   try {
       const response = await fetch("http://127.0.0.1:8000/"+path); 
       const books = await response.json();
@@ -11,24 +11,29 @@ async function fetchBooks(path, idSection) {
           const element = books[index];
 
           // Lien api livre image
-          let url_image = await fetch("https://openlibrary.org/api/books?bibkeys="+element[3]+"&format=json");
-          console.log(url_image);
-          url_image = await url_image.json();
+          // let url_image = await fetch("https://openlibrary.org/api/books?bibkeys="+element[3]+"&format=json");
+          // console.log(url_image);
+          // url_image = await url_image.json();
+          let url_image = element[4];
           
-          console.log()
 
-          if(url_image[element[3]]){
-            url_image = url_image[element[3]]['thumbnail_url'];
-          }else{
-            url_image = "";
+          
+
+          // if(url_image[element[3]]){
+          //   url_image = url_image[element[3]]['thumbnail_url'];
+          // }else{
+          //   url_image = "";
+          // }
+          
+          
+
+          
+          if(label == "Genre que vous pourriez aimer : "){
+            label = label+books[0][2];
           }
-          
-          
 
+          addCarouselItem(idSection, "/book.html?isbn="+element[3], url_image, element[0],label );
           
-
-
-          addCarouselItem(idSection, 'lien vers la page avec les infos', url_image, element[0]);
       }
       
   } catch (error) {
@@ -36,8 +41,10 @@ async function fetchBooks(path, idSection) {
   }
 }
 
-function addCarouselItem(containerSelector, href, src, alt) {
+function addCarouselItem(containerSelector, href, src, alt, label="") {
   const container = document.querySelector(`${containerSelector} .carousel--list`);
+  titre = document.querySelector(`${containerSelector}`).getElementsByClassName("category--title")[0];
+  titre.innerHTML = label;
   if (!container) return;
   
   const listItem = document.createElement('li');
@@ -59,8 +66,8 @@ function addCarouselItem(containerSelector, href, src, alt) {
 addCarouselItem('#section\\ 1', "lien vers la page avec les infos", "../TheBoy_With_The_Tiger's_Heart.jpg", "nom du livre");
 
 
-fetchBooks("livres/acm_recom/"+id_user, "#section\\ 2");
-
+fetchBooks("livres/acm_recom/"+id_user, "#section\\ 2", "Livres que vous pourriez aimer");
+fetchBooks("livres/genres/"+id_user, "#section\\ 3", "Genre que vous pourriez aimer : ");
 
 
 

@@ -1,0 +1,44 @@
+id_secteur,secteur
+1,informatique / technologie
+2,transport / logistique
+3,recherche / science
+4,arts / creation
+5,hotellerie / restauration
+6,ingenierie
+7,commerce / vente
+8,droit / juridique
+9,police
+10,espace vert
+11,mecanique
+12,aes
+13,services publics / administration
+14,medical / sante
+15,etudiant 
+16,education
+17,ressources humaines 
+18,finance / comptabilite
+19,assistante maternelle 
+20,tourisme 
+21,etudiant
+22,marketing / communication
+23,retraite
+24,logements etudiants 
+25,services aux entreprises 
+26,qualite
+27,collectivite territoriale
+28,militaire 
+29,ouvriere 
+30,ressources humaines
+31,paysagiste
+32,agriculture / agroalimentaire
+33,immobilier 
+34,artisan
+35,culturel
+36,assistante familiale 
+37,energie
+38,petite enfance 
+39,aeronautique 
+40,industries
+41,salarie
+42,telecommunication
+0,inconnu

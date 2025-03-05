@@ -17,8 +17,8 @@ def acmReco(userId: int, mca_df=mca_df):
     print("Connected")
 
     # TODO Ici on recoit l'ID de l'utilisateur qui vient de se connecter pour l'affichage de ses recommandations et on fait un transform pour l'integrer dans les clusters
-    target_id = userId
-    target_point = mca_df.loc[target_id, ["Dim1", "Dim2"]].values
+    target_id = userId-1
+    target_point = mca_df.loc[target_id, ['Dim1', 'Dim2']].values
 
     # On recupere le cluster associé à la target point
     cluster_point = mca_df.loc[target_id, "Cluster"]

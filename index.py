@@ -13,7 +13,8 @@ from admin import admin_router
 # from embeddings.embeddingsController import (
 #     get_reco_books,
 #     get_reco_user_based,
-# )
+# )from recommandation_aleatoire import recommend_genres
+
 
 app = FastAPI()
 
@@ -42,31 +43,15 @@ def read_root():
     file_path = "Site/index.html"
     return FileResponse(file_path)
 
-@app.get("/login", response_class=HTMLResponse)
-def read_login():
-    """La route par def"""
-    file_path = "Site/login.html"
+@app.get("/contact", response_class=HTMLResponse)
+def get_contact():
+    file_path = "Site/contacts.html"
     return FileResponse(file_path)
 
-
-
-@app.get("/test", response_model=Tuple[int, float])
-def test(session : SessionDep) :
-    statement = select(_livre.id_livre,_livre.average_rating)
-    session_user = session.exec(statement).first()
-    print(session_user)
-    return session_user
-
-
-# @app.get("/ollama_info")
-# def ollama_info():
-#     return init_and_check_ollama()
-
-
-# @app.get("/es_info")
-# def elastic_search_info():
-#     """Renvoie les infos du clients ElasticSearch"""
-#     return check_client_es()
+@app.get("/es_info")
+def elastic_search_info() :
+    """Renvoie les infos du clients ElasticSearch"""
+    return checkClient()
 
 
 # @app.get("/init_es")
@@ -90,6 +75,11 @@ def test(session : SessionDep) :
 # def get_books_recom_acm(user_id : int) :
 #     """Cela renvoie les la liste des livres de recommandation"""
 #     return acmReco(user_id)
+
+@app.get("/livres/genres/{user_id}")
+def get_recommended_genres(user_id):
+    recommended = recommend_genres(user_id)
+    return recommended
 
 
 # @app.get("/init")
