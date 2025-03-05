@@ -5,6 +5,7 @@ from embeddings.loadSimilarity import kNNBooks, checkClient, kNNUser
 from inputData_outputCluster import acmReco
 from fastapi.middleware.cors import CORSMiddleware
 from recommandation_aleatoire import recommend_genres
+from recherche import search_books
 
 
 app = FastAPI()
@@ -67,6 +68,11 @@ def get_books_recom_acm(user_id : int) :
 def get_recommended_genres(user_id):
     recommended = recommend_genres(user_id)
     return recommended
+
+@app.post("/search")
+def search(query: str):
+    """Route qui redirige vers la recherche"""
+    return search_books(query)
 
 @app.get("/init")
 def init_ia() :

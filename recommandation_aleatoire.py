@@ -91,3 +91,4 @@ def recommend_genres(user_id, similarity_matrix=cosine_sim_df, num_recommendatio
 
     return cursor.fetchall()
 
+ 
