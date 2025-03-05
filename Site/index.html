@@ -1,0 +1,145 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://kit.fontawesome.com/c8451551fd.js" crossorigin="anonymous"></script>
+
+
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="/static/header.css">
+    <title>MasterBook</title>
+</head>
+<body>
+
+
+    <script>
+        
+        
+        function displayBarreRecherche(){
+            let barre = document.getElementById("searchbartop");
+            if(barre.style.visibility == "hidden" || barre.style.visibility == ""){
+                barre.style.visibility = "visible";
+                barre.className = "overlay effet";
+            }else{
+                barre.style.visibility = "hidden";
+                barre.className = "overlay";
+            }
+        }
+
+        
+    </script>
+
+
+<div class="background">
+        <header>
+            <nav role="navigation">
+                <span class="primary-menu--logo" data-logo="test"><a href="#"></a></span>
+                <ul class="primary-menu--list">
+                    <li class="primary-menu--item"><a href="#">Home</a></li>
+                    <li class="primary-menu--item"><a href="#">Series</a></li>
+                    <li class="primary-menu--item"><a href="#">Books</a></li>
+                    <li class="primary-menu--item"><a href="/contact">Contact</a></li>
+                </ul>
+                <ul class="secondary-menu--list">
+                    <li class="secondary-menu--item">
+                        <a onclick="displayBarreRecherche()" id="loupe"><i class="fa-solid fa-search"></i></a>
+                    
+                        <div class="overlay" id="searchbartop">
+                            <div class="search-popup">
+                                <button class="close-btn" onclick="displayBarreRecherche()">✖</button>
+                                <form method="post" action="">
+                                    <input type="text" placeholder="Rechercher un livre, une série, un auteur..." />
+                                    <button type="submit">🔎</button>
+                                </form>
+                            </div>
+                        </div>
+
+                    </li>
+                    <li class="secondary-menu--item"><a href="#"><i class="fa-solid fa-bell"></i></a></li>
+                    <li class="secondary-menu--item user">
+                        <span class="secondary-menu--user-icon" data-user="User's icon"><a href="#"></a></span>
+                        <a href="#"><i class="fa-solid fa-caret-down"></i></a>
+                    </li>
+                </ul>
+            </nav>
+            <div role="banner" class="hero">
+                <!-- <h1>Titre du Livres</h1> -->
+                <p class="hero--description">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                <button class="hero--button info"><i class="fa-solid fa-circle-info"></i>More information</button>
+            </div>
+        </header>
+
+        <main>
+            <h1 class="visually-hidden">Livres</h1>
+            <section id="section 1" class="section__category">
+                <h3 class="category--title"><a href="#">Algo 1</a></h3>
+                <div class="category--carousel">
+                    <span class="carousel-button prev" role="button" aria-label="See previous titles"><b class="fa-solid fa-chevron-left"></b></span>
+                    <div class="carousel__container">
+                        <ul class="carousel--list">
+                            <li style="position: absolute;" class="carousel--item"><a href="#"><img src="" alt=""></a></li>
+                        </ul>
+                    </div>
+                    <span class="carousel-button next" role="button" aria-label="See more titles"><b class="fa-solid fa-chevron-right"></b></span>
+                </div>
+            </section>
+            <section id="section 2" class="section__category">
+                <h3 class="category--title"><a href="#">Algo 1</a></h3>
+                <div class="category--carousel">
+                    <span class="carousel-button prev" role="button" aria-label="See previous titles"><b class="fa-solid fa-chevron-left"></b></span>
+                    <div class="carousel__container">
+                        <ul class="carousel--list">
+                            <li style="position: absolute;" class="carousel--item"><a href="#"><img src="" alt=""></a></li>
+                        </ul>
+                    </div>
+                    <span class="carousel-button next" role="button" aria-label="See more titles"><b class="fa-solid fa-chevron-right"></b></span>
+                </div>
+            </section>
+
+            <section id="section 3" class="section__category">
+                <h3 class="category--title"><a href="#">Algo 1</a></h3>
+                <div class="category--carousel">
+                    <span class="carousel-button prev" role="button" aria-label="See previous titles"><b class="fa-solid fa-chevron-left"></b></span>
+                    <div class="carousel__container">
+                        <ul class="carousel--list">
+                            <li style="position: absolute;" class="carousel--item"><a href="#"><img src="" alt=""></a></li>
+                        </ul>
+                    </div>
+                    <span class="carousel-button next" role="button" aria-label="See more titles"><b class="fa-solid fa-chevron-right"></b></span>
+                </div>
+            </section>
+
+        </main>
+        <footer role="contentinfo">
+            <ul class="social--list">
+                <li class="social--item"><a aria-label="facebook" href="#"><i class="bi bi-facebook"></i></a></li>
+                <li class="social--item"><a aria-label="instagram" href="#"><i class="bi bi-instagram"></i></a></li>
+                <li class="social--item"><a aria-label="twitter" href="#"><i class="bi bi-twitter"></i></a></li>
+                <li class="social--item"><a aria-label="youtube" href="#"><i class="bi bi-youtube"></i></a></li>
+            </ul>
+            <div class="options">
+                <ul class="options--list">
+                    <li class="options--item"><a href="#">Audiodescription</a></li>
+                    <li class="options--item"><a href="#">Investor relations</a></li>
+                    <li class="options--item"><a href="#">Legal information</a></li>
+                    <li class="options--item"><a href="#">Help Center</a></li>
+                    <li class="options--item"><a href="#">Recruitment</a></li>
+                    <li class="options--item"><a href="#">Cookie preferences</a></li>
+                    <li class="options--item"><a href="#">Gift Cards</a></li>
+                    <li class="options--item"><a href="#">Terms of Use</a></li>
+                    <li class="options--item"><a href="#">Legal Notice</a></li>
+                    <li class="options--item"><a href="#">Press</a></li>
+                    <li class="options--item"><a href="#">Confidentiality</a></li>
+                    <li class="options--item"><a href="#">Contacts</a></li>
+                    <li class="options--item"><a href="#">Informations</a></li>
+                </ul>
+            </div>
+            <button class="service-code-button">Service Code</button>
+            <div class="footer-copyright"><span>© 2024 Débora Schaan.</span></div>
+        </footer>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
+    <script src="/static/script.js"></script>
+</body>
+</html>
