@@ -30,7 +30,7 @@ async function fetchBooks(path, idSection) {
           
 
 
-          addCarouselItem(idSection, "/book?id="+element[0], url_image, element[0]);
+          addCarouselItem(idSection, "/book?id="+element[5], url_image, element[0]);
       }
       
   } catch (error) {
