@@ -1,12 +1,10 @@
 from fastapi import FastAPI, Path
 from fastapi.responses import FileResponse, HTMLResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
-from embeddings.loadSimilarity import kNNBooks, checkClient, kNNUser
 from inputData_outputCluster import acmReco
 from fastapi.middleware.cors import CORSMiddleware
+from utilities import getBooksById
 from recommandation_aleatoire import recommend_genres
-
-
 app = FastAPI()
 
 
@@ -40,22 +38,6 @@ def get_contact():
     file_path = "Site/contacts.html"
     return FileResponse(file_path)
 
-@app.get("/es_info")
-def elastic_search_info() :
-    """Renvoie les infos du clients ElasticSearch"""
-    return checkClient()
-
-
-@app.get("/books/{books_id}")
-def get_reco_books_id(books_id : int) :
-    """ Renvoie les recommandations item_base pour le livre d'id {books_id} """
-    return kNNBooks(books_id)
-
-@app.get("/user/{user_id}")
-def get_user_similar_id(user_id : int) :
-    """Renvoie les usr similaire """
-    return kNNUser(user_id)
-
 
 @app.get("/livres/acm_recom/{user_id}")
 def get_books_recom_acm(user_id : int) :
@@ -72,3 +54,12 @@ def get_recommended_genres(user_id):
 def init_ia() :
     """Route pour init les algorithmes""" 
     
+@app.get("/book", response_class=HTMLResponse)
+def get_book():
+    file_path = "Site/book.html"
+    return FileResponse(file_path)
+
+@app.get("/books_list/{books_id}")
+def retourne_book(books_id : int) :
+    """ Renvoie les recommandations item_base pour le livre d'id {books_id} """
+    return getBooksById([books_id])
