@@ -114,7 +114,7 @@ def recommend_genres(user_id, similarity_matrix=cosine_sim_df, num_recommendatio
 
     queryRecupLivres = f"""
     SELECT * FROM (
-        SELECT DISTINCT title, average_rating, nom_genre, isbn, cover_link
+        SELECT DISTINCT title, average_rating, nom_genre, isbn, cover_link, _livre.id_livre
         FROM masterbook._livre
         NATURAL JOIN masterbook._genres_du_livre
         NATURAL JOIN masterbook._genre
