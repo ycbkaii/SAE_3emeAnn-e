@@ -1,10 +1,13 @@
 from fastapi import FastAPI, Path
 from fastapi.responses import FileResponse, HTMLResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
+from PCA import acpReco
 from inputData_outputCluster import acmReco
 from fastapi.middleware.cors import CORSMiddleware
+from recherche import search_books
 from utilities import getBooksById
 from recommandation_aleatoire import recommend_genres
+from fastapi import Form
 app = FastAPI()
 
 
@@ -44,6 +47,11 @@ def get_books_recom_acm(user_id : int) :
     """Cela renvoie les la liste des livres de recommandation"""
     return acmReco(user_id)
 
+@app.get("/livres/acp_recom/{user_id}")
+def get_books_recom_acp(user_id : int) :
+    """Cela renvoie les la liste des livres de recommandation en ACP"""
+    return acpReco(user_id)
+
 @app.get("/livres/genres/{user_id}")
 def get_recommended_genres(user_id):
     recommended = recommend_genres(user_id)
@@ -63,3 +71,13 @@ def get_book():
 def retourne_book(books_id : int) :
     """ Renvoie les recommandations item_base pour le livre d'id {books_id} """
     return getBooksById([books_id])
+
+
+@app.post("/search", response_class=HTMLResponse)
+def search(query: str = Form(...)):
+    """Route qui redirige vers la recherche"""
+    
+    file_path = "Site/recherche.html"
+    return FileResponse(file_path)
+    
+    # return search_books(query)

@@ -63,9 +63,8 @@ function addCarouselItem(containerSelector, href, src, alt, label="") {
 }
 
 // Exemple d'utilisation :
-addCarouselItem('#section\\ 1', "lien vers la page avec les infos", "../TheBoy_With_The_Tiger's_Heart.jpg", "nom du livre");
 
-
+fetchBooks("livres/acp_recom/"+id_user, "#section\\ 1", "Livres recommandés");
 fetchBooks("livres/acm_recom/"+id_user, "#section\\ 2", "Livres que vous pourriez aimer");
 fetchBooks("livres/genres/"+id_user, "#section\\ 3", "Genre que vous pourriez aimer : ");
 

@@ -48,8 +48,8 @@
                         <div class="overlay" id="searchbartop">
                             <div class="search-popup">
                                 <button class="close-btn" onclick="displayBarreRecherche()">✖</button>
-                                <form method="post" action="">
-                                    <input type="text" placeholder="Rechercher un livre, une série, un auteur..." />
+                                <form method="post" action="/search">
+                                    <input name="query" type="text" placeholder="Rechercher un livre, une série, un auteur..." required/>
                                     <button type="submit">🔎</button>
                                 </form>
                             </div>
@@ -78,7 +78,7 @@
                     <span class="carousel-button prev" role="button" aria-label="See previous titles"><b class="fa-solid fa-chevron-left"></b></span>
                     <div class="carousel__container">
                         <ul class="carousel--list">
-                            <li class="carousel--item"><a href="#"><img src="" alt=""></a></li>
+                            <li style="position: absolute;" class="carousel--item"><a href="#"><img src="" alt=""></a></li>
                         </ul>
                     </div>
                     <span class="carousel-button next" role="button" aria-label="See more titles"><b class="fa-solid fa-chevron-right"></b></span>

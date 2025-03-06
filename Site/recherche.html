@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recherche</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+        }
+        .search-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .search-input {
+            padding: 10px;
+            width: 300px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .rubrique {
+            margin-bottom: 30px;
+        }
+        .rubrique h2 {
+            text-align: center;
+        }
+        .result-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 0;
+            list-style: none;
+        }
+        .result-item {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .result-item img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+        .result-item h3 {
+            margin: 10px 0;
+            font-size: 1.2em;
+        }
+        .result-item p {
+            font-size: 0.9em;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="search-container">
+        <input type="text" class="search-input" placeholder="Rechercher...">
+    </div>
+    
+    <div class="rubrique">
+        <h2>Livres</h2>
+        <ul class="result-list">
+            <li class="result-item">
+                <img src="book.jpg" alt="Livre">
+                <h3>Titre du Livre</h3>
+                <p>Description du livre ici...</p>
+            </li>
+        </ul>
+    </div>
+    
+    <div class="rubrique">
+        <h2>Saga</h2>
+        <ul class="result-list">
+            <li class="result-item">
+                <img src="saga.jpg" alt="Saga">
+                <h3>Nom de la Saga</h3>
+                <p>Description de la saga ici...</p>
+            </li>
+        </ul>
+    </div>
+    
+    <div class="rubrique">
+        <h2>Auteurs</h2>
+        <ul class="result-list">
+            <li class="result-item">
+                <img src="author.jpg" alt="Auteur">
+                <h3>Nom de l'Auteur</h3>
+                <p>Biographie courte ici...</p>
+            </li>
+        </ul>
+    </div>
+</body>
+</html>
