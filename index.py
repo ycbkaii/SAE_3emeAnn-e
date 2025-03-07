@@ -4,11 +4,12 @@ from fastapi.staticfiles import StaticFiles
 from PCA import acpReco
 from inputData_outputCluster import acmReco
 from fastapi.middleware.cors import CORSMiddleware
+from utilities import getBooksById,getBooksInfosById, getBooksInfosallById
 from recherche import search_books
-from utilities import getBooksById
 from recommandation_aleatoire import recommend_genres
 from fastapi import Form
 from fastapi.templating import Jinja2Templates
+
 app = FastAPI()
 
 
@@ -59,6 +60,11 @@ def get_recommended_genres(user_id):
     recommended = recommend_genres(user_id)
     return recommended
 
+#@app.get("/livres/genres/{user_id}")
+#def get_recommended_genres(user_id):
+ #   recommended = recommend_genres(user_id)
+  #  return recommended
+
 
 @app.get("/init")
 def init_ia() :
@@ -73,6 +79,14 @@ def get_book():
 def retourne_book(books_id : int) :
     """ Renvoie les recommandations item_base pour le livre d'id {books_id} """
     return getBooksById([books_id])
+
+@app.get("/books_infos_list/{books_id}")
+def retourne_book2(books_id : int) :
+    return getBooksInfosById([books_id])[0]
+
+@app.get("/books_infos_all_list/{books_id}")
+def retourne_book3(books_id : int) :
+    return getBooksInfosallById([books_id]) 
 
 
 @app.post("/search", response_class=HTMLResponse)
