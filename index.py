@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Path
+from fastapi import FastAPI, Path, Request
 from fastapi.responses import FileResponse, HTMLResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from PCA import acpReco
@@ -8,6 +8,7 @@ from recherche import search_books
 from utilities import getBooksById
 from recommandation_aleatoire import recommend_genres
 from fastapi import Form
+from fastapi.templating import Jinja2Templates
 app = FastAPI()
 
 
@@ -28,6 +29,7 @@ app.add_middleware(
 
 # Charger le CSS et le JS dans les pages
 app.mount("/static", StaticFiles(directory="static"), name="static")
+templates = Jinja2Templates(directory="Site")
 
 
 @app.get("/", response_class=HTMLResponse)
@@ -74,10 +76,11 @@ def retourne_book(books_id : int) :
 
 
 @app.post("/search", response_class=HTMLResponse)
-def search(query: str = Form(...)):
+def search(request : Request,query: str = Form(...)):
     """Route qui redirige vers la recherche"""
     
-    file_path = "Site/recherche.html"
-    return FileResponse(file_path)
-    
-    # return search_books(query)
+    return templates.TemplateResponse("recherche.html", {"request": request, "query": query})
+
+@app.get("/retrievedata/{query}")
+def retrieveDataLivresSagaAuteurs(query : str) :
+    return search_books(query)
