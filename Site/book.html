@@ -2,55 +2,145 @@
 <html lang="fr">
 
 <head>
-
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Requête GET - Livre</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="/static/header.css">
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </head>
 
 <body>
+    <script>
 
-    <h1>Informations du livre</h1>
 
-    <div>ID du livre :</div>
+        function displayBarreRecherche() {
+            let barre = document.getElementById("searchbartop");
+            if (barre.style.visibility == "hidden" || barre.style.visibility == "") {
+                barre.style.visibility = "visible";
+                barre.className = "overlay effet";
+            } else {
+                barre.style.visibility = "hidden";
+                barre.className = "overlay";
+            }
+        }
 
-    <div id="book-id" ></div>
 
-    <div id="book-info"></div>
+    </script>
+    <nav role="navigation" class="scrolled">
+        <span class="primary-menu--logo"><a href="/"></a></span>
+        <ul class="primary-menu--list">
+            <li class="primary-menu--item"><a href="/">Home</a></li>
+            <li class="primary-menu--item"><a href="/contact">Contact</a></li>
+        </ul>
+        <ul class="secondary-menu--list">
+            <li class="secondary-menu--item">
+                <a onclick="displayBarreRecherche()" id="loupe"><i class="fa-solid fa-search"></i></a>
+                <div class="overlay" id="searchbartop">
+                    <div class="search-popup">
+                        <button class="close-btn" onclick="displayBarreRecherche()">✖</button>
+                        <form method="post" action="">
+                            <input type="text" placeholder="Rechercher un livre, une série, un auteur..." />
+                            <button type="submit">🔎</button>
+                        </form>
+                    </div>
+                </div>
+            </li>
+            <li class="secondary-menu--item"><a href="#"><i class="fa-solid fa-bell"></i></a></li>
+            <li class="secondary-menu--item user">
+                <span class="secondary-menu--user-icon"><a href="#"></a></span>
+                <a href="#"><i class="fa-solid fa-caret-down"></i></a>
+            </li>
+        </ul>
+    </nav>
 
+    <main class="hero">
+        <div>
+            <h1 id="book-title"></h1>
+            <p><strong>Genres :</strong>
+            <ul id="book-genres"></ul>
+            </p>
+            <p><strong>ISBN :</strong> <span id="book-isbn"></span></p>
+            <p><strong>Note :</strong> <span id="book-rating"></span> <span id="star-rating"></span></p>
+        </div>
+        <img id="book-cover" src="" alt="Couverture du livre">
+    </main>
 
 
     <script>
-async function fetchBook() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const bookId = urlParams.get('book_id');
-    if (!bookId) {
-        document.getElementById('book-info').innerText = "Aucun ID de livre fourni.";
-        return;
-    }
+        async function fetchBook() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const bookId = urlParams.get('book_id');
+            if (!bookId) {
+                document.getElementById('book-title').innerText = "Aucun ID de livre fourni.";
+                return;
+            }
 
-    document.getElementById('book-id').innerText = `ID du livre : ${bookId}`;
+            try {
+                const response = await fetch(`/books_list/${bookId}`);
+                if (!response.ok) {
+                    throw new Error("Erreur lors de la récupération des donnes");
+                }
 
-    try {
-        const response = await fetch(`/books_list/${bookId}`);
-        if (!response.ok) {
-            throw new Error("Erreur lors de la récupération des données");
+                const bookData = await response.json();
+                const book = bookData[0];
+
+                document.getElementById('book-title').innerText = book[0];
+                document.getElementById('book-cover').src = book[4];
+                document.getElementById('book-isbn').innerText = book[3];
+                document.getElementById('book-rating').innerText = book[1];
+                // Supposons que la note est un nombre entre 0 et 5
+                let rating = book[1];
+                let fullStars = Math.floor(rating); // Nombre d'étoiles pleines
+                let emptyStars = 5 - fullStars; // Nombre d'étoiles vides
+
+                // Générer les étoiles
+                let starsHtml = '';
+                for (let i = 0; i < fullStars; i++) {
+                    starsHtml += '★'; // Étoile pleine
+                }
+
+                for (let i = 0; i < emptyStars; i++) {
+                    starsHtml += '☆'; // Étoile vide
+                }
+
+                // Insérer les étoiles dans l'élément #star-rating
+                document.getElementById('star-rating').innerHTML = starsHtml;
+
+            } catch (error) {
+                document.getElementById('book-title').innerText = "Erreur : " + error.message;
+            }
+
+            try {
+                const response = await fetch(`/books_infos_list/${ bookId }`);
+                if (!response.ok) {
+                    throw new Error("Erreur lors de la récupération des données");
+                }
+
+                const genres = await response.json();
+                const genresContainer = document.getElementById('book-genres');
+                genresContainer.innerHTML = ""; // Vider le contenu précédent
+
+                const ul = document.createElement('ul'); // Créer une liste non ordonnée
+                genres.forEach(genre => {
+                    const li = document.createElement('li'); // Créer un élément de liste
+                    li.textContent = genre;
+                    ul.appendChild(li);
+                });
+
+                genresContainer.appendChild(ul); // Ajouter la liste à la page        } catch (error) {
+                document.getElementById('book-info').innerText = "Erreur : " + error.message;
+            } catch (error) {
+            document.getElementById('book-info').innerText = "Erreur : " + error.message;
         }
-
-        const bookData = await response.json();
-        document.getElementById('book-info').innerText = JSON.stringify(bookData, null, 2);
-    } catch (error) {
-        document.getElementById('book-info').innerText = "Erreur : " + error.message;
     }
-}
-// Exécuter la fonction lorsque la page est chargée
-window.onload = fetchBook;
+    
+        
+    window.onload = fetchBook;
 
     </script>
-
 </body>
 
 </html>
