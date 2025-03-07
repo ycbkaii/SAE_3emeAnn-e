@@ -7,15 +7,12 @@
     <title>Requête GET - Livre</title>
     <link rel="stylesheet" href="/static/style.css">
     <link rel="stylesheet" href="/static/header.css">
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </head>
 
 <body>
     <script>
-
-
         function displayBarreRecherche() {
             let barre = document.getElementById("searchbartop");
             if (barre.style.visibility == "hidden" || barre.style.visibility == "") {
@@ -26,9 +23,8 @@
                 barre.className = "overlay";
             }
         }
-
-
     </script>
+
     <nav role="navigation" class="scrolled">
         <span class="primary-menu--logo"><a href="/"></a></span>
         <ul class="primary-menu--list">
@@ -59,15 +55,24 @@
     <main class="hero">
         <div>
             <h1 id="book-title"></h1>
-            <p><strong>Genres :</strong>
-            <ul id="book-genres"></ul>
-            </p>
-            <p><strong>ISBN :</strong> <span id="book-isbn"></span></p>
+            <p><strong>Description :</strong> <span id="book-description"></span></p>
+            <p><strong>Genres :</strong><ul id="book-genres"></ul></p>
+    
             <p><strong>Note :</strong> <span id="book-rating"></span> <span id="star-rating"></span></p>
+            <p><strong>Personnages :</strong> <span id="book-characters"></span></p>
+            <p><strong>Éditeurs :</strong> <span id="book-publishers"></span></p>
+            <p><strong>Pages :</strong> <span id="book-pages"></span></p>
+            <p><strong>Saga :</strong> <span id="book-saga"></span></p>
+            <p><strong>Numéro de l'Opus :</strong> <span id="book-opus"></span></p>
+            <p><strong>Récompenses :</strong> <span id="book-awards"></span></p>
+            <p><strong>ISBN :</strong> <span id="book-isbn"></span></p>
+            <p><strong>Nombre de Revues :</strong> <span id="book-review-count"></span></p>
+            <p><strong>Nombre de Votes :</strong> <span id="book-rating-count"></span></p>
+    
         </div>
+
         <img id="book-cover" src="" alt="Couverture du livre">
     </main>
-
 
     <script>
         async function fetchBook() {
@@ -79,67 +84,50 @@
             }
 
             try {
-                const response = await fetch(`/books_list/${bookId}`);
-                if (!response.ok) {
-                    throw new Error("Erreur lors de la récupération des donnes");
-                }
-
-                const bookData = await response.json();
-                const book = bookData[0];
-
-                document.getElementById('book-title').innerText = book[0];
-                document.getElementById('book-cover').src = book[4];
-                document.getElementById('book-isbn').innerText = book[3];
-                document.getElementById('book-rating').innerText = book[1];
-                // Supposons que la note est un nombre entre 0 et 5
-                let rating = book[1];
-                let fullStars = Math.floor(rating); // Nombre d'étoiles pleines
-                let emptyStars = 5 - fullStars; // Nombre d'étoiles vides
-
-                // Générer les étoiles
-                let starsHtml = '';
-                for (let i = 0; i < fullStars; i++) {
-                    starsHtml += '★'; // Étoile pleine
-                }
-
-                for (let i = 0; i < emptyStars; i++) {
-                    starsHtml += '☆'; // Étoile vide
-                }
-
-                // Insérer les étoiles dans l'élément #star-rating
-                document.getElementById('star-rating').innerHTML = starsHtml;
-
-            } catch (error) {
-                document.getElementById('book-title').innerText = "Erreur : " + error.message;
-            }
-
-            try {
-                const response = await fetch(`/books_infos_list/${ bookId }`);
+                // Fetch book details by ID
+                const response = await fetch(`/books_infos_all_list/${bookId}`);
                 if (!response.ok) {
                     throw new Error("Erreur lors de la récupération des données");
                 }
 
-                const genres = await response.json();
-                const genresContainer = document.getElementById('book-genres');
-                genresContainer.innerHTML = ""; // Vider le contenu précédent
+                const bookData = await response.json();
+                const book = bookData[0][0]; // Get first book from the response
 
-                const ul = document.createElement('ul'); // Créer une liste non ordonnée
-                genres.forEach(genre => {
-                    const li = document.createElement('li'); // Créer un élément de liste
-                    li.textContent = genre;
-                    ul.appendChild(li);
-                });
+                document.getElementById('book-title').innerText = book[1];
+                document.getElementById('book-cover').src = book[10];
+                document.getElementById('book-isbn').innerText = book[4];
+                document.getElementById('book-rating').innerText = book[9];
+                
+                // Display stars
+                let rating = book[9];
+                let fullStars = Math.floor(rating);
+                let emptyStars = 5 - fullStars;
+                let starsHtml = '';
+                for (let i = 0; i < fullStars; i++) {
+                    starsHtml += '★';
+                }
+                for (let i = 0; i < emptyStars; i++) {
+                    starsHtml += '☆';
+                }
+                document.getElementById('star-rating').innerHTML = starsHtml;
 
-                genresContainer.appendChild(ul); // Ajouter la liste à la page        } catch (error) {
-                document.getElementById('book-info').innerText = "Erreur : " + error.message;
+                // Display other information
+                document.getElementById('book-characters').innerText = book[12];
+                document.getElementById('book-awards').innerText = book[13];
+                document.getElementById('book-publishers').innerText = book[14];
+                document.getElementById('book-pages').innerText = book[3];
+                document.getElementById('book-saga').innerText = book[5];
+                document.getElementById('book-opus').innerText = book[6];
+                document.getElementById('book-description').innerText = book[2];
+                document.getElementById('book-review-count').innerText = book[7];
+                document.getElementById('book-rating-count').innerText = book[8];
+                
             } catch (error) {
-            document.getElementById('book-info').innerText = "Erreur : " + error.message;
+                document.getElementById('book-title').innerText = "Erreur : " + error.message;
+            }
         }
-    }
-    
-        
-    window.onload = fetchBook;
 
+        window.onload = fetchBook;
     </script>
 </body>
 

@@ -70,4 +70,4 @@ def retourne_book2(books_id : int) :
 
 @app.get("/books_infos_all_list/{books_id}")
 def retourne_book3(books_id : int) :
-    return getBooksInfosallById([books_id])
+    return getBooksInfosallById([books_id]) 
