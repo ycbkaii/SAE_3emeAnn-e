@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recherche</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="/static/header.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/c8451551fd.js" crossorigin="anonymous"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+            color: black;
+        }
+        .search-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .search-input {
+            padding: 10px;
+            width: 300px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .rubrique {
+            margin-bottom: 30px;
+        }
+        .rubrique h2 {
+            padding: 1em;
+            text-align: center;
+            font-size: 2em;
+        }
+        .result-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 0;
+            list-style: none;
+        }
+        .result-item {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            height: 300px;
+            overflow: hidden;
+            
+        }
+        .result-item img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+        .result-item h3 {
+            margin: 10px 0;
+            font-size: 1.2em;
+        }
+        .result-item p {
+            font-size: 0.9em;
+            color: #666;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            transition: scale ease-in-out 0.5s;
+        }
+        header{
+            padding-bottom: 3em;
+        }
+        header a{
+            color: black !important;
+        }
+
+        .result-item:hover{
+            scale: 1.2;
+            transition: scale ease-in-out 0.2s;
+        }
+
+    </style>
+</head>
+<body>
+
+    <script>
+        
+        
+        function displayBarreRecherche(){
+            let barre = document.getElementById("searchbartop");
+            if(barre.style.visibility == "hidden" || barre.style.visibility == ""){
+                barre.style.visibility = "visible";
+                barre.className = "overlay effet";
+            }else{
+                barre.style.visibility = "hidden";
+                barre.className = "overlay";
+            }
+        }
+
+        
+    </script>
+
+
+    <header>
+        <nav role="navigation">
+            <span class="primary-menu--logo" data-logo="test"><a href="/"></a></span>
+            <ul class="primary-menu--list">
+                <li class="primary-menu--item"><a href="/">Home</a></li>
+                <li class="primary-menu--item"><a href="/contact">Contact</a></li>
+            </ul>
+            <ul class="secondary-menu--list">
+                <li class="secondary-menu--item">
+                    <a onclick="displayBarreRecherche()" id="loupe"><i class="fa-solid fa-search"></i></a>
+                
+                    <div class="overlay" id="searchbartop">
+                        <div class="search-popup">
+                            <button class="close-btn" onclick="displayBarreRecherche()">✖</button>
+                            <form method="post" action="/search">
+                                <input name="query" type="text" placeholder="Rechercher un livre, une série, un auteur..." required/>
+                                <button type="submit">🔎</button>
+                            </form>
+                        </div>
+                    </div>
+
+                </li>
+                
+                <li class="secondary-menu--item user">
+                    <span class="secondary-menu--user-icon" data-user="User's icon"><a href="#"></a></span>
+                    <a href="#"><i class="fa-solid fa-caret-down"></i></a>
+                </li>
+            </ul>
+        </nav>
+        
+    </header>
+
+
+    
+    
+    <div class="rubrique">
+        <h2>Livres</h2>
+        <ul id="livres_list" class="result-list">
+            
+        </ul>
+    </div>
+    
+    <div class="rubrique">
+        <h2>Sagas</h2>
+        <ul id="saga_list" class="result-list">
+            
+        </ul>
+    </div>
+    
+    <div class="rubrique">
+        <h2>Auteurs</h2>
+        <ul id="auteurs_list" class="result-list">
+            
+        </ul>
+    </div>
+
+
+    <!-- Script pour afficher les différentes listes -->
+    <script>
+
+
+
+
+
+        // Fonction pour afficher les livres de la saga
+        const displayBooksOnClickFromAuthorOrSaga = async(nom)=>{
+            let get = encodeURIComponent("{{query}}");
+            let data = await fetch(`/retrievedata/${nom}`, {method : "GET"});
+            console.log(nom)
+            let dataJson = await data.json();
+            
+
+            
+            // On affiche les livres, saga, auteurs
+            let rubriqueLivres = document.getElementById("livres_list");
+            let rubriqueSagas = document.getElementsByClassName("rubrique")[1];
+            let rubriqueAuteurs = document.getElementsByClassName("rubrique")[2];
+
+
+            rubriqueAuteurs.innerHTML = "";
+            rubriqueSagas.innerHTML = "";
+            rubriqueLivres.innerHTML = "";
+
+
+            for(let i = 0; i<dataJson['books'].length; i++){
+                
+                
+                rubriqueLivres.innerHTML+=`
+                <li class="result-item" onclick="window.location.href='/book?book_id=${dataJson['books'][i]['id']}'">
+                    <img src="${dataJson['books'][i]['cover']}">
+                    <h3>${dataJson['books'][i]['title']}</h3>
+                    <p>${dataJson['books'][i]['description']}</p>
+                </li>`;
+                
+                   
+            }
+
+
+        }
+
+
+        const fetchData = async()=>{
+            let get = encodeURIComponent("{{query}}");
+            let data = await fetch(`/retrievedata/${get}`, {method : "GET"});
+            let dataJson = await data.json();
+            
+
+            console.log(dataJson)
+            // On affiche les livres, saga, auteurs
+            let rubriqueLivres = document.getElementById("livres_list");
+            let rubriqueSagas = document.getElementById("saga_list");
+            let rubriqueAuteurs = document.getElementById("auteurs_list");
+            
+            for(let i = 0; i<dataJson['books'].length; i++){
+                
+                rubriqueLivres.innerHTML+=`
+                <li class="result-item" onclick="window.location.href='/book?book_id=${dataJson['books'][i]['id']}'">
+                    <img src="${dataJson['books'][i]['cover']}">
+                    <h3>${dataJson['books'][i]['title']}</h3>
+                    <p>${dataJson['books'][i]['description']}</p>
+                </li>`;   
+            }
+
+            for(let i=0; i<dataJson['sagas'].length;i++){
+                let link = dataJson['sagas'][i]['name'];
+                rubriqueSagas.innerHTML+=`
+                <li class="result-item" onclick="displayBooksOnClickFromAuthorOrSaga('${encodeURIComponent(link)}')">
+                    
+                    <h3>${dataJson['sagas'][i]['name']}</h3>
+                    
+                </li>
+                `;
+            }
+
+            for(let i=0; i<dataJson['authors'].length;i++){
+                let link = dataJson['authors'][i]['name'];
+                
+                rubriqueAuteurs.innerHTML += `
+                <li class="result-item" onclick="displayBooksOnClickFromAuthorOrSaga('${encodeURIComponent(link)}')">
+                    <h3>${dataJson.authors[i].name}</h3>
+                    <p>Moyenne : ${dataJson.authors[i].avg_rating}⭐</p>
+                    <p>Critiques : ${dataJson.authors[i].reviews}</p>
+                </li>`;
+                            
+            
+            
+            
+            }
+
+            
+
+        }
+        fetchData();
+        
+    </script>
+
+
+</body>
+</html>

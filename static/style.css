@@ -390,6 +390,61 @@ footer{
     cursor: pointer;
 }
 
+#book-title{
+    margin-top: 100px;
+    font-size: 32px;
+    padding-bottom: 50px;
+}
+
+.hero {
+    display: flex;
+    align-items: center; /* Centre verticalement */
+    justify-content: space-between; /* Espace entre le texte et l'image */
+    width: 90vw; /* Largeur max pour éviter d'être trop collé aux bords */
+    margin: 0 auto; /* Centre la section */
+}
+
+.hero div {
+    width: 50vw; /* Texte prend 50% de la largeur de l'image */
+}
+
+#book-cover {
+    height: 70vh; /* 70% de la hauteur de l'écran */
+    width: auto; /* Garde les proportions */
+}
+
+
+#star-rating {
+    color: gold; /* Couleur des étoiles */
+    font-size: 20px; /* Taille des étoiles */
+}
+
+#book-genres {
+    font-size: 20px; /* Taille du titre "Genres" */
+    font-weight: bold;
+    color: #333; /* Couleur du texte du titre */
+}
+
+#book-genres ul {
+    list-style: none; /* Supprime les puces */
+    display: inline; /* Garde la liste en ligne */
+    padding-bottom: 10px;
+}
+
+#book-genres li {
+    display: inline; /* Affichage en ligne */
+    font-size: 15px; /* Taille des éléments de la liste */
+    color: #e7e7e7; /* Couleur différente (bleu par défaut) */
+}
+
+#book-genres li:not(:last-child)::after {
+    content: ", "; /* Ajoute une virgule entre les genres */
+}
+
+p{
+    padding-top: 50px;
+}
+
 /* STYLE POP UP CONNEXION */
 
 .form-container {
