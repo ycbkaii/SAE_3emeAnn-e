@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inscription</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #000000;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .form-container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+        }
+        .form-container h2 {
+            margin-bottom: 20px;
+            font-size: 24px;
+            color: #333;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 14px;
+            color: #333;
+        }
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .form-group input {
+            width: 90%;
+        }
+
+
+        .form-group button {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            background-color: #e50914;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .form-group button:hover {
+            background-color: #b20710;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h2>Inscription</h2>
+        <form action="#" method="POST">
+            <div class="form-group">
+                <label for="email">Adresse e-mail</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Mot de passe</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <div class="form-group">
+                <label for="age">Age</label>
+                <input type="number" id="age" name="age" required>
+            </div>
+            <div class="form-group">
+                <label for="sector">Sexe</label>
+                <select id="id_genre_sex" name="id_genre_sex" required>
+                    <option value="">Selectionnez votre Sexe</option>
+                    <option value="1">Homme</option>
+                    <option value="2">Femme</option>
+                    <option value="3">Non-binaire</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="sector">Secteur de travail</label>
+                <select id="id_secteur" name="id_secteur" required>
+                    <option value="">Sélectionnez votre secteur</option>
+                    <option value="">Médical / Santé </option>
+                    <option value="">Ingénierie</option>
+                    <option value="">Éducation</option>
+                    <option value="">Informatique / Technologie</option>
+                    <option value="">Marketing / Communication</option>
+                    <option value="">Finance / Comptabilité</option>
+                    <option value="">Arts / Création</option>
+                    <option value="">Commerce / Vente</option>
+                    <option value="">Recherche / Science </option>
+                    <option value="">Services publics / Administration </option>
+                    <option value="">Transport / Logistique </option>
+                    <option value="">Hôtellerie / Restauration </option>
+                    <option value="">Agriculture / Agroalimentaire </option>
+                    <option value="">Droit / Juridique </option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="sector">Sentiments avec la lecture</label>
+                <select id="id_selection" name="id_selection" required>
+                    <option value="">Selectionnez</option>
+                    <option value="1">Moyen</option>
+                    <option value="2">Content</option>
+                    <option value="3">Faché</option>
+                    <option value="4">J'adore lire</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="sector">Vitesse pour lire un livre de 200 page</label>
+                <select id="id_vitesse_lecture" name="id_vitesse_lecture" required>
+                    <option value="">Selectionnez</option>
+                    <option value="1">1 à 2 semaines</option>
+                    <option value="2">Entre 3 jours et une semaines</option>
+                    <option value="3">Je ne le lis pas</option>
+                    <option value="4">2-3 jour ou moins</option>
+                    <option value="5">1 mois ou +</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="sector">Livre préféré</label>
+                <select id="id_prefere_lire" name="id_prefere_lire" required>
+                    <option value="">Selectionnez</option>
+                    <option value="1">les livres qui sont sortis apres 2010</option>
+                    <option value="2">les livres recents comme les livres anciens</option>
+                    <option value="3">les livres qui sont sortis avant 2010</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <button type="submit">S'inscrire</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
