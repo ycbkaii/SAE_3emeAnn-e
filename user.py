@@ -4,6 +4,7 @@ import jwt
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from passlib.context import CryptContext
+from pydantic import BaseModel
 from sqlmodel import Session, select
 from models import User, UserCreate
 from models import Token
@@ -83,6 +84,22 @@ def login_access_token(
             user.id_user, expires_delta=access_token_expires
         )
     )
+
+
+class Form_data_create_user(BaseModel) :
+    email : str
+    password : str
+    age : int
+    id_genre_sex : int
+    id_secteur : int
+    id_prefere_lire : int
+    id_vitesse_lecture : int
+    id_selection : int
+
+
+@user_router.post("/create")
+def create_user_route(form_data : Annotated[Form_data_create_user,Depends()]) :
+    return True
 
 
 @user_router.get("/test", response_model=User)
