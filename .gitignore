@@ -5,3 +5,4 @@ questionnaire*.csv
 # csv/vectDesc1024
 
 # *.csv
+docker/fastapi/*

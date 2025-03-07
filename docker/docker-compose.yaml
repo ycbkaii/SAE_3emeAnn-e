@@ -15,19 +15,19 @@ services:
     networks:
       - db_network
 
-  elasticsearch:
-    image: bitnami/elasticsearch:8.17.1
-    container_name: my-es-sae
-    ports:
-      - 9200:9200
-      - 9300:9300
-    environment:
-      - discovery.type=single-node
-      - ES_JAVA_OPTS=-Xms4096m -Xmx4096m # Pour pas que ES prennent TOUTES la rep
-    volumes:
-      - elasticsearch-data-persistence:/bitnami/elasticsearch/data
-    networks:
-      - es  
+  # elasticsearch:
+  #   image: bitnami/elasticsearch:8.17.1
+  #   container_name: my-es-sae
+  #   ports:
+  #     - 9200:9200
+  #     - 9300:9300
+  #   environment:
+  #     - discovery.type=single-node
+  #     - ES_JAVA_OPTS=-Xms4096m -Xmx4096m # Pour pas que ES prennent TOUTES la rep
+  #   volumes:
+  #     - elasticsearch-data-persistence:/bitnami/elasticsearch/data
+  #   networks:
+  #     - es  
 
   server:
     container_name: fastapi_server
@@ -40,13 +40,13 @@ services:
       - db_network
       - ollama
 
-  ollama:
-    container_name: ollama_sae
-    volumes:
-      - ollama:/root/.ollama
-    image: ollama/ollama
-    networks:
-      - ollama
+  # ollama:
+  #   container_name: ollama_sae
+  #   volumes:
+  #     - ollama:/root/.ollama
+  #   image: ollama/ollama
+  #   networks:
+  #     - ollama
 
 
 networks:

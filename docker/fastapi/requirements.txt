@@ -1,7 +1,11 @@
 fastapi[standard]
+sqlalchemy
 pyjwt
 passlib
 elasticsearch
 scikit-learn
 pandas
 numpy
+matplotlib
+psycopg2-binary
+mca
