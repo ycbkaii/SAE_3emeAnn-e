@@ -45,7 +45,7 @@ document.getElementById('oauth-form').addEventListener('submit', async function(
     const formData = new URLSearchParams({
         grant_type: 'password',
         username: document.getElementById('username').value,
-        password: document.getElementById('password').value,
+        password: "",
         client_id: "",
         client_secret: "",
     });

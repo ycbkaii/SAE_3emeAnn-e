@@ -24,7 +24,7 @@ GRANT USAGE ON SCHEMA masterbook TO admin;
 GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA masterbook TO admin;
 
 -- ON donne le droit à l'utilisateur à se connecter 
-
+GRANT USAGE ON SCHEMA masterbook TO utilisateur;
 
 /**
 * @author Yanis
