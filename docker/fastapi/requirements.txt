@@ -9,3 +9,6 @@ numpy
 matplotlib
 psycopg2-binary
 mca
+sqlmodel
+ollama
+bcrypt

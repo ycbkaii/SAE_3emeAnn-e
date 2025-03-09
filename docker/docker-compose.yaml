@@ -30,7 +30,10 @@ services:
   #     - es  
 
   server:
+    restart : "on-failure"
     container_name: fastapi_server
+    depends_on:
+      - postgres
     build:
       context: ./fastapi
     ports:

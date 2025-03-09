@@ -31,9 +31,9 @@ def getBooksInfosById(listIdBooks) :
     
     # Ouverture connexion bdd
     conn = psycopg2.connect(database="masterbook",
-                        port="5433",
+                        port="5432",
                         user="root",
-                        host="localhost",
+                        host="postgres-sae",
                         password="root"
                         )
     cursor = conn.cursor()
@@ -62,7 +62,7 @@ import psycopg2
 def getBooksInfosallById(listIdBooks):
     try:
         # Ouverture connexion bdd avec gestion sécurisée
-        with psycopg2.connect(database="masterbook", port="5433", user="root", host="localhost", password="root") as conn:
+        with psycopg2.connect(database="masterbook", port="5432", user="root", host="postgres-sae", password="root") as conn:
             with conn.cursor() as cursor:
                 tuples = []
                 for id in listIdBooks:

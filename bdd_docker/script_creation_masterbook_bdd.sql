@@ -205,6 +205,8 @@ CREATE TABLE _preference_lecture (
 -- Création table utilisateur 
 CREATE TABLE _utilisateur(
     id_user SERIAL PRIMARY KEY,
+    email VARCHAR DEFAULT "example@gmail.com",
+    passwd VARCHAR DEFAULT "",
     age INT,
     id_selection INT NOT NULL,
     id_vitesse_lecture INT NOT NULL,

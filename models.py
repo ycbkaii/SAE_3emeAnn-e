@@ -9,7 +9,7 @@ metaData = MetaData(schema="masterbook")
 class User(SQLModel, table=True):
     __tablename__ = "_utilisateur"
     metadata = metaData
-    id_user: int = Field(default=None, primary_key=True)
+    id_user: int = Field(default=None, primary_key=True,)
     age: Optional[int] = None
     id_selection: int
     id_vitesse_lecture: int

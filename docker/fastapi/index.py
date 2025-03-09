@@ -71,6 +71,11 @@ def get_recommended_genres(user_id):
     recommended = recommend_genres(user_id)
     return recommended
 
+@app.get("/livres/sim/{user_id}")
+def get_sim_recom(user : int) :
+    return 0
+
+
 #@app.get("/livres/genres/{user_id}")
 #def get_recommended_genres(user_id):
  #   recommended = recommend_genres(user_id)

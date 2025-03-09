@@ -1,4 +1,4 @@
-from analyseACM import mca_result
+from analyseACM import mca_result, ids_individus, dataFromCsv
 from sklearn.cluster import KMeans
 import pandas as pd
 import matplotlib.pyplot as plt
