@@ -7,8 +7,8 @@ import psycopg2
 import random as rd
 
 # Charger le fichier CSV
-file_path = "questionnaire_traite.csv"
-df = pd.read_csv(file_path)
+#file_path = "questionnaire_traite.csv"
+#df = pd.read_csv(file_path)
 
 # INIT BDD
 conn = psycopg2.connect(database="masterbook",
