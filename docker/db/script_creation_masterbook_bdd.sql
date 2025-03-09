@@ -56,6 +56,7 @@ CREATE TABLE "_livre" (
     "three_star_ratings" INT,
     "two_star_ratings" INT,
     "one_star_ratings" INT,
+    "cover_link" VARCHAR,
     FOREIGN KEY (nom_de_la_saga) REFERENCES _saga(nom_de_la_saga),
 	PRIMARY KEY("id_livre")
 );
@@ -205,6 +206,8 @@ CREATE TABLE _preference_lecture (
 CREATE TABLE _utilisateur(
     id_user SERIAL PRIMARY KEY,
     age INT,
+    email VARCHAR DEFAULT 'example@gmail.com',
+    passwd VARCHAR DEFAULT '',
     id_selection INT NOT NULL,
     id_vitesse_lecture INT NOT NULL,
     id_secteur INT DEFAULT NULL,
@@ -591,7 +594,8 @@ CREATE TABLE temp_import_livre (
     four_star_ratings VARCHAR,
     three_star_ratings VARCHAR,
     two_star_ratings VARCHAR,
-    one_star_ratings VARCHAR
+    one_star_ratings VARCHAR,
+    cover_link VARCHAR
 );
 
 

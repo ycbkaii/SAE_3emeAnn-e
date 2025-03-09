@@ -1,8 +1,5 @@
 from analyseACM import mca_result
-import random
-import pandas as pd
 import matplotlib.pyplot as plt
-import numpy as np
 from sklearn.cluster import DBSCAN
 from sklearn.preprocessing import StandardScaler
 
@@ -13,13 +10,17 @@ mca_scaled = scaler.fit_transform(mca_result)
 
 
 # Appliquer DBSCAN
-dbscan = DBSCAN(eps=0.5, min_samples=5)  # Ajustez `eps` et `min_samples` selon vos besoins
+dbscan = DBSCAN(
+    eps=0.5, min_samples=5
+)  # Ajustez `eps` et `min_samples` selon vos besoins
 clusters = dbscan.fit_predict(mca_scaled)
 
 
 # Visualiser les clusters dans le premier plan factoriel
 plt.figure(figsize=(8, 6))
-plt.scatter(mca_result[:, 1], mca_result[:, 0], c=clusters, cmap='viridis', s=50, alpha=0.7)
+plt.scatter(
+    mca_result[:, 1], mca_result[:, 0], c=clusters, cmap="viridis", s=50, alpha=0.7
+)
 plt.title("DBSCAN Clusters sur le plan factoriel 1-2")
 plt.xlabel("Dimension 2")
 plt.ylabel("Dimension 1")

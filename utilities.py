@@ -1,39 +1,43 @@
 import psycopg2
+from fastapi import HTTPException
 
 
-def getBooksById(listIdBooks) :
-    
+def getBooksById(listIdBooks):
     # Ouverture connexion bdd
-    conn = psycopg2.connect(database="masterbook",
-                        port="5433",
-                        user="root",
-                        host="localhost",
-                        password="root"
-                        )
+    conn = psycopg2.connect(
+        database="masterbook",
+        port="5432",
+        user="root",
+        # host="localhost",
+        host="localhost",
+        password="root",
+    )
     cursor = conn.cursor()
-    
+
     tuples = []
-    
-    for id in listIdBooks : 
-        
+
+    for id in listIdBooks:
         # On vérifie que l'id est un tuple ou non
-        if isinstance(id, tuple) :
+        if isinstance(id, tuple):
             id = id[0]
         
         queryToSelectBooks = f"SELECT DISTINCT(title), average_rating, nom_genre, isbn, cover_link, _livre.id_livre FROM masterbook._livre NATURAL JOIN masterbook._genres_du_livre NATURAL JOIN masterbook._genre WHERE id_livre = {id};"
         
         cursor.execute(queryToSelectBooks)
 
-        tuples.append(cursor.fetchall()[0])
-        
-    
+        try :
+            tuples.append(cursor.fetchall()[0])
+        except Exception as e:
+            print(id)
+            print(e)
+
     return tuples
 
 def getBooksInfosById(listIdBooks) :
     
     # Ouverture connexion bdd
     conn = psycopg2.connect(database="masterbook",
-                        port="5433",
+                        port="5432",
                         user="root",
                         host="localhost",
                         password="root"
@@ -58,13 +62,11 @@ def getBooksInfosById(listIdBooks) :
     return tuples
 
 
-from fastapi import HTTPException
-import psycopg2
 
 def getBooksInfosallById(listIdBooks):
     try:
         # Ouverture connexion bdd avec gestion sécurisée
-        with psycopg2.connect(database="masterbook", port="5433", user="root", host="localhost", password="root") as conn:
+        with psycopg2.connect(database="masterbook", port="5432", user="root", host="localhost", password="root") as conn:
             with conn.cursor() as cursor:
                 tuples = []
                 for id in listIdBooks:

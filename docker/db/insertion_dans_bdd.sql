@@ -91,7 +91,9 @@ INSERT INTO masterbook._livre(
     four_star_ratings,
     three_star_ratings,
     two_star_ratings,
-    one_star_ratings)
+    one_star_ratings,
+    cover_link
+    )
 SELECT DISTINCT 
 id::INT, 
 title, 
@@ -129,7 +131,8 @@ five_star_ratings::INT,
 four_star_ratings::INT,
 three_star_ratings::INT,
 two_star_ratings::INT,
-one_star_ratings::INT
+one_star_ratings::INT,
+cover_link
 FROM masterbook.temp_import_livre 
 INNER JOIN masterbook.temp_import_saga ON temp_import_saga.colonne1 = temp_import_livre.id;
 

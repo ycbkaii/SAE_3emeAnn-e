@@ -1,9 +1,22 @@
-from fastapi import FastAPI, Path, Request
-from fastapi.responses import FileResponse, HTMLResponse, RedirectResponse
+from typing import Tuple
+from fastapi import FastAPI, Request
+from fastapi.responses import FileResponse, HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from PCA import acpReco
+from embeddings.embeddingsController import book_sim_by_id
 from inputData_outputCluster import acmReco
 from fastapi.middleware.cors import CORSMiddleware
+from sqlmodel import select
+
+from deps import SessionDep
+from models import User, _livre
+from user import user_router
+from admin import admin_router
+# from inputData_outputCluster import acmReco
+# from embeddings.embeddingsController import (
+#     get_reco_books,
+#     get_reco_user_based,
+# )
 from utilities import getBooksById,getBooksInfosById, getBooksInfosallById
 from recherche import search_books
 from recommandation_aleatoire import recommend_genres
@@ -11,7 +24,6 @@ from fastapi import Form
 from fastapi.templating import Jinja2Templates
 
 app = FastAPI()
-
 
 # On mentionne les cors
 origins = [
@@ -60,16 +72,20 @@ def get_recommended_genres(user_id):
     recommended = recommend_genres(user_id)
     return recommended
 
+@app.get("/livres/sim/{user_id}")
+def get_sim_recom(user_id : int) :
+    return book_sim_by_id(user_id)
+
+
 #@app.get("/livres/genres/{user_id}")
 #def get_recommended_genres(user_id):
  #   recommended = recommend_genres(user_id)
   #  return recommended
 
 
-@app.get("/init")
-def init_ia() :
-    """Route pour init les algorithmes""" 
-    
+app.include_router(admin_router)
+app.include_router(user_router)
+
 @app.get("/book", response_class=HTMLResponse)
 def get_book():
     file_path = "Site/book.html"

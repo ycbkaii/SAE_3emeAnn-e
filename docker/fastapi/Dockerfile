@@ -48,4 +48,4 @@ COPY . .
 EXPOSE 8000
 
 # Run the application.
-CMD fastapi run index.py
+CMD ["fastapi", "run", "--workers", "4", "index.py"]

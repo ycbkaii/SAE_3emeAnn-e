@@ -1,5 +1,8 @@
-# bdd_docker
+bdd_docker
 *pycache*
+*.csv
 questionnaire*.csv
-# csv/*
+# csv/vectDesc1024
+
 # *.csv
+docker/fastapi/*

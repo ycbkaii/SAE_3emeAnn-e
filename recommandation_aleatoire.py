@@ -12,7 +12,7 @@ import random as rd
 
 # INIT BDD
 conn = psycopg2.connect(database="masterbook",
-                    port="5433",
+                    port="5432",
                     user="root",
                     host="localhost",
                     password="root"
