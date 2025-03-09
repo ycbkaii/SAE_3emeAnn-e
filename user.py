@@ -1,9 +1,11 @@
 from datetime import datetime, timedelta, timezone
 import secrets
 import jwt
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from jwt.exceptions import InvalidTokenError
 from passlib.context import CryptContext
+import psycopg2
 from pydantic import BaseModel
 from sqlmodel import Session, select
 from models import User, UserCreate
@@ -33,30 +35,38 @@ def get_password_hash(password):
     return pwd_context.hash(password)
 
 
-def get_user(session: Session, email: str):
-    statement = select(User).where(User.email == email)
+def get_user(session: Session, email: str,passwd):
+    statement = select(User).where(User.id_user == email)
     session_user = session.exec(statement).first()
     return session_user
 
 
 def authenticate_user(session: Session, email: str, password: str):
-    # user = get_user(session, email)
-    # if not user:
-    #     return False
+    user = get_user(session, email,password)
+    if not user:
+        return False
     # if not verify_password(password, user.hashed_password):
     #     return False
-    user : User = User(id_user=1)
+    # user : User = User(id_user=5)
     return user
 
 
-def create_user(session: Session, user_create: UserCreate) -> User:
+def create_user(user_create: UserCreate):
     db_obj = User.model_validate(
-        user_create, update={"hashed_password": get_password_hash(user_create.password)}
+        user_create, update={"passwd": get_password_hash(user_create.password)}
     )
-    session.add(db_obj)
-    session.commit()
-    session.refresh(db_obj)
-    return db_obj
+    conn = psycopg2.connect(
+        database="masterbook",
+        port="5432",
+        user="root",
+        # host="localhost",
+        host="postgres-sae",
+        password="root",
+    )
+    cursor = conn.cursor()
+    query = f"INSERT INTO masterbook._utilisateur(age, email, passwd, id_selection, id_vitesse_lecture, id_secteur, id_genre_sex, id_prefere_lire) VALUES ('{db_obj.age}', '{db_obj.email}', '{db_obj.passwd}', {db_obj.id_selection}, {db_obj.id_vitesse_lecture}, {db_obj.id_secteur}, {db_obj.id_genre_sex}, {db_obj.id_prefere_lire});"
+
+    cursor.execute(query)
 
 
 def create_access_token(subject: str | Any, expires_delta: timedelta) -> str:
@@ -98,15 +108,28 @@ class Form_data_create_user(BaseModel) :
 
 
 @user_router.post("/create")
-def create_user_route(form_data : Annotated[Form_data_create_user,Depends()]) :
+def create_user_route(session: SessionDep,form_data : Annotated[Form_data_create_user,Depends()]) :
+    create_user(user_create=form_data )
     return True
 
+async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):
+    credentials_exception = HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Could not validate credentials",
+        headers={"WWW-Authenticate": "Bearer"},
+    )
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        id = payload.get("sub")
+        if id is None:
+            raise credentials_exception
+        return id
+    except InvalidTokenError:
+        raise credentials_exception
 
-@user_router.get("/test", response_model=User)
-def read_users_me(
-    current_user: CurrentUser,
-):
-    return "Test"
+@user_router.get("/get_id")
+def get_id(current_user: Annotated[int, Depends(get_current_user)]) :
+    return current_user
 
 
 # @user_router.get("/users/me/items/")

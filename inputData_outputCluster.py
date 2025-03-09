@@ -8,9 +8,9 @@ from utilities import getBooksById
 def acmReco(userId: int, mca_df=mca_df):
     conn = psycopg2.connect(
         database="masterbook",
-        port="5433",
+        port="5432",
         user="root",
-        host="localhost",
+        host="postgres-sae",
         password="root",
     )
     cursor = conn.cursor()

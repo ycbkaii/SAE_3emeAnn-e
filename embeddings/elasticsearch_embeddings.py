@@ -2,7 +2,7 @@ import numpy as np
 from elasticsearch import Elasticsearch
 import pandas as pd
 
-ES_URL = "http://localhost:9200"
+ES_URL = "http://my-es-sae:9200"
 
 try:
     client = Elasticsearch(ES_URL)
@@ -12,12 +12,9 @@ except Exception as e:
 index_name_desc = "embeddings-books"
 
 
-def add_books(desc, vect_desc, title, genre_principal, id_books):
+def add_books(vect_desc, id_books):
     doc = {
         "id": id_books,
-        "description": desc,
-        "title": title,
-        "genre_principal": genre_principal,
         "description_vector": vect_desc,
     }
     client.index(index=index_name_desc, document=doc)
@@ -27,12 +24,6 @@ def recreate_index_desc(index_name=index_name_desc):
     mappings = {
         "properties": {
             "id": {"type": "keyword"},
-            "description": {"type": "text", "index": "false"},
-            "title": {"type": "text", "fields": {"keyword": {"type": "keyword"}}},
-            "genre_principal": {
-                "type": "text",
-                "fields": {"keyword": {"type": "keyword"}},
-            },
             "description_vector": {
                 "type": "dense_vector",
                 "dims": 1024,
@@ -47,9 +38,10 @@ def recreate_index_desc(index_name=index_name_desc):
     except Exception as e:
         print(e)
     client.indices.create(index=index_name, mappings=mappings)
-    tab = pd.read_feather("vectDesc1024").to_numpy()
-    for i in range(len(tab)):
-        add_books(desc="", genre_principal="", id_books=i, title="", vect_desc=tab[i])
+    df = pd.read_csv("vectDesc1024.csv",index_col="id_livre")
+    for index, row in df.iterrows() :
+        add_books(id_books=index,vect_desc=row)
+
 
 
 def recreateIndexGenre(index_name):
@@ -102,12 +94,7 @@ def search_books_by_title(title: str):
     )
 
 
-def fill_index_desc(books_array: np.array, index_name=index_name_desc):
-    for book in books_array:
-        add_books(
-            book["desc"], book["vect_desc"], book["title"], book["genre"], book["id"]
-        )
-
-
 # recreate_index_user()
-# recreate_index_desc()
+
+if not client.indices.exists(index=index_name_desc) :
+    recreate_index_desc()

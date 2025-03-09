@@ -3,6 +3,7 @@ from fastapi import FastAPI, Request
 from fastapi.responses import FileResponse, HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from PCA import acpReco
+from embeddings.embeddingsController import book_sim_by_id
 from inputData_outputCluster import acmReco
 from fastapi.middleware.cors import CORSMiddleware
 from sqlmodel import select
@@ -70,6 +71,11 @@ def get_books_recom_acp(user_id : int) :
 def get_recommended_genres(user_id):
     recommended = recommend_genres(user_id)
     return recommended
+
+@app.get("/livres/sim/{user_id}")
+def get_sim_recom(user_id : int) :
+    return book_sim_by_id(user_id)
+
 
 #@app.get("/livres/genres/{user_id}")
 #def get_recommended_genres(user_id):

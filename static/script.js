@@ -1,5 +1,6 @@
 //Partie Yoannnnnnnnnnnnnnnnnnnn
 
+// Remplacer par un get USR
 let id_user = 5;
 
 async function fetchBooks(path, idSection, label) {
@@ -41,10 +42,21 @@ async function fetchBooks(path, idSection, label) {
   }
 }
 
+function suppBooks() {
+  let className = 'carousel--item';
+
+  let elementsToRemove = document.querySelectorAll(`.${className}`);
+
+  elementsToRemove.forEach((element) => {
+    element.parentNode.removeChild(element);
+  });
+}
+
 function addCarouselItem(containerSelector, href, src, alt, label="") {
   const container = document.querySelector(`${containerSelector} .carousel--list`);
   titre = document.querySelector(`${containerSelector}`).getElementsByClassName("category--title")[0];
   titre.innerHTML = label;
+  
   if (!container) return;
   
   const listItem = document.createElement('li');
@@ -63,10 +75,14 @@ function addCarouselItem(containerSelector, href, src, alt, label="") {
 }
 
 // Exemple d'utilisation :
-fetchBooks("livres/acp_recom/"+id_user, "#section\\ 1", "Livres recommandés");
-fetchBooks("livres/acm_recom/"+id_user, "#section\\ 2", "Livres que vous pourriez aimer");
-fetchBooks("livres/genres/"+id_user, "#section\\ 3", "Genre que vous pourriez aimer : ");
-
+function fetchAllBooks() {
+  suppBooks()
+  fetchBooks("livres/acp_recom/" + id_user, "#section\\ 1", "Livres recommandés");
+  fetchBooks("livres/sim/"+id_user, "#section\\ 2", "Livres similaires à ceux que vous aimer");
+  fetchBooks("livres/acm_recom/" + id_user, "#section\\ 3", "Livres que vous pourriez aimer");
+  fetchBooks("livres/genres/" + id_user, "#section\\ 4", "Genre que vous pourriez aimer : ");
+}
+fetchAllBooks();
 
 
 //Fin partie modifiée
@@ -112,3 +128,4 @@ nextButton.addEventListener('click', () => {
   });
 });
 });
+

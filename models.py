@@ -1,6 +1,6 @@
 from pydantic import EmailStr, BaseModel
 from typing import Optional
-from sqlmodel import Field, MetaData, SQLModel
+from sqlmodel import Column, Field, Integer, MetaData, SQLModel, Sequence, func
 
 
 metaData = MetaData(schema="masterbook")
@@ -9,13 +9,15 @@ metaData = MetaData(schema="masterbook")
 class User(SQLModel, table=True):
     __tablename__ = "_utilisateur"
     metadata = metaData
-    id_user: int = Field(default=None, primary_key=True,)
+    id_user: Optional[int] = Field(default=None, primary_key=True)
     age: Optional[int] = None
     id_selection: int
     id_vitesse_lecture: int
     id_secteur: Optional[int] = None
     id_genre_sex: int
     id_prefere_lire: int
+    email : str
+    passwd : str
 
 
 # Properties to receive via API on creation
@@ -27,12 +29,6 @@ class UserRegister(SQLModel):
     email: EmailStr = Field(max_length=255)
     password: str = Field(min_length=8, max_length=40)
     full_name: str | None = Field(default=None, max_length=255)
-
-
-# Properties to receive via API on update, all are optional
-class UserUpdate(User):
-    email: EmailStr | None = Field(default=None, max_length=255)  # type: ignore
-    password: str | None = Field(default=None, min_length=8, max_length=40)
 
 
 class UserUpdateMe(SQLModel):

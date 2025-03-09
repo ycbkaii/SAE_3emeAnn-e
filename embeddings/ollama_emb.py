@@ -19,8 +19,7 @@ def embed_text(text: str):
 
 
 def embed_desc_all():
-    description = pd.read_csv("csv/bigboss_book.csv", usecols=["description"])
-
+    description = pd.read_csv("csv/bigboss_book.csv", usecols=["description"],index_col="id")
     def embed_desc(list_res: list, start_i: int, end_i: int):
         for e in description.to_numpy()[start_i:end_i]:
             list_res.append(embed_text(str(e))["embeddings"][0])

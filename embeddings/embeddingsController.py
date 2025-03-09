@@ -2,10 +2,10 @@ import numpy as np
 from elastic_transport import ObjectApiResponse
 import psycopg2
 
-from .ollama_emb import embed_text, check_ollama
+from utilities import getBooksById
+
 from .load_recommandation import knn_books, check_client_es, knn_user
 from .elasticsearch_embeddings import (
-    add_books,
     search_books_by_title,
     recreate_index_desc,
     fill_index_desc,
@@ -14,7 +14,7 @@ from typing import Any
 
 def object_api_response_to_ids(object_api: ObjectApiResponse[Any]):
     """Permet de renvoyer les ids des livres de la réponse d'ES"""
-    return object_api["hits"]["hits"]["_source"]["id"]
+    return object_api["hits"]["hits"]
 
 class Books:
     """La classe pour un livre"""
@@ -31,17 +31,6 @@ def initialize_elastic_search():
     fill_index_desc(np.array([]))
 
 
-def init_and_check_ollama():
-    """Pour savoir si Ollama marche bien"""
-    return {"status": check_ollama()}
-
-
-def add_new_books(books: Books) -> bool:
-    # TODO ajouter le livre au SQL
-    embedding = embed_text(books.desc)["embeddings"][0]
-    add_books(books.desc, embedding, books.title, books.genre, books.id)
-    return True
-
 
 def search_books(title: str):
     return object_api_response_to_ids(search_books_by_title(title=title))
@@ -52,10 +41,14 @@ def check_client():
 
 
 def get_reco_books(books_id: int):
-    return object_api_response_to_ids(knn_books(books_id))
+    response = knn_books(books_id)
+    if response is not None :
+        return object_api_response_to_ids(response)
+    else :
+        return []
 
 
-def getBooksByUser(id: int | str) -> list[tuple] | list:
+def getBooksByUser(id_user: int | str) -> list[tuple] | list:
     """
     Fonction pour avoir les livres aimé par les utilisateur
     """
@@ -64,7 +57,7 @@ def getBooksByUser(id: int | str) -> list[tuple] | list:
             database="masterbook",
             port="5432",
             user="root",
-            host="localhost",
+            host="postgres-sae",
             password="root",
         )
     except Exception as e:
@@ -74,7 +67,7 @@ def getBooksByUser(id: int | str) -> list[tuple] | list:
         with conn.cursor() as cursor:
             requete = (
                 "SELECT id_livre FROM masterbook._a_lu_livre_vote_genre_pour_livre WHERE note_livre>4 AND id_user="
-                + str(id)
+                + str(id_user)
             )
             try:
                 cursor.execute(requete)
@@ -94,3 +87,17 @@ def get_reco_user_based(id: int):
         if id_usr != id:
             listBooks[id_usr] = getBooksByUser(id_usr)
     return listBooks
+
+
+def book_sim_by_id(id_user) :
+    livre_aime = getBooksByUser(id_user)
+    print(livre_aime)
+    tuple_books = []
+    for i in livre_aime :
+        for e in get_reco_books(i[0]) :
+            print(e)
+            tuple_books.append(e["_source"]["id"])
+    tuple_books = list(set(tuple_books))
+    tuple_books = tuple_books[1:6]
+    print(tuple_books)
+    return getBooksById(tuple_books)

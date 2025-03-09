@@ -1,13 +1,15 @@
 import psycopg2
+from fastapi import HTTPException
 
 
 def getBooksById(listIdBooks):
     # Ouverture connexion bdd
     conn = psycopg2.connect(
         database="masterbook",
-        port="5433",
+        port="5432",
         user="root",
-        host="localhost",
+        # host="localhost",
+        host="postgres-sae",
         password="root",
     )
     cursor = conn.cursor()
@@ -23,7 +25,11 @@ def getBooksById(listIdBooks):
         
         cursor.execute(queryToSelectBooks)
 
-        tuples.append(cursor.fetchall()[0])
+        try :
+            tuples.append(cursor.fetchall()[0])
+        except Exception as e:
+            print(id)
+            print(e)
 
     return tuples
 
@@ -56,8 +62,6 @@ def getBooksInfosById(listIdBooks) :
     return tuples
 
 
-from fastapi import HTTPException
-import psycopg2
 
 def getBooksInfosallById(listIdBooks):
     try:

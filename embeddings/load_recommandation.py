@@ -46,16 +46,19 @@ def get_vect_user(id_user: int):
 
 
 def knn_books(id_books1):
-    livre1 = get_vect_books(id_book=id_books1)["hits"]["hits"][0]["_source"][
-        "description_vector"
-    ]
-    query_string = {
-        "field": "description_vector",
-        "query_vector": livre1,
-        "k": 6,
-        "num_candidates": 10000,
-    }
-    return client.search(index=index_name, knn=query_string, source_includes="id")
+    try :
+        livre1 = get_vect_books(id_book=id_books1)["hits"]["hits"][0]["_source"][
+            "description_vector"
+        ]
+        query_string = {
+            "field": "description_vector",
+            "query_vector": livre1,
+            "k": 6,
+            "num_candidates": 10000,
+        }
+        return client.search(index=index_name, knn=query_string, source_includes="id")
+    except Exception:
+        return None
 
 
 def knn_user(user: int):

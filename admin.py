@@ -5,7 +5,6 @@ from fastapi.security import APIKeyHeader
 from embeddings.embeddingsController import (
     check_client,
     initialize_elastic_search,
-    init_and_check_ollama,
 )
 
 api_key = APIKeyHeader(name="admin-api-key")
@@ -29,16 +28,6 @@ def elastic_search_info():
 @admin_router.get("/init_es")
 def init_es():
     return initialize_elastic_search()
-
-
-@admin_router.get("/ollama_info")
-def ollama_info():
-    return init_and_check_ollama()
-
-
-@admin_router.get("/init")
-def init_ia():
-    """Route pour init les algorithmes"""
 
 
 @admin_router.get("/modify_api_key/{new_key}")

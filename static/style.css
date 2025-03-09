@@ -450,7 +450,9 @@ p{
 .form-container {
     display: block;
     position: absolute;
-    z-index: 1;
+    right: 0;
+    top: 100;
+    z-index: 2;
     background-color: #fff;
     padding: 20px;
     border-radius: 8px;
