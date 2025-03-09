@@ -9,24 +9,7 @@ async function fetchBooks(path, idSection, label) {
       console.log(books); 
      for (let index = 0; index < books.length; index++) {
           const element = books[index];
-
-          // Lien api livre image
-          // let url_image = await fetch("https://openlibrary.org/api/books?bibkeys="+element[3]+"&format=json");
-          // console.log(url_image);
-          // url_image = await url_image.json();
           let url_image = element[4];
-          
-
-          
-
-          // if(url_image[element[3]]){
-          //   url_image = url_image[element[3]]['thumbnail_url'];
-          // }else{
-          //   url_image = "";
-          // }
-          
-          
-
           
           if(label == "Genre que vous pourriez aimer : "){
             label = label+books[0][2];
@@ -63,8 +46,11 @@ function addCarouselItem(containerSelector, href, src, alt, label="") {
 }
 
 // Exemple d'utilisation :
-fetchBooks("livres/acp_recom/"+id_user, "#section\\ 1", "Livres recommandés");
+//fetchBooks("livres/acp_recom/"+id_user, "#section\\ 1", "Livres recommandés");
+
+
 fetchBooks("livres/acm_recom/"+id_user, "#section\\ 2", "Livres que vous pourriez aimer");
+
 fetchBooks("livres/genres/"+id_user, "#section\\ 3", "Genre que vous pourriez aimer : ");
 
 

@@ -389,58 +389,69 @@ footer{
     color: var(--white);
     cursor: pointer;
 }
-
-#book-title{
-    margin-top: 100px;
-    font-size: 32px;
-    padding-bottom: 50px;
+.book-container {
+    width: 80%;
+    margin: 50px auto;
+    margin-top: 150px;
+    text-align: center;
 }
 
-.hero {
+.book-title {
+    font-size: 36px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.book-info {
     display: flex;
-    align-items: center; /* Centre verticalement */
-    justify-content: space-between; /* Espace entre le texte et l'image */
-    width: 90vw; /* Largeur max pour éviter d'être trop collé aux bords */
-    margin: 0 auto; /* Centre la section */
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 10px;
 }
 
-.hero div {
-    width: 50vw; /* Texte prend 50% de la largeur de l'image */
+.book-left {
+    flex: 1;
+    text-align: left;
+    padding: 20px;
 }
 
-#book-cover {
-    height: 70vh; /* 70% de la hauteur de l'écran */
-    width: auto; /* Garde les proportions */
+.book-right {
+    flex: 1;
+    display: flex;
+    justify-content: center;
 }
 
+.book-right img {
+    width: 250px;
+    height: auto;
+    border-radius: 10px;
+}
+
+.book-extra,.book-info{
+    margin-top: 30px;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 20px;
+    border-radius: 10px;
+    text-align: left;
+}
+
+p {
+    margin-bottom: 10px;
+}
 
 #star-rating {
-    color: gold; /* Couleur des étoiles */
-    font-size: 20px; /* Taille des étoiles */
+    color: gold;
+    font-size: 20px;
 }
 
-#book-genres {
-    font-size: 20px; /* Taille du titre "Genres" */
-    font-weight: bold;
-    color: #333; /* Couleur du texte du titre */
-}
 
-#book-genres ul {
-    list-style: none; /* Supprime les puces */
-    display: inline; /* Garde la liste en ligne */
-    padding-bottom: 10px;
-}
-
-#book-genres li {
-    display: inline; /* Affichage en ligne */
-    font-size: 15px; /* Taille des éléments de la liste */
-    color: #e7e7e7; /* Couleur différente (bleu par défaut) */
-}
-
-#book-genres li:not(:last-child)::after {
-    content: ", "; /* Ajoute une virgule entre les genres */
-}
-
-p{
-    padding-top: 50px;
+@media (max-width: 768px) {
+    .book-info {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .book-details, .book-cover {
+        width: 100%;
+    }
 }
