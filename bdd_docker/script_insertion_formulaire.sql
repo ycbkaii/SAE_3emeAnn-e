@@ -145,3 +145,13 @@ COPY masterbook._aime_auteur(id_user, id_auteur)
 FROM '/docker-entrypoint-initdb.d/csv/formulaire/peuplement_formulaire_users_auteurs.csv'
 DELIMITER ','
 CSV HEADER;
+
+
+
+---------------------------------------------------------------------------
+--                            a lu livre                                 --
+---------------------------------------------------------------------------
+
+INSERT INTO masterbook."_a_lu_livre_vote_genre_pour_livre"
+(id_user, id_genre, id_livre, note_livre, review)
+VALUES(5, 0, 630104, 5, '');

@@ -11,20 +11,16 @@ SET SCHEMA 'masterbook';
 
 
 -- Création des roles
-CREATE ROLE utilisateur;
-CREATE ROLE admin;
+CREATE ROLE utilisateur LOGIN PASSWORD 'root';
+CREATE ROLE admin LOGIN PASSWORD 'root';
 
 
 -- On autorise la connexion à la BDD pour les utilisateurs / admin
 GRANT CONNECT ON DATABASE masterbook TO utilisateur;
 GRANT CONNECT ON DATABASE masterbook TO admin;
 
--- ON donne les privilèges à l'admin
-GRANT USAGE ON SCHEMA masterbook TO admin;
-GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA masterbook TO admin;
 
--- ON donne le droit à l'utilisateur à se connecter 
-GRANT USAGE ON SCHEMA masterbook TO utilisateur;
+
 
 /**
 * @author Yanis
@@ -625,3 +621,67 @@ CREATE TABLE temp_import_auteur (
     colonne6 VARCHAR,
     colonne7 VARCHAR
 );
+
+
+
+-- ON donne les privilèges à l'admin
+GRANT USAGE ON SCHEMA masterbook TO admin;
+
+GRANT SELECT ON 
+    _genre_personne, _awards, _saga, "_livre", "_genre", "_personnage", "_possede_personnage",
+    "_publisher", "_a_publie", "_genres_du_livre", _recompense_en, _vitesse_de_lecture,
+    _critere_pour_choisir_livre, _secteur_de_travail, _lieux_lecture, _mood_selection,
+    _preference_lecture, _utilisateur, _genre_aime, _categories_raison_lecture,
+    _utilisateur_raison, _a_lu_livre_vote_genre_pour_livre, _ou_utilisateur_lit_generalement,
+    _decouverte_livre, _a_decouvert_livre, _critere_de_utilisateur, _lieu_de_naissance,
+    _auteur, _genres_auteurs, _a_ecrit, _a_lu_auteur, _aime_auteur
+
+TO admin;
+
+GRANT UPDATE ON 
+    _genre_personne, _awards, _saga, "_livre", "_genre", "_personnage", "_possede_personnage",
+    "_publisher", "_a_publie", "_genres_du_livre", _recompense_en, _vitesse_de_lecture,
+    _critere_pour_choisir_livre, _secteur_de_travail, _lieux_lecture, _mood_selection,
+    _preference_lecture, _utilisateur, _genre_aime, _categories_raison_lecture,
+    _utilisateur_raison, _a_lu_livre_vote_genre_pour_livre, _ou_utilisateur_lit_generalement,
+    _decouverte_livre, _a_decouvert_livre, _critere_de_utilisateur, _lieu_de_naissance,
+    _auteur, _genres_auteurs, _a_ecrit, _a_lu_auteur, _aime_auteur
+
+TO admin;
+
+GRANT INSERT ON 
+    _genre_personne, _awards, _saga, "_livre", "_genre", "_personnage", "_possede_personnage",
+    "_publisher", "_a_publie", "_genres_du_livre", _recompense_en, _vitesse_de_lecture,
+    _critere_pour_choisir_livre, _secteur_de_travail, _lieux_lecture, _mood_selection,
+    _preference_lecture, _utilisateur, _genre_aime, _categories_raison_lecture,
+    _utilisateur_raison, _a_lu_livre_vote_genre_pour_livre, _ou_utilisateur_lit_generalement,
+    _decouverte_livre, _a_decouvert_livre, _critere_de_utilisateur, _lieu_de_naissance,
+    _auteur, _genres_auteurs, _a_ecrit, _a_lu_auteur, _aime_auteur
+
+TO admin;
+
+GRANT DELETE ON 
+    _genre_personne, _awards, _saga, "_livre", "_genre", "_personnage", "_possede_personnage",
+    "_publisher", "_a_publie", "_genres_du_livre", _recompense_en, _vitesse_de_lecture,
+    _critere_pour_choisir_livre, _secteur_de_travail, _lieux_lecture, _mood_selection,
+    _preference_lecture, _utilisateur, _genre_aime, _categories_raison_lecture,
+    _utilisateur_raison, _a_lu_livre_vote_genre_pour_livre, _ou_utilisateur_lit_generalement,
+    _decouverte_livre, _a_decouvert_livre, _critere_de_utilisateur, _lieu_de_naissance,
+    _auteur, _genres_auteurs, _a_ecrit, _a_lu_auteur, _aime_auteur
+
+TO admin;
+
+-- ON donne le droit à l'utilisateur à se connecter 
+GRANT USAGE ON SCHEMA masterbook TO utilisateur;
+
+-- On met des droits de lecture seulement
+GRANT SELECT ON 
+    _genre_personne, _awards, _saga, "_livre", "_genre", "_personnage", "_possede_personnage",
+    "_publisher", "_a_publie", "_genres_du_livre", _recompense_en, _vitesse_de_lecture,
+    _critere_pour_choisir_livre, _secteur_de_travail, _lieux_lecture, _mood_selection,
+    _preference_lecture, _utilisateur, _genre_aime, _categories_raison_lecture,
+    _utilisateur_raison, _a_lu_livre_vote_genre_pour_livre, _ou_utilisateur_lit_generalement,
+    _decouverte_livre, _a_decouvert_livre, _critere_de_utilisateur, _lieu_de_naissance,
+    _auteur, _genres_auteurs, _a_ecrit, _a_lu_auteur, _aime_auteur
+
+TO utilisateur;

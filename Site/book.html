@@ -42,9 +42,45 @@
             <p><strong>ISBN:</strong> <span id="book-isbn"></span></p>
             <p><strong>Number of Reviews:</strong> <span id="book-review-count"></span></p>
         </div>
+
+
+        <section id="section_saga" class="section__category" style="display: none;">
+                <h3 class="category--title"><a href="#">De la même saga :</a></h3>
+                <div class="category--carousel">
+                    <span class="carousel-button prev" role="button" aria-label="See previous titles"><b class="fa-solid fa-chevron-left"></b></span>
+                    <div class="carousel__container">
+                        <ul class="carousel--list">
+                        </ul>
+                    </div>
+                    <span class="carousel-button next" role="button" aria-label="See more titles"><b class="fa-solid fa-chevron-right"></b></span>
+                </div>
+            </section>
     </main>
 
     <script>
+
+        function addCarouselItem(containerSelector, href, src, alt, label="") {
+        const container = document.querySelector(`${containerSelector} .carousel--list`);
+        titre = document.querySelector(`${containerSelector}`).getElementsByClassName("category--title")[0];
+        titre.innerHTML = label;
+        if (!container) return;
+        
+        const listItem = document.createElement('li');
+        listItem.classList.add('carousel--item');
+        
+        const link = document.createElement('a');
+        link.href = href;
+        
+        const image = document.createElement('img');
+        image.src = src;
+        image.alt = alt;
+        
+        link.appendChild(image);
+        listItem.appendChild(link);
+        container.appendChild(listItem);
+        }
+
+
         function setTextContent(id, value) {
             document.getElementById(id).innerText = value ? value : "Not provided";
         }
@@ -82,6 +118,7 @@
                 setTextContent('book-characters', book[12]);
                 setTextContent('book-publishers', book[14]);
                 setTextContent('book-awards', book[13]);
+                saga_Name = book[5];
             } catch (error) {
                 setTextContent('book-title', "Error: " + error.message);
             }
@@ -101,6 +138,31 @@
                     ul.appendChild(li);
                 });
                 genresContainer.appendChild(ul);
+            } catch (error) {
+                setTextContent('book-info', "Error: " + error.message);
+            }
+
+            try {
+                if (saga_Name != null) {
+                    
+                    const response = await fetch(`/books_saga/${encodeURIComponent(saga_Name)}`);
+                    if (!response.ok) {
+                        throw new Error("Error retrieving data");
+                    }
+                    const books_saga = await response.json();
+
+                    if (books_saga != []) 
+                    {
+                        document.getElementById("section_saga").style.display = "block"
+                    for (let index = 0; index < books_saga.length; index++) {
+                        const element = books_saga[index];
+                        let url_image = element[4];
+                        console.log(element);
+                        addCarouselItem("#section_saga", "/book?book_id="+element[5], url_image, element[0], "");
+                    }                
+                }
+            }
+    
             } catch (error) {
                 setTextContent('book-info', "Error: " + error.message);
             }

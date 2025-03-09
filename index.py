@@ -4,6 +4,7 @@ from fastapi.responses import FileResponse, HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from PCA import acpReco
 from embeddings.embeddingsController import book_sim_by_id
+from get_saga import getSagaById
 from inputData_outputCluster import acmReco
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -22,7 +23,32 @@ from recommandation_aleatoire import recommend_genres
 from fastapi import Form
 from fastapi.templating import Jinja2Templates
 
-app = FastAPI()
+
+
+
+description = """
+# Comment installer l'api
+
+## Prerequis :
+
+- docker
+- python3
+
+Dans le dossier /docker et dans le dossier /bdd_docker, executer la commande :
+`docker compose up -d --build`
+
+L'initialisation du système peut prendre plusieurs minutes la premier fois, donc soyez patient
+
+Ensuite dans la raçine (ou il y a index.py) executer les commande :
+
+Uniquement première fois :
+  `python -m pip install -r requirements.txt`
+
+`fastapi dev index.py`
+"""
+
+app = FastAPI(description=description)
+
 
 # On mentionne les cors
 origins = [
@@ -102,6 +128,11 @@ def retourne_book2(books_id : int) :
 @app.get("/books_infos_all_list/{books_id}")
 def retourne_book3(books_id : int) :
     return getBooksInfosallById([books_id]) 
+
+
+@app.get("/books_saga/{sagaName}")
+def retourne_saga(sagaName : str) :
+    return getSagaById(sagaName)
 
 
 @app.post("/search", response_class=HTMLResponse)

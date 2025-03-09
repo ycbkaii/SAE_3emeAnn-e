@@ -15,7 +15,7 @@ def acpReco(target_id : int) :
     host = "localhost"
     port = 5433              # Port par défaut de PostgreSQL
     database = "masterbook"     # Nom de la base
-    user = "root" # Nom d'utilisateur
+    user = "admin" # Nom d'utilisateur
     password = "root" # Mot de passe
 
     # Créer l'objet de connexion

@@ -58,7 +58,7 @@ def create_user(user_create: UserCreate):
     conn = psycopg2.connect(
         database="masterbook",
         port="5433",
-        user="root",
+        user="admin",
         # host="localhost",
         host="localhost",
         password="root",

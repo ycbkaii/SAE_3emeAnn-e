@@ -68,7 +68,7 @@ function addCarouselItem(containerSelector, href, src, alt, label="") {
 function fetchAllBooks() {
   suppBooks();
   fetchBooks("livres/acp_recom/" + id_user, "#section\\ 1", "Livres recommandés");
-  fetchBooks("livres/sim/"+id_user, "#section\\ 2", "Livres similaires à ceux que vous aimer");
+  fetchBooks("livres/sim/"+id_user, "#section\\ 2", "Livres similaires à ceux que vous aimez");
   fetchBooks("livres/acm_recom/" + id_user, "#section\\ 3", "Livres que vous pourriez aimer");
   fetchBooks("livres/genres/" + id_user, "#section\\ 4", "Genre que vous pourriez aimer : ");
 }

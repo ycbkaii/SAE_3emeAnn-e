@@ -54,7 +54,7 @@ def getBooksByUser(id_user: int | str) -> list[tuple] | list:
         conn = psycopg2.connect(
             database="masterbook",
             port="5433",
-            user="root",
+            user="utilisateur",
             host="localhost",
             password="root",
         )

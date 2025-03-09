@@ -9,7 +9,7 @@ def acmReco(userId: int, mca_df=mca_df):
     conn = psycopg2.connect(
         database="masterbook",
         port="5433",
-        user="root",
+        user="utilisateur",
         host="localhost",
         password="root",
     )
