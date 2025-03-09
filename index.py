@@ -1,6 +1,11 @@
 from fastapi import FastAPI, Path
 from fastapi.responses import FileResponse, HTMLResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
+<<<<<<< Updated upstream
+=======
+from PCA import acpReco
+from get_saga import getSagaById
+>>>>>>> Stashed changes
 from inputData_outputCluster import acmReco
 from PCA import acpReco
 from fastapi.middleware.cors import CORSMiddleware
@@ -68,4 +73,31 @@ def get_book():
 @app.get("/books_list/{books_id}")
 def retourne_book(books_id : int) :
     """ Renvoie les recommandations item_base pour le livre d'id {books_id} """
+<<<<<<< Updated upstream
     return getBooksById([books_id])
+=======
+    return getBooksById([books_id])
+
+@app.get("/books_infos_list/{books_id}")
+def retourne_book2(books_id : int) :
+    return getBooksInfosById([books_id])[0]
+
+@app.get("/books_infos_all_list/{books_id}")
+def retourne_book3(books_id : int) :
+    return getBooksInfosallById([books_id]) 
+
+@app.get("/books_saga/{sagaName}")
+def retourne_saga(sagaName : str) :
+    return getSagaById(sagaName)
+
+
+@app.post("/search", response_class=HTMLResponse)
+def search(request : Request,query: str = Form(...)):
+    """Route qui redirige vers la recherche"""
+    
+    return templates.TemplateResponse("recherche.html", {"request": request, "query": query})
+
+@app.get("/retrievedata/{query}")
+def retrieveDataLivresSagaAuteurs(query : str) :
+    return search_books(query)
+>>>>>>> Stashed changes
