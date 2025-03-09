@@ -6,7 +6,7 @@ def getBooksById(listIdBooks):
     # Ouverture connexion bdd
     conn = psycopg2.connect(
         database="masterbook",
-        port="5432",
+        port="5433",
         user="root",
         # host="localhost",
         host="localhost",
@@ -37,7 +37,7 @@ def getBooksInfosById(listIdBooks) :
     
     # Ouverture connexion bdd
     conn = psycopg2.connect(database="masterbook",
-                        port="5432",
+                        port="5433",
                         user="root",
                         host="localhost",
                         password="root"
@@ -66,7 +66,7 @@ def getBooksInfosById(listIdBooks) :
 def getBooksInfosallById(listIdBooks):
     try:
         # Ouverture connexion bdd avec gestion sécurisée
-        with psycopg2.connect(database="masterbook", port="5432", user="root", host="localhost", password="root") as conn:
+        with psycopg2.connect(database="masterbook", port="5433", user="root", host="localhost", password="root") as conn:
             with conn.cursor() as cursor:
                 tuples = []
                 for id in listIdBooks:

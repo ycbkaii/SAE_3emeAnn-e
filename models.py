@@ -16,8 +16,7 @@ class User(SQLModel, table=True):
     id_secteur: Optional[int] = None
     id_genre_sex: int
     id_prefere_lire: int
-    email : str
-    passwd : str
+    
 
 
 # Properties to receive via API on creation

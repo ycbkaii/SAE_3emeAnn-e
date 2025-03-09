@@ -7,6 +7,25 @@ SET SCHEMA 'masterbook';
 * Mise en place du merge
 */
 
+
+
+
+-- Création des roles
+CREATE ROLE utilisateur;
+CREATE ROLE admin;
+
+
+-- On autorise la connexion à la BDD pour les utilisateurs / admin
+GRANT CONNECT ON DATABASE masterbook TO utilisateur;
+GRANT CONNECT ON DATABASE masterbook TO admin;
+
+-- ON donne les privilèges à l'admin
+GRANT USAGE ON SCHEMA masterbook TO admin;
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA masterbook TO admin;
+
+-- ON donne le droit à l'utilisateur à se connecter 
+
+
 /**
 * @author Yanis
 */
@@ -205,8 +224,6 @@ CREATE TABLE _preference_lecture (
 -- Création table utilisateur 
 CREATE TABLE _utilisateur(
     id_user SERIAL PRIMARY KEY,
-    email VARCHAR DEFAULT "example@gmail.com",
-    passwd VARCHAR DEFAULT "",
     age INT,
     id_selection INT NOT NULL,
     id_vitesse_lecture INT NOT NULL,

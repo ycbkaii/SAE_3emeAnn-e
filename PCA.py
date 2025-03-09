@@ -12,8 +12,8 @@ def acpReco(target_id : int) :
     Nombre_livre = 10
 
     # host = "localhost"       # Adresse de la BDD
-    host = "postgres-sae"
-    port = 5432              # Port par défaut de PostgreSQL
+    host = "localhost"
+    port = 5433              # Port par défaut de PostgreSQL
     database = "masterbook"     # Nom de la base
     user = "root" # Nom d'utilisateur
     password = "root" # Mot de passe

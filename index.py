@@ -6,7 +6,6 @@ from PCA import acpReco
 from embeddings.embeddingsController import book_sim_by_id
 from inputData_outputCluster import acmReco
 from fastapi.middleware.cors import CORSMiddleware
-from sqlmodel import select
 
 from deps import SessionDep
 from models import User, _livre

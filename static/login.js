@@ -30,6 +30,7 @@ async function login(formData) {
 
         const data = await response.json();
         TOKEN = data
+        
         alert('Connexion réussie!');
     } catch (error) {
         console.error('Erreur lors de l\'envoi du formulaire:', error);
@@ -52,6 +53,7 @@ document.getElementById('oauth-form').addEventListener('submit', async function(
     await login(formData);
     display_conn()
     id_user = document.getElementById('username').value
+    
     fetchAllBooks()
 });
 

@@ -8,7 +8,6 @@ from .load_recommandation import knn_books, check_client_es, knn_user
 from .elasticsearch_embeddings import (
     search_books_by_title,
     recreate_index_desc,
-    fill_index_desc,
 )
 from typing import Any
 
@@ -28,7 +27,6 @@ class Books:
 def initialize_elastic_search():
     """Fonction pour initializer ES"""
     recreate_index_desc()
-    fill_index_desc(np.array([]))
 
 
 
@@ -55,7 +53,7 @@ def getBooksByUser(id_user: int | str) -> list[tuple] | list:
     try:
         conn = psycopg2.connect(
             database="masterbook",
-            port="5432",
+            port="5433",
             user="root",
             host="localhost",
             password="root",

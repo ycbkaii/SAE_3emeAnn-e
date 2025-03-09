@@ -16,7 +16,7 @@ ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
 
-engine = create_engine("postgresql://root:root@postgres-sae:5432/masterbook", echo=True)
+engine = create_engine("postgresql://root:root@localhost:5433/masterbook", echo=True)
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/usr/token")
 
 

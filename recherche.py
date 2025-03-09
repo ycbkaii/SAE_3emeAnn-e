@@ -31,7 +31,10 @@ def search_books(query: str = Form(...)):
 
     
     # Recherche des livres
-    cur.execute("SELECT _livre.id_livre, title, description, cover_link, nom_de_la_saga, numéro_opus, _a_ecrit.id_auteur FROM masterbook._livre FULL OUTER JOIN masterbook._a_ecrit ON _livre.id_livre = _a_ecrit.id_livre FULL OUTER JOIN masterbook._auteur ON _auteur.id_auteur = _a_ecrit.id_auteur WHERE title ILIKE %s OR nom_complet ILIKE %s OR nom_de_la_saga ILIKE %s", (f"%{query}%",f"%{query}%", f"%{query}%"))
+    cur.execute("""
+                SELECT _livre.id_livre, title, description, cover_link, nom_de_la_saga, numéro_opus, _a_ecrit.id_auteur FROM masterbook._livre FULL OUTER JOIN masterbook._a_ecrit ON _livre.id_livre = _a_ecrit.id_livre FULL OUTER JOIN masterbook._auteur ON _auteur.id_auteur = _a_ecrit.id_auteur WHERE title ILIKE %s OR _auteur.nom_complet ILIKE %s OR nom_de_la_saga ILIKE %s
+                
+                """, (f"%{query}%",f"%{query}%", f"%{query}%"))
     books = cur.fetchall()
     results["books"] = [{"id": b[0], "title": b[1] ,"description": b[2] or "Pas de description", "cover": b[3] or "", "saga" : b[4], "num_opus" : b[5], "id_auteur" : b[6]} for b in books]
 

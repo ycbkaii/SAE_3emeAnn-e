@@ -1,7 +1,7 @@
 //Partie Yoannnnnnnnnnnnnnnnnnnn
 
 // Remplacer par un get USR
-let id_user = 5;
+let id_user = 21;
 
 async function fetchBooks(path, idSection, label) {
   try {
@@ -33,6 +33,13 @@ function suppBooks() {
   elementsToRemove.forEach((element) => {
     element.parentNode.removeChild(element);
   });
+
+  let listeAlgos = document.getElementsByClassName("carousel--list");
+
+  for(let i = 0; i<listeAlgos.length; i++){
+    listeAlgos[i].innerHTML = `<li style="position: absolute;" class="carousel--item"><a href="#"><img src="" alt=""></a></li>`;
+    
+  }
 }
 
 function addCarouselItem(containerSelector, href, src, alt, label="") {
@@ -59,7 +66,7 @@ function addCarouselItem(containerSelector, href, src, alt, label="") {
 
 // Exemple d'utilisation :
 function fetchAllBooks() {
-  suppBooks()
+  suppBooks();
   fetchBooks("livres/acp_recom/" + id_user, "#section\\ 1", "Livres recommandés");
   fetchBooks("livres/sim/"+id_user, "#section\\ 2", "Livres similaires à ceux que vous aimer");
   fetchBooks("livres/acm_recom/" + id_user, "#section\\ 3", "Livres que vous pourriez aimer");
