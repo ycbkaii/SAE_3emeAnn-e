@@ -15,6 +15,6 @@ Ensuite dans la raçine (ou il y a index.py) executer les commande :
 
 Uniquement première fois :
 
-  `python -m pip install -r requirements.txt`
+  `python3 -m pip install -r requirements.txt`
 
 `fastapi dev index.py`
