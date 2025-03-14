@@ -55,6 +55,19 @@
                     <span class="carousel-button next" role="button" aria-label="See more titles"><b class="fa-solid fa-chevron-right"></b></span>
                 </div>
             </section>
+            <section id="section_algo" class="section__category">
+                <h3 class="category--title"><a href="#">Vous pourriez aimez aussi :</a></h3>
+                <div class="category--carousel">
+                    <span class="carousel-button prev" role="button" aria-label="See previous titles"><b class="fa-solid fa-chevron-left"></b></span>
+                    <div class="carousel__container">
+                        <ul class="carousel--list">
+                            <li style="position: absolute;" class="carousel--item"><a href="#"><img src="" alt=""></a></li>
+
+                        </ul>
+                    </div>
+                    <span class="carousel-button next" role="button" aria-label="See more titles"><b class="fa-solid fa-chevron-right"></b></span>
+                </div>
+            </section>
     </main>
 
     <script>
@@ -164,7 +177,28 @@
             }
     
             } catch (error) {
-                setTextContent('book-info', "Error: " + error.message);
+                console.log('book-info', "Error: " + error.message);
+            }
+            try {
+                if (bookId) {
+                    const response = await fetch(`/livres/similaire/${encodeURIComponent(bookId)}`);
+                        if (!response.ok) {
+                            throw new Error("Error retrieving data");
+                        }
+                        const books_reco = await response.json();
+
+                        if (books_reco != []) 
+                        {
+                        for (let index = 0; index < books_reco.length; index++) {
+                            const element = books_reco[index];
+                            let url_image = element[4];
+                            console.log(element);
+                            addCarouselItem("#section_algo", "/book?book_id="+element[5], url_image, element[0], "");
+                        }                
+                    }
+                }
+            } catch (error) {
+                console.log(error);
             }
         }
 

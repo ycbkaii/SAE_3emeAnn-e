@@ -1,22 +1,28 @@
-from fastapi import FastAPI, Path
-from fastapi.responses import FileResponse, HTMLResponse, RedirectResponse
+from typing import Tuple
+from fastapi import FastAPI, Request
+from fastapi.responses import FileResponse, HTMLResponse
 from fastapi.staticfiles import StaticFiles
-<<<<<<< Updated upstream
-=======
 from PCA import acpReco
-<<<<<<< Updated upstream
-=======
-from embeddings.embeddingsController import book_sim_by_id, get_reco_books
->>>>>>> Stashed changes
-from get_saga import getSagaById
->>>>>>> Stashed changes
 from inputData_outputCluster import acmReco
-from PCA import acpReco
 from fastapi.middleware.cors import CORSMiddleware
-from utilities import getBooksById
-from recommandation_aleatoire import recommend_genres
-app = FastAPI()
+from sqlmodel import select
 
+from deps import SessionDep
+from models import User, _livre
+from user import user_router
+from admin import admin_router
+# from inputData_outputCluster import acmReco
+from embeddings.embeddingsController import (
+    get_reco_books,
+    # get_reco_user_based,
+)
+from utilities import getBooksById,getBooksInfosById, getBooksInfosallById
+from recherche import search_books
+from recommandation_aleatoire import recommend_genres
+from fastapi import Form
+from fastapi.templating import Jinja2Templates
+
+app = FastAPI()
 
 # On mentionne les cors
 origins = [
@@ -35,6 +41,7 @@ app.add_middleware(
 
 # Charger le CSS et le JS dans les pages
 app.mount("/static", StaticFiles(directory="static"), name="static")
+templates = Jinja2Templates(directory="Site")
 
 
 @app.get("/", response_class=HTMLResponse)
@@ -64,11 +71,9 @@ def get_recommended_genres(user_id):
     recommended = recommend_genres(user_id)
     return recommended
 
-<<<<<<< Updated upstream
-=======
 @app.get("/livres/sim/{user_id}")
-def get_sim_recom(user_id : int) :
-    return book_sim_by_id(user_id)
+def get_sim_recom(user : int) :
+    return 0
 
 @app.get("/livres/similaire/{book_id}")
 def get_recommended_genres(book_id):
@@ -83,12 +88,7 @@ def get_recommended_genres(book_id):
 
 app.include_router(admin_router)
 app.include_router(user_router)
->>>>>>> Stashed changes
 
-@app.get("/init")
-def init_ia() :
-    """Route pour init les algorithmes""" 
-    
 @app.get("/book", response_class=HTMLResponse)
 def get_book():
     file_path = "Site/book.html"
@@ -97,9 +97,6 @@ def get_book():
 @app.get("/books_list/{books_id}")
 def retourne_book(books_id : int) :
     """ Renvoie les recommandations item_base pour le livre d'id {books_id} """
-<<<<<<< Updated upstream
-    return getBooksById([books_id])
-=======
     return getBooksById([books_id])
 
 @app.get("/books_infos_list/{books_id}")
@@ -109,10 +106,6 @@ def retourne_book2(books_id : int) :
 @app.get("/books_infos_all_list/{books_id}")
 def retourne_book3(books_id : int) :
     return getBooksInfosallById([books_id]) 
-
-@app.get("/books_saga/{sagaName}")
-def retourne_saga(sagaName : str) :
-    return getSagaById(sagaName)
 
 
 @app.post("/search", response_class=HTMLResponse)
@@ -124,4 +117,3 @@ def search(request : Request,query: str = Form(...)):
 @app.get("/retrievedata/{query}")
 def retrieveDataLivresSagaAuteurs(query : str) :
     return search_books(query)
->>>>>>> Stashed changes
