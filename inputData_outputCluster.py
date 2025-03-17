@@ -23,7 +23,7 @@ def acmReco(userId: int, mca_df=mca_df):
     # On recupere le cluster associé à la target point
     cluster_point = mca_df.loc[target_id, "Cluster"]
 
-    print(target_point)
+    # print(target_point)
 
     # On exclu les clusters qui ne sont pas associés
     mca_df = mca_df[mca_df["Cluster"] == cluster_point]
@@ -37,12 +37,12 @@ def acmReco(userId: int, mca_df=mca_df):
     points_les_plus_proches = mca_df.drop(index=target_id).sort_values(
         by="distance_to_target"
     )[:10]
-    print(points_les_plus_proches)
+    # print(points_les_plus_proches)
 
     # On affiche les utilisateurs qui sont les plus proches de notre target
-    print(f"Target Point : \n {dataFromCsv.loc[target_id]}\n\n")
-    for i in points_les_plus_proches.index:
-        print(f"{dataFromCsv.loc[i]}\n\n")
+    # print(f"Target Point : \n {dataFromCsv.loc[target_id]}\n\n")
+    # for i in points_les_plus_proches.index:
+        # print(f"{dataFromCsv.loc[i]}\n\n")
 
     # Fonction pour afficher les "''"
     def escapeString(row):
@@ -70,8 +70,8 @@ def acmReco(userId: int, mca_df=mca_df):
         .idxmax()[0]
     )
 
-    print(f"Genres proposés :{genres_le_plus_linked}")
-    print(f"Familiarité générale avec la lecture : {familieLecture}")
+    # print(f"Genres proposés :{genres_le_plus_linked}")
+    # print(f"Familiarité générale avec la lecture : {familieLecture}")
 
     # On définit des constantes pour savoir si la durée du livre en fonction de la familiarité de l'utilisateur
     FACHE = "<=100"
@@ -120,9 +120,9 @@ def acmReco(userId: int, mca_df=mca_df):
 
     tuples = cursor.fetchall()
 
-    print(f"Les livres proposés : {tuples}\n")
+    # print(f"Les livres proposés : {tuples}\n")
 
-    print(f"A partir des IDS on a ces livres : {getBooksById(tuples)}\n")
+    # print(f"A partir des IDS on a ces livres : {getBooksById(tuples)}\n")
 
     conn.commit()
     conn.close()

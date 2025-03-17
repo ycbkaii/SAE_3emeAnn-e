@@ -6,6 +6,7 @@ from PCA import acpReco
 from inputData_outputCluster import acmReco
 from fastapi.middleware.cors import CORSMiddleware
 from sqlmodel import select
+from embeddings import embeddingsController
 
 from deps import SessionDep
 from models import User, _livre

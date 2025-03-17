@@ -7,17 +7,17 @@ from embeddings.embeddingsController import book_sim_by_id
 from get_saga import getSagaById
 from inputData_outputCluster import acmReco
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi import Query
 
 from deps import SessionDep
 from models import User, _livre
 from user import user_router
 from admin import admin_router
 # from inputData_outputCluster import acmReco
-# from embeddings.embeddingsController import (
-#     get_reco_books,
-#     get_reco_user_based,
-# )
-from utilities import getBooksById,getBooksInfosById, getBooksInfosallById
+from embeddings.embeddingsController import (
+    get_reco_books
+)
+from utilities import getBooksById,getBooksInfosById, get_books_by_author, getBooksInfosallById, search_books_deux, get_search_suggestions_deux
 from recherche import search_books
 from recommandation_aleatoire import recommend_genres
 from fastapi import Form
@@ -55,6 +55,8 @@ origins = [
     "http://127.0.0.1:8000",
     "http://localhost",
     "http://localhost:8080",
+    "http://localhost:5174",
+    "http://localhost:5173"
 ]
 
 app.add_middleware(
@@ -141,6 +143,17 @@ def search(request : Request,query: str = Form(...)):
     
     return templates.TemplateResponse("recherche.html", {"request": request, "query": query})
 
-@app.get("/retrievedata/{query}")
-def retrieveDataLivresSagaAuteurs(query : str) :
-    return search_books(query)
+@app.get("/api/search_deux")
+def search_books_deux_route(query: str = Query(..., min_length=1), type: str = Query("title")):
+    """Route API pour la recherche améliorée"""
+    return search_books_deux(query, type)
+
+@app.get("/api/search_deux/suggestions")
+def get_search_suggestions_deux_route(query: str = Query(..., min_length=1), type: str = Query("title")):
+    """Route API pour les suggestions de recherche en temps réel"""
+    return get_search_suggestions_deux(query, type)
+
+@app.get("/api/author_books")
+def get_books_by_author_route(author_id: int = Query(..., description="ID de l'auteur")):
+    """Route API pour récupérer tous les livres écrits par un auteur donné"""
+    return get_books_by_author(author_id)

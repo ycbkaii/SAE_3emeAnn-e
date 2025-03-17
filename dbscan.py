@@ -1,4 +1,6 @@
 from analyseACM import mca_result
+import matplotlib
+matplotlib.use("Agg")  # Mode sans interface graphique
 import matplotlib.pyplot as plt
 from sklearn.cluster import DBSCAN
 from sklearn.preprocessing import StandardScaler

@@ -1,5 +1,7 @@
 import pandas as pd
 import numpy as np
+import matplotlib
+matplotlib.use("Agg")  # Mode sans interface graphique
 import matplotlib.pyplot as plt
 from sklearn.decomposition import PCA
 import pandas as pd

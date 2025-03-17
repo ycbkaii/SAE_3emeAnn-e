@@ -99,3 +99,11 @@ def book_sim_by_id(id_user) :
     tuple_books = tuple_books[1:6]
     print(tuple_books)
     return getBooksById(tuple_books)
+
+def book_sim_by_book(id_book) :
+    tuple_books = []
+    for e in get_reco_books(id_book) :
+        tuple_books.append(e["_source"]["id"])
+    tuple_books = list(set(tuple_books))
+    tuple_books = tuple_books[1:6]
+    return getBooksById(tuple_books)
