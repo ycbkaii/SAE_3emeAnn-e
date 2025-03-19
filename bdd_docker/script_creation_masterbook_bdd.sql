@@ -220,6 +220,8 @@ CREATE TABLE _preference_lecture (
 -- Création table utilisateur 
 CREATE TABLE _utilisateur(
     id_user SERIAL PRIMARY KEY,
+    email varchar,
+    passwd varchar,
     age INT,
     id_selection INT NOT NULL,
     id_vitesse_lecture INT NOT NULL,

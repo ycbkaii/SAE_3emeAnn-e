@@ -12,6 +12,11 @@ from models import User, UserCreate
 from models import Token
 from typing import Annotated, Any
 from deps import CurrentUser, SessionDep
+from typing import List, Optional
+
+import bcrypt
+print(bcrypt.__version__)
+
 
 # to get a string like this run:
 # openssl rand -hex 32
@@ -30,110 +35,177 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/usr/token")
 def verify_password(plain_password, hashed_password):
     return pwd_context.verify(plain_password, hashed_password)
 
-
 def get_password_hash(password):
     return pwd_context.hash(password)
 
 
-def get_user(session: Session, email: str,passwd):
-    statement = select(User).where(User.id_user == email)
-    session_user = session.exec(statement).first()
-    return session_user
-
-
-def authenticate_user(session: Session, email: str, password: str):
-    user = get_user(session, email,password)
-    if not user:
-        return False
-    # if not verify_password(password, user.hashed_password):
-    #     return False
-    # user : User = User(id_user=5)
-    return user
-
-
-def create_user(user_create: UserCreate):
-    db_obj = User.model_validate(
-        user_create, update={"passwd": get_password_hash(user_create.password)}
-    )
-    conn = psycopg2.connect(
+def get_db_connection():
+    return psycopg2.connect(
         database="masterbook",
         port="5433",
-        user="admin",
-        # host="localhost",
+        user="root",
         host="localhost",
-        password="root",
+        password="root"
     )
-    cursor = conn.cursor()
-    query = f"INSERT INTO masterbook._utilisateur(age, email, passwd, id_selection, id_vitesse_lecture, id_secteur, id_genre_sex, id_prefere_lire) VALUES ('{db_obj.age}', '{db_obj.email}', '{db_obj.passwd}', {db_obj.id_selection}, {db_obj.id_vitesse_lecture}, {db_obj.id_secteur}, {db_obj.id_genre_sex}, {db_obj.id_prefere_lire});"
-
-    cursor.execute(query)
 
 
-def create_access_token(subject: str | Any, expires_delta: timedelta) -> str:
-    expire = datetime.now(timezone.utc) + expires_delta
-    to_encode = {"exp": expire, "sub": str(subject)}
-    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
-    return encoded_jwt
+# Pydantic model pour l'utilisateur
+class UserCreate(BaseModel):
+    email: str
+    password: str
+    age: int
+    id_selection: int  # Humeur
+    id_vitesse_lecture: int  # Vitesse de lecture
+    id_secteur: Optional[int] = None  # Secteur d'activité (optionnel)
+    id_genre_sex: int  # Genre
+    genres: List[int]  # Genres préférés (liste d'IDs de genres)
+    book_criteria: List[int]  # Critères pour choisir un livre (liste d'IDs de critères)
+    favorite_authors: List[int]  # Auteurs favoris (liste d'IDs d'auteurs)
+    id_prefere_lire: int  # Préférence de lecture
 
 
-@user_router.post("/token")
-def login_access_token(
-    session: SessionDep, form_data: Annotated[OAuth2PasswordRequestForm, Depends()]
-) -> Token:
-    """
-    OAuth2 compatible token login, get an access token for future requests
-    """
-    user = authenticate_user(
-        session=session, email=form_data.username, password=form_data.password
-    )
+@user_router.post("/register")
+def register_user(user: UserCreate):
+    """Créer un nouvel utilisateur avec un mot de passe haché"""
+    print(user)
+    
+    hashed_password = get_password_hash(user.password)  # Hachage du mot de passe
+    conn = get_db_connection()
+    cur = conn.cursor()
+
+    try:
+        # Insertion de l'utilisateur dans la table _utilisateur
+        query = """
+            INSERT INTO masterbook._utilisateur 
+            (email, passwd, age, id_genre_sex, id_secteur, id_prefere_lire, id_vitesse_lecture, id_selection)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+            RETURNING id_user;
+        """
+        
+        cur.execute(query, (
+            user.email, 
+            hashed_password, 
+            user.age, 
+            user.id_genre_sex, 
+            user.id_secteur, 
+            user.id_prefere_lire,  # Ajout de l'attribut 'id_prefere_lire'
+            user.id_vitesse_lecture, 
+            user.id_selection
+        ))
+
+        # Récupérer l'id de l'utilisateur
+        user_id = cur.fetchone()[0]  # Récupère l'id généré
+        conn.commit()
+
+        # Insérer les genres favoris de l'utilisateur dans la table _genre_aime
+        for genre_id in user.genres:
+            query_genre = """
+                INSERT INTO masterbook._genre_aime (id_user, id_genre)
+                VALUES (%s, %s);
+            """
+            cur.execute(query_genre, (user_id, genre_id))
+        
+        # Insérer les critères de l'utilisateur dans la table _critere_de_utilisateur
+        for criterion_id in user.book_criteria:
+            query_criteria = """
+                INSERT INTO masterbook._critere_de_utilisateur (id_user, id_critere)
+                VALUES (%s, %s);
+            """
+            cur.execute(query_criteria, (user_id, criterion_id))
+        
+        # Insérer les auteurs favoris de l'utilisateur dans la table _aime_auteur
+        for author_id in user.favorite_authors:
+            query_author = """
+                INSERT INTO masterbook._aime_auteur (id_user, id_auteur)
+                VALUES (%s, %s);
+            """
+            cur.execute(query_author, (user_id, author_id))
+        
+        conn.commit()
+
+        return {"message": "Utilisateur créé avec succès", "id_user": user_id}
+    
+    except psycopg2.Error as e:
+        conn.rollback()  # Annule la transaction en cas d'erreur
+        raise HTTPException(status_code=400, detail=f"Erreur SQL : {e.pgcode} - {e.pgerror}")
+    
+    finally:
+        cur.close()
+        conn.close()
+
+@user_router.post("/login")
+def login_user(form_data: OAuth2PasswordRequestForm = Depends()):
+    """Connexion utilisateur et génération du token JWT"""
+    
+    conn = psycopg2.connect(database="masterbook",
+                            port="5433",
+                            user="admin",
+                            host="localhost",
+                            password="root")
+    cur = conn.cursor()
+
+    query = "SELECT id_user, passwd FROM masterbook._utilisateur WHERE email = %s"
+    cur.execute(query, (form_data.username,))
+    user = cur.fetchone()
+
+    cur.close()
+    conn.close()
+
     if not user:
-        raise HTTPException(status_code=400, detail="Incorrect email or password")
-    access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
-    return Token(
-        access_token=create_access_token(
-            user.id_user, expires_delta=access_token_expires
-        )
-    )
+        raise HTTPException(status_code=400, detail="Email incorrect")
+
+    user_id, hashed_password = user
+
+    if not verify_password(form_data.password, hashed_password):
+        raise HTTPException(status_code=400, detail="Mot de passe incorrect")
+
+    access_token_expires = timedelta(minutes=30)
+    access_token = create_access_token(user_id, access_token_expires)
+
+    return {"access_token": access_token, "token_type": "bearer"}
 
 
-class Form_data_create_user(BaseModel) :
-    email : str
-    password : str
-    age : int
-    id_genre_sex : int
-    id_secteur : int
-    id_prefere_lire : int
-    id_vitesse_lecture : int
-    id_selection : int
+class Token(BaseModel):
+    access_token: str
+    token_type: str
 
+def create_access_token(subject: str, expires_delta: timedelta):
+    """Crée un token JWT"""
+    expire = datetime.now(timezone.utc) + expires_delta
+    to_encode = {"exp": expire, "sub": str(subject)}  # <-- Convertit `sub` en string
+    return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
 
-@user_router.post("/create")
-def create_user_route(session: SessionDep,form_data : Annotated[Form_data_create_user,Depends()]) :
-    create_user(user_create=form_data )
-    return True
+async def get_current_user(token: str = Depends(oauth2_scheme)):
+    """Décode le Token et retourne l'utilisateur connecté"""
+    """Décode le Token et retourne l'utilisateur connecté"""
+    print(f"🔎 Token extrait par OAuth2 : {token}")  # <-- Affiche le token reçu
 
-async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
-        detail="Could not validate credentials",
+        detail="Identifiants invalides",
         headers={"WWW-Authenticate": "Bearer"},
     )
     try:
+        print(f"🔍 Token reçu : {token}")  # <-- Vérifier le token reçu
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        id = payload.get("sub")
-        if id is None:
+        print(f"📌 Contenu du token décodé : {payload}")  # <-- Voir le contenu exact
+
+        user_id = payload.get("sub")
+        if user_id is None:
+            print("⚠️ Erreur : `sub` est None")
             raise credentials_exception
-        return id
-    except InvalidTokenError:
+
+        print(f"✅ ID utilisateur récupéré : {user_id}")
+        return user_id
+    except jwt.ExpiredSignatureError:
+        print("❌ Token expiré")
+        raise HTTPException(status_code=401, detail="Token expiré")
+    except jwt.InvalidTokenError:
+        print("❌ Token invalide")
         raise credentials_exception
+    
 
-@user_router.get("/get_id")
-def get_id(current_user: Annotated[int, Depends(get_current_user)]) :
-    return current_user
-
-
-# @user_router.get("/users/me/items/")
-# async def read_own_items(
-#     current_user: Annotated[User, Depends(get_current_user)],
-# ):
-#     return [{"item_id": "Foo", "owner": current_user.username}]
+@user_router.get("/me")
+def get_user_profile(current_user: int = Depends(get_current_user)):
+    """Renvoie l'ID de l'utilisateur connecté"""
+    return {"id_user": current_user}

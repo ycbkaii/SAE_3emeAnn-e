@@ -189,6 +189,6 @@ CSV HEADER;
 
 -- Insertion dans _ecrit_par
 COPY masterbook._a_ecrit(id_livre, id_auteur)
-FROM '/docker-entrypoint-initdb.d/csv/a_ecrit.csv'
+FROM '/docker-entrypoint-initdb.d/csv/a_ecrit_v2.csv'
 DELIMITER ','
 CSV HEADER;

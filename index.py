@@ -8,6 +8,7 @@ from get_saga import getSagaById
 from inputData_outputCluster import acmReco
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi import Query
+import psycopg2
 
 from deps import SessionDep
 from models import User, _livre
@@ -66,6 +67,16 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+def get_db_connection():
+    conn = psycopg2.connect(
+        dbname="masterbook", 
+        user="admin", 
+        password="root", 
+        host="localhost", 
+        port="5433"
+    )
+    return conn
 
 # Charger le CSS et le JS dans les pages
 app.mount("/static", StaticFiles(directory="static"), name="static")
@@ -157,3 +168,83 @@ def get_search_suggestions_deux_route(query: str = Query(..., min_length=1), typ
 def get_books_by_author_route(author_id: int = Query(..., description="ID de l'auteur")):
     """Route API pour récupérer tous les livres écrits par un auteur donné"""
     return get_books_by_author(author_id)
+
+@app.get("/api/moods")
+def get_moods():
+    """Retourne les moods disponibles"""
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute("SELECT id_selection, nom_humeur FROM masterbook._mood_selection")
+    moods = cur.fetchall()
+    conn.close()
+    return [{"id_selection": mood[0], "nom_humeur": mood[1]} for mood in moods]
+
+
+@app.get("/api/reading-speeds")
+def get_reading_speeds():
+    """Retourne les vitesses de lecture disponibles"""
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute("SELECT id_vitesse_lecture, nom_categorie FROM masterbook._vitesse_de_lecture")
+    speeds = cur.fetchall()
+    conn.close()
+    return [{"id_vitesse_lecture": speed[0], "nom_categorie": speed[1]} for speed in speeds]
+
+
+@app.get("/api/sectors")
+def get_sectors():
+    """Retourne les secteurs d'activité disponibles"""
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute("SELECT id_secteur, nom_secteur FROM masterbook._secteur_de_travail")
+    sectors = cur.fetchall()
+    conn.close()
+    return [{"id_secteur": sector[0], "nom_secteur": sector[1]} for sector in sectors]
+
+
+@app.get("/api/genres")
+def get_genres():
+    """Retourne les genres disponibles"""
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute("SELECT id_genre, nom_genre FROM masterbook._genre")
+    genres = cur.fetchall()
+    conn.close()
+    return [{"id_genre": genre[0], "nom_genre": genre[1]} for genre in genres]
+
+
+@app.get("/api/book-criteria")
+def get_book_criteria():
+    """Retourne les critères pour choisir des livres"""
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute("SELECT id_critere, critere FROM masterbook._critere_pour_choisir_livre")
+    criteria = cur.fetchall()
+    conn.close()
+    return [{"id_critere": criterion[0], "critere": criterion[1]} for criterion in criteria]
+
+
+@app.get("/api/authors")
+def get_authors():
+    """Retourne les auteurs favoris disponibles"""
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute("SELECT id_auteur, nom_complet FROM masterbook._auteur")
+    authors = cur.fetchall()
+    conn.close()
+    return [{"id_auteur": author[0], "nom_complet": author[1]} for author in authors]
+
+@app.get("/api/preferences")
+def get_preferences():
+    """Retourne les préférences de lecture disponibles"""
+    conn = get_db_connection()
+    cur = conn.cursor()
+
+    # Exécution de la requête pour récupérer les préférences de lecture
+    cur.execute("SELECT id_preference, preference FROM masterbook._preference_lecture")
+    preferences = cur.fetchall()
+    
+    conn.close()
+
+    # Retourne les préférences sous forme de dictionnaire
+    return [{"id_preference": preference[0], "preference": preference[1]} for preference in preferences]

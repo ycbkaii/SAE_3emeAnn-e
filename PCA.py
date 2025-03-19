@@ -68,8 +68,7 @@ def acpReco(target_id : int) :
 
     # On supprime les data qui possèdent -1
     data = data[data['genre_humain'] != '-1']
-    data = data[~data['genre'].isna()]
-
+    data['genre'] = data['genre'].fillna('Inconnu')
 
 
     data_verif = data[variables]

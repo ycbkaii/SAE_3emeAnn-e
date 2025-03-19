@@ -199,7 +199,6 @@ def get_search_suggestions_deux(query: str, search_type: str):
                 SELECT DISTINCT id_livre, title 
                 FROM masterbook._livre 
                 WHERE title ILIKE %s 
-                LIMIT 10
             """, (f"%{query}%",))
         elif search_type == "author":
             cur.execute("""
