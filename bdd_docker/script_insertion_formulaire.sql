@@ -41,6 +41,9 @@ FROM '/docker-entrypoint-initdb.d/csv/formulaire/peuplement_formulaire_users.csv
 DELIMITER ','
 CSV HEADER;
 
+-- Mettre à jour la séquence pour qu'elle commence après le maximum des ids déjà présents
+SELECT setval('masterbook._utilisateur_id_user_seq', (SELECT MAX(id_user) FROM masterbook._utilisateur) + 1);
+
 ---------------------------------------------------------------------------
 --                       Critere de choix de livre                       --
 ---------------------------------------------------------------------------

@@ -545,27 +545,32 @@ GROUP BY nom_de_la_saga;
 */
 
 
-CREATE OR REPLACE FUNCTION _update_nombre_vote()
+CREATE OR REPLACE FUNCTION masterbook._update_nombre_vote()
 RETURNS TRIGGER AS $$
-DECLARE id_genre_existe INT := NULL;
+DECLARE
+    id_genre_existe INT := NULL;
 BEGIN
     IF (NEW.id_genre IS NOT NULL) THEN
-        -- On vérifie que 'genre_du_livre' avec id_genre est déjà associé au livre
-        SELECT id_genre INTO id_genre_existe FROM _genres_du_livre WHERE id_genre = NEW.id_genre AND id_livre = NEW.id_livre;
+        -- On vérifie que '_genres_du_livre' avec id_genre est déjà associé au livre
+        SELECT id_genre INTO id_genre_existe
+        FROM masterbook._genres_du_livre
+        WHERE id_genre = NEW.id_genre AND id_livre = NEW.id_livre;
 
-        -- S'il n'existe pas on insert un row dans _genres_du_livre
-        IF id_genre_existe IS NULL THEN 
-            INSERT INTO _genres_du_livre VALUES (NEW.id_genre, 1, NEW.id_livre);
+        -- S'il n'existe pas on insère une ligne dans '_genres_du_livre'
+        IF id_genre_existe IS NULL THEN
+            INSERT INTO masterbook._genres_du_livre (id_genre, nombre_votes_utilisateur, id_livre)
+            VALUES (NEW.id_genre, 1, NEW.id_livre);
         ELSE
-            UPDATE _genres_du_livre SET nombre_votes_utilisateur = nombre_votes_utilisateur+1 WHERE id_genre = id_genre_existe AND id_livre = NEW.id_livre;
+            UPDATE masterbook._genres_du_livre
+            SET nombre_votes_utilisateur = nombre_votes_utilisateur + 1
+            WHERE id_genre = id_genre_existe AND id_livre = NEW.id_livre;
         END IF;
-
     END IF;
 
-    
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
+
 
 CREATE TRIGGER update_nombre_vote_pour_genre_livre
 AFTER INSERT ON _a_lu_livre_vote_genre_pour_livre
@@ -624,7 +629,13 @@ CREATE TABLE temp_import_auteur (
     colonne7 VARCHAR
 );
 
-
+CREATE TABLE masterbook._est_dans_wishlist(
+    id_user INT,
+    id_livre INT,
+    PRIMARY KEY (id_user, id_livre),
+    FOREIGN KEY (id_user) REFERENCES masterbook._utilisateur(id_user),
+    FOREIGN KEY (id_livre) REFERENCES masterbook._livre(id_livre)
+);
 
 -- ON donne les privilèges à l'admin
 GRANT USAGE ON SCHEMA masterbook TO admin;
@@ -636,7 +647,7 @@ GRANT SELECT ON
     _preference_lecture, _utilisateur, _genre_aime, _categories_raison_lecture,
     _utilisateur_raison, _a_lu_livre_vote_genre_pour_livre, _ou_utilisateur_lit_generalement,
     _decouverte_livre, _a_decouvert_livre, _critere_de_utilisateur, _lieu_de_naissance,
-    _auteur, _genres_auteurs, _a_ecrit, _a_lu_auteur, _aime_auteur
+    _auteur, _genres_auteurs, _a_ecrit, _a_lu_auteur, _aime_auteur, _est_dans_wishlist
 
 TO admin;
 
@@ -647,7 +658,7 @@ GRANT UPDATE ON
     _preference_lecture, _utilisateur, _genre_aime, _categories_raison_lecture,
     _utilisateur_raison, _a_lu_livre_vote_genre_pour_livre, _ou_utilisateur_lit_generalement,
     _decouverte_livre, _a_decouvert_livre, _critere_de_utilisateur, _lieu_de_naissance,
-    _auteur, _genres_auteurs, _a_ecrit, _a_lu_auteur, _aime_auteur
+    _auteur, _genres_auteurs, _a_ecrit, _a_lu_auteur, _aime_auteur, _est_dans_wishlist
 
 TO admin;
 
@@ -658,7 +669,7 @@ GRANT INSERT ON
     _preference_lecture, _utilisateur, _genre_aime, _categories_raison_lecture,
     _utilisateur_raison, _a_lu_livre_vote_genre_pour_livre, _ou_utilisateur_lit_generalement,
     _decouverte_livre, _a_decouvert_livre, _critere_de_utilisateur, _lieu_de_naissance,
-    _auteur, _genres_auteurs, _a_ecrit, _a_lu_auteur, _aime_auteur
+    _auteur, _genres_auteurs, _a_ecrit, _a_lu_auteur, _aime_auteur, _est_dans_wishlist
 
 TO admin;
 
@@ -669,7 +680,7 @@ GRANT DELETE ON
     _preference_lecture, _utilisateur, _genre_aime, _categories_raison_lecture,
     _utilisateur_raison, _a_lu_livre_vote_genre_pour_livre, _ou_utilisateur_lit_generalement,
     _decouverte_livre, _a_decouvert_livre, _critere_de_utilisateur, _lieu_de_naissance,
-    _auteur, _genres_auteurs, _a_ecrit, _a_lu_auteur, _aime_auteur
+    _auteur, _genres_auteurs, _a_ecrit, _a_lu_auteur, _aime_auteur, _est_dans_wishlist
 
 TO admin;
 
@@ -684,6 +695,6 @@ GRANT SELECT ON
     _preference_lecture, _utilisateur, _genre_aime, _categories_raison_lecture,
     _utilisateur_raison, _a_lu_livre_vote_genre_pour_livre, _ou_utilisateur_lit_generalement,
     _decouverte_livre, _a_decouvert_livre, _critere_de_utilisateur, _lieu_de_naissance,
-    _auteur, _genres_auteurs, _a_ecrit, _a_lu_auteur, _aime_auteur
+    _auteur, _genres_auteurs, _a_ecrit, _a_lu_auteur, _aime_auteur, _est_dans_wishlist
 
 TO utilisateur;
