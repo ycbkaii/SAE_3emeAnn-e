@@ -13,10 +13,10 @@ from models import User, _livre
 from user import user_router
 from admin import admin_router
 # from inputData_outputCluster import acmReco
-# from embeddings.embeddingsController import (
-#     get_reco_books,
-#     get_reco_user_based,
-# )
+from embeddings.embeddingsController import (
+     get_reco_books,
+     #get_reco_user_based,
+)
 from utilities import getBooksById,getBooksInfosById, getBooksInfosallById
 from recherche import search_books
 from recommandation_aleatoire import recommend_genres
@@ -76,11 +76,10 @@ def get_recommended_genres(user_id):
 def get_sim_recom(user : int) :
     return 0
 
-
-#@app.get("/livres/genres/{user_id}")
-#def get_recommended_genres(user_id):
- #   recommended = recommend_genres(user_id)
-  #  return recommended
+@app.get("/livres/similaire/{book_id}")
+def get_recommended_genres(book_id):
+    recommended = get_reco_books(book_id)
+    return recommended
 
 
 app.include_router(admin_router)

@@ -48,42 +48,8 @@ def embed_desc_all():
     return list_embedings
 
 
-def embedGenreAll():
-    genre = pd.read_csv("csv/peuplement_genre_livre.csv", index_col="id").to_numpy()
-    listVecGenre = []
-
-    def processFils(start: bool):
-        if start:
-            for gen in genre[:400]:
-                listVecGenre.append(embed_text(str(gen))["embeddings"][0])
-        else:
-            for gen in genre[400:]:
-                listVecGenre.append(embed_text(str(gen))["embeddings"][0])
-
-    thread1 = threading.Thread(
-        target=processFils, args=[True], name="Tread pour le début"
-    )
-    thread2 = threading.Thread(
-        target=processFils, args=[False], name="Tread pour la fin"
-    )
-
-    thread1.start()
-    thread2.start()
-    thread1.join()
-    thread2.join()
-
-    return listVecGenre
-
-
-def saveVectGenre():
-    embedGenre = embedGenreAll()
-    pd.DataFrame(embedGenre).to_csv("./vectGenre.csv", index_label="id_genre")
-
-
 def saveVectDesc():
     resEmbedDesc = embed_desc_all()
     pd.DataFrame(resEmbedDesc).to_csv("./vectDesc1024.csv", index_label="id_livre")
 
-
-# saveVectGenre()
-# saveVectDesc()
+saveVectDesc()

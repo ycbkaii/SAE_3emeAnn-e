@@ -12,9 +12,11 @@ from .elasticsearch_embeddings import (
 from typing import Any
 
 def object_api_response_to_ids(object_api: ObjectApiResponse[Any]):
-    """Permet de renvoyer les ids des livres de la réponse d'ES"""
-    return object_api["hits"]["hits"]
-
+    if "hits" in object_api and "hits" in object_api["hits"]:
+        return object_api["hits"]["hits"]
+    else:
+        print("Structure inattendue dans la réponse Elasticsearch.")
+        return []
 class Books:
     """La classe pour un livre"""
 
@@ -40,9 +42,10 @@ def check_client():
 
 def get_reco_books(books_id: int):
     response = knn_books(books_id)
-    if response is not None :
-        return object_api_response_to_ids(response)
-    else :
+    if response is not None:
+        ids = object_api_response_to_ids(response)
+        return ids
+    else:
         return []
 
 
