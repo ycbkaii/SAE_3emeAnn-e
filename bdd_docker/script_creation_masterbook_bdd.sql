@@ -217,7 +217,7 @@ CREATE TABLE _preference_lecture (
     PRIMARY KEY(id_preference)
 );
 
--- Création table utilisateur 
+-- Création table _utilisateur avec l'attribut "role"
 CREATE TABLE _utilisateur(
     id_user SERIAL PRIMARY KEY,
     email varchar,
@@ -228,6 +228,7 @@ CREATE TABLE _utilisateur(
     id_secteur INT DEFAULT NULL,
     id_genre_sex INT NOT NULL,
     id_prefere_lire INT NOT NULL,
+    role varchar DEFAULT NULL,  -- colonne ajoutée pour le rôle, initialisée à NULL
     FOREIGN KEY(id_prefere_lire) REFERENCES _preference_lecture(id_preference),
     FOREIGN KEY(id_genre_sex) REFERENCES _genre_personne(id_genre),
     FOREIGN KEY (id_secteur) REFERENCES _secteur_de_travail(id_secteur),
@@ -366,6 +367,15 @@ ORDER BY
 CREATE TABLE _lieu_de_naissance(
     id_lieu SERIAL PRIMARY KEY,
     lieu VARCHAR
+);
+
+CREATE TABLE masterbook.recommended_books (
+    id_livre INT PRIMARY KEY,
+    title VARCHAR(255),
+    author VARCHAR(255),
+    isbn VARCHAR(20),
+    occurrences INT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 
@@ -647,7 +657,7 @@ GRANT SELECT ON
     _preference_lecture, _utilisateur, _genre_aime, _categories_raison_lecture,
     _utilisateur_raison, _a_lu_livre_vote_genre_pour_livre, _ou_utilisateur_lit_generalement,
     _decouverte_livre, _a_decouvert_livre, _critere_de_utilisateur, _lieu_de_naissance,
-    _auteur, _genres_auteurs, _a_ecrit, _a_lu_auteur, _aime_auteur, _est_dans_wishlist
+    _auteur, _genres_auteurs, _a_ecrit, _a_lu_auteur, _aime_auteur, _est_dans_wishlist, recommended_books
 
 TO admin;
 
@@ -658,7 +668,7 @@ GRANT UPDATE ON
     _preference_lecture, _utilisateur, _genre_aime, _categories_raison_lecture,
     _utilisateur_raison, _a_lu_livre_vote_genre_pour_livre, _ou_utilisateur_lit_generalement,
     _decouverte_livre, _a_decouvert_livre, _critere_de_utilisateur, _lieu_de_naissance,
-    _auteur, _genres_auteurs, _a_ecrit, _a_lu_auteur, _aime_auteur, _est_dans_wishlist
+    _auteur, _genres_auteurs, _a_ecrit, _a_lu_auteur, _aime_auteur, _est_dans_wishlist, recommended_books
 
 TO admin;
 
@@ -669,7 +679,7 @@ GRANT INSERT ON
     _preference_lecture, _utilisateur, _genre_aime, _categories_raison_lecture,
     _utilisateur_raison, _a_lu_livre_vote_genre_pour_livre, _ou_utilisateur_lit_generalement,
     _decouverte_livre, _a_decouvert_livre, _critere_de_utilisateur, _lieu_de_naissance,
-    _auteur, _genres_auteurs, _a_ecrit, _a_lu_auteur, _aime_auteur, _est_dans_wishlist
+    _auteur, _genres_auteurs, _a_ecrit, _a_lu_auteur, _aime_auteur, _est_dans_wishlist, recommended_books
 
 TO admin;
 
@@ -680,7 +690,7 @@ GRANT DELETE ON
     _preference_lecture, _utilisateur, _genre_aime, _categories_raison_lecture,
     _utilisateur_raison, _a_lu_livre_vote_genre_pour_livre, _ou_utilisateur_lit_generalement,
     _decouverte_livre, _a_decouvert_livre, _critere_de_utilisateur, _lieu_de_naissance,
-    _auteur, _genres_auteurs, _a_ecrit, _a_lu_auteur, _aime_auteur, _est_dans_wishlist
+    _auteur, _genres_auteurs, _a_ecrit, _a_lu_auteur, _aime_auteur, _est_dans_wishlist, recommended_books
 
 TO admin;
 
@@ -695,6 +705,9 @@ GRANT SELECT ON
     _preference_lecture, _utilisateur, _genre_aime, _categories_raison_lecture,
     _utilisateur_raison, _a_lu_livre_vote_genre_pour_livre, _ou_utilisateur_lit_generalement,
     _decouverte_livre, _a_decouvert_livre, _critere_de_utilisateur, _lieu_de_naissance,
-    _auteur, _genres_auteurs, _a_ecrit, _a_lu_auteur, _aime_auteur, _est_dans_wishlist
+    _auteur, _genres_auteurs, _a_ecrit, _a_lu_auteur, _aime_auteur, _est_dans_wishlist, recommended_books
 
 TO utilisateur;
+
+-- Accordez explicitement le droit de TRUNCATE pour l'utilisateur root
+GRANT TRUNCATE ON TABLE masterbook.recommended_books TO root;
