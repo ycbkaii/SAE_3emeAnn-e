@@ -9,12 +9,16 @@ from inputData_outputCluster import acmReco
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi import Query
 import psycopg2
+import logging
 from pydantic import BaseModel
 from deps import SessionDep
 from models import User, _livre
 from typing import Optional
 from user import user_router
 from admin import admin_router
+
+from addBook import check_book_exists, get_cover_from_google_books, createBook
+
 # from inputData_outputCluster import acmReco
 from embeddings.embeddingsController import (
     get_reco_books
@@ -84,6 +88,21 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="Site")
 
 
+
+@app.get("/livres/check")
+def check_livre(isbn: str):
+    """
+    Vérifie si un livre existe déjà dans la base de données en fonction de son ISBN.
+    """
+    try:
+        result = check_book_exists(isbn)
+        return result
+    except HTTPException as e:
+        raise e
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Erreur inattendue : {str(e)}")
+
+
 @app.get("/", response_class=HTMLResponse)
 def read_root():
     """La route par def"""
@@ -110,6 +129,7 @@ def get_books_recom_acp(user_id : int) :
 def get_recommended_genres(user_id):
     recommended = recommend_genres(user_id)
     return recommended
+
 
 @app.get("/livres/sim/{user_id}")
 def get_sim_recom(user_id : int) :
@@ -507,3 +527,54 @@ def get_books_to_read(id_user: int):
         # Fermer les ressources
         cur.close()
         conn.close()
+
+
+from pydantic import BaseModel
+
+class AddLivrePayload(BaseModel):
+    isbn: str
+    id_genre: int   
+
+@app.post("/livre/add")
+def add_livre(payload: AddLivrePayload):
+    """
+    Reçoit uniquement isbn et id_genre depuis le front et crée un livre minimal (ou complet)
+    en base de données, selon vos besoins.
+    """
+    try:
+        # Insertion en base de données
+        book_id = createBook(
+            {
+                "isbn": payload.isbn,
+                "genre_id": payload.id_genre,
+            }
+        )
+        return {"message": "Livre ajouté avec succès", "book_id": book_id}
+    except HTTPException as e:
+        raise e
+    except Exception as e:
+        print(e)
+        raise HTTPException(status_code=500, detail=payload.dict())  # Conversion en dictionnaire
+    
+
+
+@app.get("/livres/cover")
+def get_cover(isbn: str):
+    """
+    Récupère l'URL de la couverture d'un livre à partir de l'API Google Books.
+    Si aucune couverture n'est trouvée, renvoie une indication pour utiliser une image par défaut.
+    :param isbn: L'ISBN du livre.
+    :return: Un dictionnaire contenant l'ISBN, l'URL de la couverture et une indication pour l'image par défaut.
+    """
+    if not isbn or isbn.strip() == "":
+        raise HTTPException(status_code=400, detail="L'ISBN ne peut pas être vide.")
+
+    no_cover_url = "http://localhost:5173/public/images/noCover.png"  # URL de votre image par défaut
+    cover_url = get_cover_from_google_books(isbn)
+
+    if cover_url and cover_url != no_cover_url:
+        return {"isbn": isbn, "cover_url": cover_url, "use_no_cover": False}
+    elif cover_url=="noExist":
+        return {"isbn":isbn,"cover_url":cover_url,"use_no_cover":False}
+    else:
+        return {"isbn": isbn, "cover_url": no_cover_url, "use_no_cover": True}

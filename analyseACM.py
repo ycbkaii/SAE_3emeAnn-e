@@ -5,7 +5,7 @@ import psycopg2
 
 
 conn = psycopg2.connect(
-    database="masterbook", port="5433", user="admin", host="localhost", password="root"
+    database="masterbook", port="5433", user="root", host="localhost", password="root"
 )
 cursor = conn.cursor()
 print("Connected")

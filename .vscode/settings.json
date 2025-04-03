@@ -1,0 +1,15 @@
+{
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 5433,
+            "driver": "PostgreSQL",
+            "name": "masterbook",
+            "group": "masterbook",
+            "database": "masterbook",
+            "username": "root",
+            "password": "root"
+        }
+    ]
+}

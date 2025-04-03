@@ -1,5 +1,6 @@
 import psycopg2
 from fastapi import HTTPException
+import requests
 
 
 def getBooksById(listIdBooks):
@@ -65,6 +66,10 @@ def getBooksInfosById(listIdBooks) :
 
 
 
+
+
+
+
 def getBooksInfosallById(listIdBooks):
     try:
         # Ouverture connexion bdd avec gestion sécurisée
@@ -126,6 +131,9 @@ GROUP BY
         raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Unexpected error: {str(e)}")
+    
+
+
     
 def search_books_deux(query: str, search_type: str):
     """Recherche améliorée des livres, auteurs et sagas"""
@@ -220,6 +228,8 @@ def get_search_suggestions_deux(query: str, search_type: str):
     
     except psycopg2.DatabaseError as e:
         raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
+
+
     
 def get_books_by_author(author_id: int):
     """Récupère tous les livres écrits par un auteur donné"""
