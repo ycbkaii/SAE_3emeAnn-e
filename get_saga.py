@@ -29,6 +29,6 @@ def getSagaById(sagaName : str):
     cur.close()
     conn.close()
 
-    print(books)
+    #print(books)
 
     return getBooksById(books)

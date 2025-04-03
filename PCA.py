@@ -372,8 +372,6 @@ def acpReco(target_id : int) :
                     # print(f"user_index = {user_index}, max index possible = {len(pca_coords) - 1}")
                     dist = euclidean(target_coords, pca_coords[user_index])
                     distances.append((user_index, dist))
-                else:
-                    print(f"Ignoré : user_index {user_index} hors limites pour pca_coords")
 
         
         # Trier par distance croissante
@@ -752,7 +750,7 @@ def acpReco(target_id : int) :
     # print("Voisins : ")
     # print(neighbors_original)
     # print(f"\nTop {Nombre_livre} livres recommandés :")
-    print(getBooksById(top_livres))
+    #print(getBooksById(top_livres))
     # print(books.columns)
     for id in top_livres :
         # print(" ")

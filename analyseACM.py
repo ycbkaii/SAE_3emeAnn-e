@@ -8,7 +8,7 @@ conn = psycopg2.connect(
     database="masterbook", port="5433", user="admin", host="localhost", password="root"
 )
 cursor = conn.cursor()
-print("Connected")
+#print("Connected")
 
 
 query_get_data = """
@@ -26,7 +26,7 @@ cursor.execute(query_get_data)
 
 tuples = cursor.fetchall()
 
-print(f"La data : {tuples}\n")
+#print(f"La data : {tuples}\n")
 
 
 # Récupération des noms des colonnes
@@ -86,7 +86,7 @@ x = pd.concat([data], axis=1)
 dc = pd.DataFrame(pd.get_dummies(x))
 dc.head()
 # On affiche le tableau disjonctif
-print(dc)
+#print(dc)
 
 # On affiche le graphique
 mcaFic = MCA(dc, benzecri=False)
@@ -101,4 +101,4 @@ mca_result = mcaFic.fs_r()
 ids_individus = dc.index
 
 
-print(mca_result)
+#print(mca_result)

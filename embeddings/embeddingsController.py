@@ -67,7 +67,7 @@ def getBooksByUser(id_user: int | str) -> list[tuple] | list:
     if conn is not None:
         with conn.cursor() as cursor:
             requete = (
-                "SELECT id_livre FROM masterbook._a_lu_livre_vote_genre_pour_livre WHERE note_livre>4 AND id_user="
+                "SELECT id_livre FROM masterbook._a_lu_livre_vote_genre_pour_livre WHERE id_user="
                 + str(id_user)
             )
             try:
@@ -92,7 +92,6 @@ def get_reco_user_based(id: int):
 
 def book_sim_by_id(id_user) :
     livre_aime = getBooksByUser(id_user)
-    print(livre_aime)
     tuple_books = []
     for i in livre_aime :
         for e in get_reco_books(i[0]) :

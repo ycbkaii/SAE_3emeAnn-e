@@ -15,7 +15,7 @@ from deps import CurrentUser, SessionDep
 from typing import List, Optional
 
 import bcrypt
-print(bcrypt.__version__)
+#print(bcrypt.__version__)
 
 
 # to get a string like this run:
@@ -209,3 +209,21 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
 def get_user_profile(current_user: int = Depends(get_current_user)):
     """Renvoie l'ID de l'utilisateur connecté"""
     return {"id_user": current_user}
+
+@user_router.get("/me/role")
+def get_user_role(current_user: int = Depends(get_current_user)):
+    """Récupère le rôle de l'utilisateur connecté"""
+    conn = get_db_connection()
+    cur = conn.cursor()
+
+    query = "SELECT role FROM masterbook._utilisateur WHERE id_user = %s"
+    cur.execute(query, (current_user,))
+    role = cur.fetchone()
+
+    cur.close()
+    conn.close()
+
+    if not role:
+        raise HTTPException(status_code=404, detail="Rôle non trouvé pour cet utilisateur")
+
+    return {"role": role[0]}

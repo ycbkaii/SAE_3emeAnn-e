@@ -63,4 +63,4 @@ for cluster in range(k):
 # plt.grid()
 # plt.show()
 
-print(mca_df)
+#print(mca_df)

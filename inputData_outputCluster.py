@@ -14,7 +14,7 @@ def acmReco(userId: int, mca_df=mca_df):
         password="root",
     )
     cursor = conn.cursor()
-    print("Connected")
+    #print("Connected")
 
     # TODO Ici on recoit l'ID de l'utilisateur qui vient de se connecter pour l'affichage de ses recommandations et on fait un transform pour l'integrer dans les clusters
     target_id = userId-1
@@ -126,6 +126,6 @@ def acmReco(userId: int, mca_df=mca_df):
 
     conn.commit()
     conn.close()
-    print("Connexion closed")
+    # print("Connexion closed")
 
     return getBooksById(tuples)

@@ -15,6 +15,8 @@ from models import User, _livre
 from typing import Optional
 from user import user_router
 from admin import admin_router
+from managerProjection import manager_router
+
 # from inputData_outputCluster import acmReco
 from embeddings.embeddingsController import (
     get_reco_books
@@ -99,11 +101,13 @@ def get_contact():
 @app.get("/livres/acm_recom/{user_id}")
 def get_books_recom_acm(user_id : int) :
     """Cela renvoie les la liste des livres de recommandation"""
+    print("Test ACM:")
     return acmReco(user_id)
 
 @app.get("/livres/acp_recom/{user_id}")
 def get_books_recom_acp(user_id : int) :
     """Cela renvoie les la liste des livres de recommandation en ACP"""
+    print("Test ACP:")
     return acpReco(user_id)
 
 @app.get("/livres/genres/{user_id}")
@@ -113,6 +117,7 @@ def get_recommended_genres(user_id):
 
 @app.get("/livres/sim/{user_id}")
 def get_sim_recom(user_id : int) :
+    print("Test :")
     return book_sim_by_id(user_id)
 
 
@@ -124,6 +129,7 @@ def get_sim_recom(user_id : int) :
 
 app.include_router(admin_router)
 app.include_router(user_router)
+app.include_router(manager_router)
 
 @app.get("/book", response_class=HTMLResponse)
 def get_book():
