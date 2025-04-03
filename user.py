@@ -38,7 +38,6 @@ def verify_password(plain_password, hashed_password):
 def get_password_hash(password):
     return pwd_context.hash(password)
 
-
 def get_db_connection():
     return psycopg2.connect(
         database="masterbook",
@@ -47,6 +46,39 @@ def get_db_connection():
         host="localhost",
         password="root"
     )
+
+def startup_event():
+    """Exécute l'UPDATE de l'utilisateur 258 au démarrage de l'application"""
+    conn = get_db_connection()
+    cur = conn.cursor()
+
+    try:
+        # Hachage du mot de passe 'test' pour l'utilisateur 258
+        hashed_password = get_password_hash("test")
+        
+        # Mettre à jour l'utilisateur 258 : email, mot de passe et rôle
+        update_query = """
+            UPDATE masterbook._utilisateur
+            SET email = %s, passwd = %s, role = %s
+            WHERE id_user = 258;
+        """
+        update_email = "test@example.com"
+        update_role = "manager"
+        
+        # Exécution de l'UPDATE
+        cur.execute(update_query, (update_email, hashed_password, update_role))
+        conn.commit()
+        print("Utilisateur avec id_user 258 mis à jour avec succès.")
+
+    except psycopg2.Error as e:
+        conn.rollback()  # Annule la transaction en cas d'erreur
+        print(f"Erreur SQL lors de la mise à jour de l'utilisateur 258 : {e.pgcode} - {e.pgerror}")
+    
+    finally:
+        cur.close()
+        conn.close()
+
+startup_event()
 
 
 # Pydantic model pour l'utilisateur
